@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather and Climate — Chapter Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-deep:#1c4f6b;
+    --sky-mid:#3d7d9e;
+    --cloud:#f4f8fa;
+    --card:#ffffff;
+    --sun:#e2a53f;
+    --grass:#4c7a5e;
+    --frost:#6b6f9e;
+    --ink:#1a2b32;
+    --ink-soft:#516670;
+    --line:#dbe6ea;
+    --wrong:#b8503f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cloud);
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Fraunces',serif;margin:0;}
+
+  .hero{
+    background:linear-gradient(180deg,var(--sky-deep) 0%,var(--sky-mid) 100%);
+    color:#fff;
+    padding:34px 20px 46px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-40px;
+    width:150px;height:150px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, var(--sun), rgba(226,165,63,0));
+    opacity:0.85;
+  }
+  .hero-inner{position:relative; max-width:640px; margin:0 auto;}
+  .eyebrow{font-size:13px; letter-spacing:0.02em; color:#cfe4ee; margin-bottom:6px;}
+  .hero h1{font-size:30px; font-weight:600; line-height:1.15; max-width:420px;}
+  .hero p{margin-top:10px; color:#d8e9f0; font-size:14.5px; max-width:440px; line-height:1.5;}
+
+  .wrap{max-width:640px; margin:0 auto; padding:0 16px 60px;}
+
+  .tabs{
+    display:flex; gap:6px; overflow-x:auto;
+    margin-top:-24px; padding:6px; background:var(--card);
+    border-radius:14px; box-shadow:0 8px 24px rgba(20,50,65,0.12);
+    position:relative; z-index:2;
+    -webkit-overflow-scrolling:touch;
+  }
+  .tab{
+    flex:0 0 auto;
+    padding:10px 14px;
+    border-radius:9px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .tab.active{background:var(--sky-deep); color:#fff;}
+
+  .section-title{
+    margin-top:30px;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:8px;
+  }
+  .section-title h2{font-size:19px; font-weight:600; color:var(--sky-deep);}
+  .panel-head-right{display:flex; align-items:center; gap:10px;}
+  .count{font-size:13px; color:var(--ink-soft); font-weight:500;}
+  .section-reset-btn{
+    background:none; border:none; color:var(--ink-soft);
+    font-size:12px; text-decoration:underline; cursor:pointer; padding:0;
+  }
+
+  .view-toggle-row{display:flex; gap:8px; margin-top:14px; width:100%;}
+  .view-toggle-btn{
+    flex:1; padding:10px; border-radius:9px; border:1px solid var(--line);
+    background:#fff; font-weight:600; font-size:13px; cursor:pointer; color:var(--ink-soft);
+  }
+  .view-toggle-btn.active{background:var(--sky-deep); color:#fff; border-color:var(--sky-deep);}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 18px 16px;
+    margin-top:12px;
+  }
+  .qnum{
+    font-size:12px; font-weight:700; color:var(--sun);
+    margin-bottom:6px;
+  }
+  .qtext{font-size:15.5px; line-height:1.5; font-weight:500;}
+  .qtext .blank{
+    display:inline-block; min-width:70px; border-bottom:2px solid var(--sky-mid);
+  }
+
+  .options{margin-top:12px; display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left;
+    padding:10px 12px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:#fbfdfe;
+    font-size:14.5px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .opt.correct{background:#eaf4ee; border-color:var(--grass); color:#2f5240;}
+  .opt.incorrect{background:#f8ecea; border-color:var(--wrong); color:var(--wrong);}
+
+  .tf-row{display:flex; gap:10px; margin-top:12px;}
+  .tf-btn{
+    flex:1; padding:10px; border-radius:9px; border:1px solid var(--line);
+    background:#fbfdfe; font-weight:600; font-size:14px; cursor:pointer; color:var(--ink);
+  }
+  .tf-btn.correct{background:#eaf4ee; border-color:var(--grass); color:#2f5240;}
+  .tf-btn.incorrect{background:#f8ecea; border-color:var(--wrong); color:var(--wrong);}
+
+  .reveal-btn{
+    margin-top:12px;
+    background:none;
+    border:1px solid var(--sky-mid);
+    color:var(--sky-deep);
+    padding:8px 14px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .answer{
+    margin-top:10px;
+    padding:10px 12px;
+    background:#eef6f8;
+    border-left:3px solid var(--sky-mid);
+    border-radius:6px;
+    font-size:14px;
+    line-height:1.5;
+    display:none;
+  }
+  .answer.show{display:block;}
+  .answer b{color:var(--sky-deep);}
+
+  .input-row{margin-top:12px; display:flex; gap:8px;}
+  .input-row input{
+    flex:1; padding:10px 12px; border-radius:8px; border:1px solid var(--line);
+    font-size:14.5px; font-family:'Inter',sans-serif;
+  }
+  .check-btn{
+    background:var(--sky-deep); color:#fff; border:none; padding:0 16px;
+    border-radius:8px; font-weight:600; font-size:13px; cursor:pointer;
+  }
+  .fill-feedback{margin-top:8px; font-size:13.5px; font-weight:600;}
+  .fill-feedback.right{color:var(--grass);}
+  .fill-feedback.wrong{color:var(--wrong);}
+
+  .score-bar{
+    position:sticky; top:0; z-index:5;
+    background:var(--cloud);
+    padding:10px 16px 4px;
+    max-width:640px; margin:0 auto;
+    display:none;
+  }
+  .score-pill{
+    display:inline-block; background:var(--sun); color:#3a2a05;
+    font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:999px;
+  }
+
+  .voice-status{
+    margin-top:14px; font-size:14px; line-height:1.5;
+    padding:10px 12px; border-radius:8px; background:#eef6f8; color:var(--ink);
+  }
+  .voice-status.right{background:#eaf4ee; color:#2f5240;}
+  .voice-status.wrong{background:#f8ecea; color:var(--wrong);}
+  .voice-controls{display:flex; gap:10px; margin-top:16px;}
+  .voice-controls .check-btn, .voice-controls .reveal-btn{flex:1; margin-top:0;}
+
+  footer{
+    text-align:center; color:var(--ink-soft); font-size:12.5px;
+    padding:22px 16px 4px;
+  }
+  .reset-row{
+    text-align:center; padding-top:4px;
+  }
+  .reset-btn{
+    background:none; border:none; color:var(--wrong);
+    font-size:12.5px; font-weight:600; cursor:pointer;
+    text-decoration:underline;
+  }
+  .load-msg{
+    text-align:center; color:var(--ink-soft); font-size:13px;
+    padding:40px 16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Chapter 11</div>
+    <h1>Weather and Climate</h1>
+    <p>Every sentence from the chapter, turned into a question — fill‑ups, MCQs, one‑word answers, definitions, short answers, reasoning, and true/false. Fill‑ups, one‑word, and true/false also offer a hands‑free Voice Round.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div id="scoreArea" class="score-bar"><span class="score-pill" id="scorePill"></span></div>
+  <div id="content"><div class="load-msg">Loading your progress…</div></div>
+</div>
+
+<footer>Tap "Show answer" or an option to check yourself as you go. Your progress is saved automatically on this device.</footer>
+<div class="reset-row"><button class="reset-btn" id="resetBtn">Reset all progress</button></div>
+
+<script>
+/* =========================================================
+   DATA — question coverage is unchanged from the prior build.
+   The only new section is "reasoning".
+   ========================================================= */
+const DATA = {
+  fill: {
+    label: "Fill in the Blanks",
+    items: [
+      ["Weather is a ___ phenomena.", "temporary"],
+      ["Weather changes ___.", "everyday"],
+      ["Climate is the sum total of the weather at a place over a very ___ period of time.", "long"],
+      ["Weather generally refers to day-to-day temperature and ___ activity.", "precipitation"],
+      ["A region's climate is generated by the climate system, which has ___ components.", "five"],
+      ["The five components of the climate system are atmosphere, hydrosphere, cryosphere, land surface, and ___.", "biosphere"],
+      ["Weather data collected over several ___ are used to make climate graphs.", "decades"],
+      ["Places near the equator are hotter because the rays of the sun fall ___ on the equator.", "vertically"],
+      ["As we move away from the equator towards the poles, the rays of the sun become ___.", "slanting"],
+      ["The polar regions, being farthest from the Equator, experience extremely ___ climate.", "cold"],
+      ["Temperature generally decreases at 1 degree C for every ___ metres in altitude.", "100"],
+      ["___ is cool even in summers because of its height, though it lies near the equator.", "Ooty"],
+      ["The peaks of the ___ are covered with snow even in summers.", "Himalayas"],
+      ["The sea has a ___ influence on the region close to it.", "moderating"],
+      ["Compared to land, water takes ___ to heat and cool.", "longer"],
+      ["Cool sea breeze keeps the coastal areas cooler in summer and ___ in winter.", "warmer"],
+      ["___ is neither very hot in summer nor very cold in winter, because it lies near the sea.", "Chennai"],
+      ["The wind blowing from the sea to the land is called the ___.", "sea breeze"],
+      ["The wind blowing from the land to the sea is called the ___.", "land breeze"],
+      ["___ means the amount of water vapour in the surrounding air.", "Humidity"],
+      ["In colder places, humidity results in ___ instead of rainfall.", "snowfall"],
+      ["The Torrid Zone lies between the Tropic of Cancer and the Tropic of ___.", "Capricorn"],
+      ["The Temperate Zone receives ___ rays of the sun.", "slanting"],
+      ["The Frigid Zone in the Northern Hemisphere extends from the Arctic Circle to the ___.", "North Pole"],
+      ["The Arctic Circle lies at ___ degrees N.", "66.5"],
+      ["The Tropic of Cancer lies at ___ degrees N.", "23.5"]
+    ]
+  },
+  mcq: {
+    label: "MCQ",
+    items: [
+      ["Weather refers to:", ["Atmospheric conditions at a place over a long period", "Atmospheric conditions at a specific place at a specific point in time", "The average conditions expected at a place", "None of these"], 1],
+      ["Climate refers to:", ["Day-to-day atmospheric conditions", "The average conditions expected at a place at a given time", "A sudden change in weather", "None of these"], 1],
+      ["Which of the following is NOT part of weather?", ["Rain and sunshine", "Cloud cover and winds", "Climate graphs made from decades of data", "Hail and snow"], 2],
+      ["The climate system has how many components?", ["Three", "Four", "Five", "Six"], 2],
+      ["Weather data collected over several decades is used to make:", ["Weather forecasts", "Climate graphs", "Rainfall records only", "Temperature-only charts"], 1],
+      ["Places near the equator are hotter mainly because:", ["They are at a lower altitude", "The sun's rays fall vertically and are concentrated", "They are far from the sea", "The wind blows from cold areas"], 1],
+      ["Ooty stays cool in summer, even though it is near the equator, because of its:", ["Sea breeze", "High altitude", "Forest cover", "Cloud cover"], 1],
+      ["Temperature generally decreases by 1 degree C for every:", ["10 metres of altitude", "50 metres of altitude", "100 metres of altitude", "1000 metres of altitude"], 2],
+      ["Compared to land, oceans:", ["Heat up and cool down faster", "Heat up and cool down slower", "Never change temperature", "Heat up faster but cool slower"], 1],
+      ["The sea breeze blows from:", ["Land to sea", "Sea to land", "North to south always", "Mountains to plains"], 1],
+      ["The land breeze typically blows:", ["During the day", "At night", "At noon", "Only in winter"], 1],
+      ["Which Indian city is neither very hot in summer nor very cold in winter, due to the sea's influence?", ["Delhi", "Chennai", "Jaipur", "Shimla"], 1],
+      ["Humidity is best defined as:", ["The amount of water vapour in the surrounding air", "The total yearly rainfall of a place", "The speed of the wind", "The temperature of the sea"], 0],
+      ["In colder places, an increase in humidity results in:", ["Heavier rainfall only", "Snowfall instead of rainfall", "No precipitation at all", "Fog only"], 1],
+      ["The Torrid Zone lies between:", ["The Arctic Circle and the Antarctic Circle", "The Tropic of Cancer and the Tropic of Capricorn", "The Equator and the Arctic Circle only", "The Tropic of Cancer and the Arctic Circle"], 1],
+      ["The Temperate Zone lies between:", ["The two Tropics only", "The Tropic of Cancer/Capricorn and the respective polar circles", "The two polar circles only", "The Equator only"], 1],
+      ["The Frigid Zone is characterised by:", ["Hot and humid climate", "Extremely cold climate", "Moderate climate all year", "Desert-like dryness"], 1]
+    ]
+  },
+  oneword: {
+    label: "One Word",
+    items: [
+      ["The temporary, day-to-day atmospheric condition at a specific place.", "Weather"],
+      ["The average atmospheric condition of a place over a long period of time.", "Climate"],
+      ["The wind that blows from the sea towards the land.", "Sea breeze"],
+      ["The wind that blows from the land towards the sea.", "Land breeze"],
+      ["The amount of water vapour present in the surrounding air.", "Humidity"],
+      ["The climatic zone lying between the Tropic of Cancer and the Tropic of Capricorn.", "Torrid Zone"],
+      ["The climatic zone with an extremely cold climate, near the poles.", "Frigid Zone"],
+      ["The hill station that stays cool in summer because of its high altitude.", "Ooty"],
+      ["The mountain range whose peaks remain snow-covered even in summer.", "Himalayas"],
+      ["The Indian coastal city that experiences less contrast between summer and winter temperatures.", "Chennai"]
+    ]
+  },
+  define: {
+    label: "Definitions",
+    items: [
+      ["Define Weather.", "Weather is the atmospheric condition at a specific place at a specific point in time. It is a temporary phenomenon that can change every day, or even during the same day."],
+      ["Define Climate.", "Climate is the sum total of the weather at a place over a very long period of time — the average conditions expected at a place at a given time, generated by the climate system."],
+      ["Define Humidity.", "Humidity means the amount of water vapour present in the surrounding air. An increase in humidity increases the chances of rainfall (or snowfall in colder places)."],
+      ["Define Sea breeze.", "The wind that blows from the sea to the land, carrying moisture and bringing rain to coastal areas. It blows during the day, as the sea stays cooler than the land."],
+      ["Define Land breeze.", "The wind that blows from the land to the sea. It is cold and dry if it blows from a cold area, and warm and dry if it blows from a warm area."],
+      ["Define a Climatic Zone.", "A region of the world grouped together with other regions because they share similar climatic conditions. The world is divided into three climatic zones: Torrid, Temperate, and Frigid."]
+    ]
+  },
+  shortqa: {
+    label: "Short Q&A",
+    items: [
+      ["State one difference between weather and climate.", "Weather is the atmospheric condition at a specific place at a specific point in time, and it changes daily. Climate is the average condition expected at a place over a long period of time, and stays broadly the same."],
+      ["Name the five components of the climate system.", "Atmosphere, hydrosphere, cryosphere, land surface, and biosphere."],
+      ["List the five factors that influence the climate of a place.", "Distance from the Equator, altitude or elevation, distance from the sea, direction of the wind, and humidity."],
+      ["Why are places near the equator hotter than places near the poles?", "Near the equator, the sun's rays fall vertically and cover a smaller area, so the heat is more concentrated. Near the poles, the rays are slanting and spread over a larger area, so the heat is less concentrated and it is cooler."],
+      ["Why does temperature decrease with an increase in altitude?", "Temperature generally decreases at the rate of about 1 degree C for every 100 metres of altitude, which is why places at higher altitude, like Ooty, have colder climates than places at lower altitude even near the equator."],
+      ["Why is a place near the sea likely to have a moderate climate?", "Water takes longer than land to both heat up and cool down, so oceans heat up and cool down slower than land. This keeps nearby coastal areas cooler in summer and warmer in winter than places far from the sea."],
+      ["How do the climates of coastal and interior parts of India differ?", "Coastal areas of India, such as Chennai, experience less contrast between summer and winter temperatures because of the sea's moderating influence. Interior/north Indian areas, farther from the sea, show a much bigger difference between summer and winter temperatures."],
+      ["How does the sea breeze differ from the land breeze?", "The sea breeze blows from the sea to the land, carries moisture, and brings rain to coastal areas. The land breeze blows from the land to the sea and is cold and dry (if from a cold area) or warm and dry (if from a warm area)."],
+      ["Name the three climatic zones of the world.", "The Torrid Zone, the Temperate Zone, and the Frigid Zone."],
+      ["Give the approximate latitude limits of the three climatic zones.", "Torrid Zone: between the Tropic of Cancer (23.5° N) and the Tropic of Capricorn (23.5° S). Temperate Zone: between the Tropics and the Arctic/Antarctic Circles (66.5° N/S). Frigid Zone: from the Arctic/Antarctic Circles (66.5° N/S) to the poles."]
+    ]
+  },
+  reasoning: {
+    label: "Reasoning",
+    items: [
+      ["The chapter says weather changes every day, yet also says weather data collected over decades is used to make climate graphs. How do these two ideas fit together?",
+       "Weather is recorded day by day because it constantly changes. When this changeable, day-to-day weather data is gathered continuously over many decades, it evens out into a long-term average — which is exactly what the chapter defines climate to be. So today's changeable weather readings are the same raw material that, collected over a long period, becomes the climate graph."],
+      ["The chapter states that the Torrid Zone is very hot and humid, and separately explains why places near the Equator are hot. Connect these two facts.",
+       "The Torrid Zone lies between the Tropic of Cancer and the Tropic of Capricorn, on either side of the Equator. The chapter explains that places near the Equator receive the sun's rays vertically, which concentrates the heat over a smaller area. Since the Torrid Zone surrounds the Equator, this same concentrated heat is why the zone is described as very hot."],
+      ["Ooty lies near the Equator, yet the chapter says it stays cool even in summer. Using the factors of 'distance from the Equator' and 'altitude', explain how both can be true.",
+       "Being near the Equator would normally make a place hot, since the chapter says such places get vertical, concentrated sun rays. But the chapter also explains that temperature falls by about 1°C for every 100 metres of altitude, and that places at higher altitude are colder. Ooty's height is enough to override the warming effect of being near the Equator, which is why it stays cool even in summer."],
+      ["The chapter explains that oceans heat up and cool down slower than land, and separately says Chennai is neither very hot in summer nor very cold in winter, unlike north India. Connect these two facts.",
+       "Because water heats and cools more slowly than land, the sea keeps nearby coastal areas cooler in summer and warmer in winter than places far from the sea. Chennai is on the coast, so it gets this moderating effect and stays fairly even across seasons. North India lies far from the sea, so it misses this moderating influence and swings between very hot summers and very cold winters."],
+      ["The chapter says the sea breeze carries moisture and brings rain to coastal areas, and separately says an increase in humidity increases the chances of rainfall. How are these two statements connected?",
+       "The sea breeze picks up moisture as it blows from the sea onto the land, which raises the humidity — the amount of water vapour — in the air over the coast. Since the chapter says higher humidity increases the chances of rainfall, the moisture the sea breeze carries is the reason coastal areas that receive it tend to get more rain."],
+      ["Using the description of the Torrid Zone and of the sea breeze, explain how a coastal place inside the Torrid Zone could receive high rainfall and not just heat.",
+       "A place in the Torrid Zone is hot mainly because it lies near the Equator and receives concentrated, vertical sunlight. If that same place is also on the coast, the sea breeze described in the chapter would carry extra moisture onto the land, adding humidity on top of the zone's natural heat. This combination is why the chapter notes that some areas in the Torrid Zone receive high rainfall, not just heat."],
+      ["The chapter describes land breeze as being either cold and dry or warm and dry, but never moist. Using what the chapter says about the sea breeze, explain why land breeze is dry.",
+       "The land breeze blows from the land, not the sea, so unlike the sea breeze it has no large body of water to pick up moisture from. Whether the land it comes from is cold or warm, the absence of a sea source is why the chapter describes land breeze as dry in both cases."],
+      ["Using the descriptions of the Torrid, Temperate, and Frigid Zones together with the explanation of the sun's rays, explain why climate becomes progressively colder from the Equator to the poles.",
+       "The chapter explains that near the Equator the sun's rays fall vertically and concentrated, making the Torrid Zone hot. Moving towards the poles, the rays become more slanting and spread over a larger area, so the heat is less concentrated — which is why the Temperate Zone, further from the Equator, is neither very hot nor very cold. The polar regions are farthest from the Equator and receive the least concentrated heat, which is why the Frigid Zone has an extremely cold climate."],
+      ["The chapter treats 'distance from the Equator' and 'altitude' as two separate factors affecting climate. Based on the chapter's own example, can one override the other?",
+       "Yes. The chapter's example of Ooty shows altitude overriding distance from the Equator: Ooty lies near the Equator, which should make it hot, but its high altitude alone keeps it cool even in summer. This shows the two factors act independently, and being close to the Equator does not guarantee heat if altitude works strongly in the opposite direction."],
+      ["The chapter mentions that weather reports help people plan clothing and daily activities, while climate graphs are built from decades of weather data. Why would planning for an entire year need climate information rather than a weather report?",
+       "A weather report only describes the atmospheric conditions expected for a specific day or short period, since the chapter defines weather as temporary and changeable. Climate, by contrast, is the average condition of a place over a very long period, built from decades of collected weather data. Planning for a whole year needs to match the region's long-term expected conditions, which is what climate describes, not a short-term weather forecast."]
+    ]
+  },
+  tf: {
+    label: "True / False",
+    items: [
+      ["Weather changes every day, and can even change during the same day.", true],
+      ["Weather and climate mean exactly the same thing.", false],
+      ["The climate system has five components.", true],
+      ["Places near the equator are cooler than places near the poles.", false],
+      ["Temperature generally decreases as altitude increases.", true],
+      ["Ooty is hot in summer because it lies close to the equator.", false],
+      ["The sea heats up and cools down faster than the land.", false],
+      ["A cool sea breeze keeps coastal areas cooler in summer and warmer in winter.", true],
+      ["Chennai experiences a large difference between summer and winter temperatures.", false],
+      ["The land breeze blows from the land to the sea.", true],
+      ["Humidity means the amount of dust particles in the air.", false],
+      ["In colder places, high humidity can result in snowfall instead of rainfall.", true],
+      ["The Torrid Zone lies between the Tropic of Cancer and the Tropic of Capricorn.", true],
+      ["The Temperate Zone is the hottest of the three climatic zones.", false],
+      ["The Frigid Zone, in the Northern Hemisphere, extends from the Arctic Circle to the North Pole.", true]
+    ]
+  }
+};
+
+const TAB_ORDER = ["fill","mcq","oneword","define","shortqa","reasoning","tf"];
+const VOICE_SECTIONS = ["fill","oneword","tf"];
+let current = "fill";
+let viewMode = { fill:"list", oneword:"list", tf:"list" };
+
+/* answers[key][idx] shapes:
+   fill:      { value, checked, correct }
+   mcq:       { chosenIndex }
+   tf:        { chosenValue }
+   oneword/define/shortqa/reasoning: { shown }  (plus optional voice fields on oneword)
+*/
+let answers = { fill:{}, mcq:{}, oneword:{}, define:{}, shortqa:{}, reasoning:{}, tf:{} };
+
+/* =========================================================
+   PERSISTENCE — plain localStorage, one key per section, so
+   this quiz's data never collides with other chapter quizzes
+   hosted alongside it, and a section can be reset on its own.
+   ========================================================= */
+const STORAGE_PREFIX = "quiz-progress-weather-and-climate";
+
+function loadAllProgress(){
+  TAB_ORDER.forEach(key => {
+    try{
+      const raw = localStorage.getItem(STORAGE_PREFIX + ":" + key);
+      if(raw){
+        const parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === "object") answers[key] = parsed;
+      }
+    } catch(e){
+      // corrupted entry for this section only — start that section fresh
+      answers[key] = {};
+    }
+  });
+}
+
+function saveSection(key){
+  try{
+    localStorage.setItem(STORAGE_PREFIX + ":" + key, JSON.stringify(answers[key]));
+  } catch(e){
+    console.error("Could not save progress for section:", key, e);
+  }
+}
+
+function resetSection(key){
+  answers[key] = {};
+  try{ localStorage.removeItem(STORAGE_PREFIX + ":" + key); } catch(e){}
+  if(voiceState && voiceState.sectionKey === key){
+    cleanupVoiceTurn();
+    voiceState = null;
+  }
+  if(VOICE_SECTIONS.includes(key)) viewMode[key] = "list";
+  render();
+}
+
+function resetAllProgress(){
+  cleanupVoiceTurn();
+  voiceState = null;
+  TAB_ORDER.forEach(key => {
+    answers[key] = {};
+    try{ localStorage.removeItem(STORAGE_PREFIX + ":" + key); } catch(e){}
+    if(VOICE_SECTIONS.includes(key)) viewMode[key] = "list";
+  });
+  render();
+}
+
+function computeStats(key){
+  const items = DATA[key].items;
+  const total = items.length;
+  let done = 0, correct = 0;
+  items.forEach((item, idx) => {
+    const a = answers[key][idx];
+    if(!a) return;
+    if(key === "mcq"){
+      if(a.chosenIndex !== undefined){ done++; if(a.chosenIndex === item[2]) correct++; }
+    } else if(key === "tf"){
+      if(a.chosenValue !== undefined){ done++; if(a.chosenValue === item[1]) correct++; }
+    } else if(key === "fill"){
+      if(a.checked){ done++; if(a.correct) correct++; }
+    } else {
+      if(a.shown){ done++; }
+    }
+  });
+  return {done, total, correct};
+}
+
+/* =========================================================
+   TABS / SCORE BAR
+   ========================================================= */
+function renderTabs(){
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = "";
+  TAB_ORDER.forEach(key=>{
+    const b = document.createElement('button');
+    b.className = 'tab' + (key===current ? ' active' : '');
+    b.textContent = DATA[key].label;
+    b.onclick = () => {
+      if(key === current) return;
+      cleanupVoiceTurn();
+      current = key;
+      render();
+    };
+    tabsEl.appendChild(b);
+  });
+}
+
+function updateScoreBar(){
+  const area = document.getElementById('scoreArea');
+  if(current === 'mcq' || current === 'tf' || current === 'fill'){
+    const s = computeStats(current);
+    area.style.display = 'block';
+    document.getElementById('scorePill').textContent =
+      `Score: ${s.correct}/${s.done} correct • ${s.done}/${s.total} answered`;
+  } else {
+    area.style.display = 'none';
+  }
+}
+
+/* =========================================================
+   PANEL HEAD (title + count + per-section reset) and the
+   List View / Voice Round toggle, shared across renders.
+   ========================================================= */
+function renderPanelHead(key){
+  const stats = computeStats(key);
+  const label = (key === 'mcq' || key === 'tf' || key === 'fill') ? 'answered' : 'revealed';
+  return `<div class="section-title">
+      <h2>${DATA[key].label}</h2>
+      <div class="panel-head-right">
+        <span class="count">${stats.done}/${stats.total} ${label}</span>
+        <button class="section-reset-btn" data-section="${key}">Reset section</button>
+      </div>
+    </div>`;
+}
+
+function wirePanelHead(key){
+  const btn = document.querySelector('.section-reset-btn[data-section="' + key + '"]');
+  if(btn){
+    btn.onclick = () => {
+      if(confirm('Clear your saved answers for "' + DATA[key].label + '"?')){
+        resetSection(key);
+      }
+    };
+  }
+}
+
+function renderViewToggle(key){
+  if(!VOICE_SECTIONS.includes(key)) return "";
+  const mode = viewMode[key] || "list";
+  return `<div class="view-toggle-row">
+      <button class="view-toggle-btn ${mode==='list' ? 'active' : ''}" data-mode="list">List View</button>
+      <button class="view-toggle-btn ${mode==='voice' ? 'active' : ''}" data-mode="voice">Voice Round</button>
+    </div>`;
+}
+
+function wireViewToggle(key){
+  if(!VOICE_SECTIONS.includes(key)) return;
+  document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+    btn.onclick = () => {
+      const mode = btn.dataset.mode;
+      if(mode === viewMode[key]) return;
+      cleanupVoiceTurn();
+      viewMode[key] = mode;
+      if(mode === "voice"){
+        startVoiceRound(key);
+      } else {
+        render();
+      }
+    };
+  });
+}
+
+/* =========================================================
+   MAIN RENDER (List View for all sections)
+   ========================================================= */
+function render(){
+  renderTabs();
+  const key = current;
+  const content = document.getElementById('content');
+
+  if(VOICE_SECTIONS.includes(key) && viewMode[key] === "voice"){
+    if(!voiceState || voiceState.sectionKey !== key){
+      startVoiceRound(key);
+    }
+    updateScoreBar();
+    return;
+  }
+
+  content.innerHTML = renderPanelHead(key) + renderViewToggle(key);
+  wirePanelHead(key);
+  wireViewToggle(key);
+
+  const items = DATA[key].items;
+
+  items.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    if(key === 'fill'){
+      const [q, ans] = item;
+      const saved = answers.fill[idx];
+      const displayQ = q.replace(/_{3,}/g, '<span class="blank"></span>');
+      card.innerHTML = `
+        <div class="qnum">Question ${idx+1}</div>
+        <div class="qtext">${displayQ}</div>
+        <div class="input-row">
+          <input type="text" placeholder="Type your answer" id="fill-${idx}" value="${saved ? String(saved.value).replace(/"/g,'&quot;') : ''}">
+          <button class="check-btn">Check</button>
+        </div>
+        <div class="fill-feedback" id="feedback-${idx}"></div>
+      `;
+      const fb = card.querySelector('#feedback-' + idx);
+      if(saved && saved.checked){
+        fb.textContent = saved.correct ? "Correct!" : `Not quite — answer: ${ans}`;
+        fb.className = "fill-feedback " + (saved.correct ? "right" : "wrong");
+      }
+      card.querySelector('.check-btn').onclick = () => {
+        const val = card.querySelector('#fill-' + idx).value.trim();
+        const isRight = val.toLowerCase() === ans.toLowerCase();
+        fb.textContent = isRight ? "Correct!" : `Not quite — answer: ${ans}`;
+        fb.className = "fill-feedback " + (isRight ? "right" : "wrong");
+        answers.fill[idx] = { value: val, checked: true, correct: isRight };
+        saveSection('fill');
+        updateScoreBar();
+      };
+    }
+
+    else if(key === 'mcq'){
+      const [q, opts, correctIdx] = item;
+      const saved = answers.mcq[idx];
+      card.innerHTML = `<div class="qnum">Question ${idx+1}</div><div class="qtext">${q}</div><div class="options"></div>`;
+      const optsWrap = card.querySelector('.options');
+      opts.forEach((opt, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt';
+        btn.textContent = opt;
+        if(saved !== undefined){
+          if(oi === correctIdx) btn.classList.add('correct');
+          else if(oi === saved.chosenIndex) btn.classList.add('incorrect');
+          btn.dataset.locked = "1";
+        }
+        btn.onclick = () => {
+          if(btn.dataset.locked) return;
+          [...optsWrap.children].forEach(c => c.dataset.locked = "1");
+          if(oi === correctIdx){
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('incorrect');
+            optsWrap.children[correctIdx].classList.add('correct');
+          }
+          answers.mcq[idx] = { chosenIndex: oi };
+          saveSection('mcq');
+          updateScoreBar();
+        };
+        optsWrap.appendChild(btn);
+      });
+    }
+
+    else if(key === 'tf'){
+      const [q, ans] = item;
+      const saved = answers.tf[idx];
+      card.innerHTML = `<div class="qnum">Question ${idx+1}</div><div class="qtext">${q}</div><div class="tf-row"></div>`;
+      const row = card.querySelector('.tf-row');
+      if(saved !== undefined && saved.chosenValue !== undefined) row.dataset.locked = "1";
+      [["True", true], ["False", false]].forEach(([label, val]) => {
+        const btn = document.createElement('button');
+        btn.className = 'tf-btn';
+        btn.textContent = label;
+        if(saved !== undefined && saved.chosenValue !== undefined){
+          if(val === ans) btn.classList.add('correct');
+          if(val === saved.chosenValue && val !== ans) btn.classList.add('incorrect');
+        }
+        btn.onclick = () => {
+          if(row.dataset.locked) return;
+          row.dataset.locked = "1";
+          [...row.children].forEach(c => {
+            if(c.textContent === (ans ? "True":"False")) c.classList.add('correct');
+          });
+          if(val !== ans) btn.classList.add('incorrect');
+          answers.tf[idx] = { chosenValue: val };
+          saveSection('tf');
+          updateScoreBar();
+        };
+        row.appendChild(btn);
+      });
+    }
+
+    else {
+      // oneword, define, shortqa, reasoning — reveal style, unchanged
+      const [q, ans] = item;
+      const shown = answers[key][idx] && answers[key][idx].shown;
+      card.innerHTML = `
+        <div class="qnum">Question ${idx+1}</div>
+        <div class="qtext">${q}</div>
+        <button class="reveal-btn">${shown ? "Hide answer" : "Show answer"}</button>
+        <div class="answer${shown ? ' show' : ''}"><b>Answer:</b> ${ans}</div>
+      `;
+      const btn = card.querySelector('.reveal-btn');
+      const ansEl = card.querySelector('.answer');
+      btn.onclick = () => {
+        ansEl.classList.toggle('show');
+        const isShown = ansEl.classList.contains('show');
+        btn.textContent = isShown ? "Hide answer" : "Show answer";
+        const prev = answers[key][idx] || {};
+        answers[key][idx] = Object.assign({}, prev, { shown: isShown });
+        saveSection(key);
+      };
+    }
+
+    content.appendChild(card);
+  });
+
+  updateScoreBar();
+}
+
+/* =========================================================
+   VOICE ROUND — fill / oneword / tf only.
+   Always renders into a single #voice-stage element that is
+   rebuilt in place (innerHTML replaced), never duplicated.
+   ========================================================= */
+let voiceState = null;
+
+function normalizeText(s){
+  return String(s == null ? "" : s).toLowerCase().replace(/[^a-z0-9.\s]/g, "").replace(/\s+/g, " ").trim();
+}
+
+function cleanupVoiceTurn(){
+  if(voiceState && voiceState.recognition){
+    try{
+      voiceState.recognition.onresult = null;
+      voiceState.recognition.onend = null;
+      voiceState.recognition.onerror = null;
+      voiceState.recognition.onstart = null;
+      voiceState.recognition.stop();
+    } catch(e){}
+    voiceState.recognition = null;
+  }
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); } catch(e){}
+  }
+}
+
+function speakThen(text, onDone){
+  if(!window.speechSynthesis){
+    setTimeout(onDone, 300);
+    return;
+  }
+  try{ window.speechSynthesis.cancel(); } catch(e){}
+  const utter = new SpeechSynthesisUtterance(text);
+  let done = false;
+  const finish = () => { if(!done){ done = true; onDone(); } };
+  utter.onend = finish;
+  utter.onerror = finish;
+  // Safety net in case neither event fires on a flaky platform.
+  setTimeout(finish, Math.max(4000, text.length * 90));
+  try{ window.speechSynthesis.speak(utter); } catch(e){ finish(); }
+}
+
+function speakQuestionThenListen(text, startListeningFn){
+  if(!window.speechSynthesis){
+    startListeningFn();
+    return;
+  }
+  try{ window.speechSynthesis.cancel(); } catch(e){}
+  const utter = new SpeechSynthesisUtterance(text);
+  let started = false;
+  const words = text.trim().split(/\s+/);
+  const lastWord = words[words.length - 1] || "";
+  const lastWordStart = lastWord ? text.lastIndexOf(lastWord) : text.length;
+  const beginListening = () => {
+    if(started) return;
+    started = true;
+    startListeningFn();
+  };
+  utter.onboundary = (e) => {
+    if(started) return;
+    if(typeof e.charIndex === 'number' && e.charIndex >= lastWordStart){
+      beginListening();
+    }
+  };
+  utter.onend = beginListening;
+  utter.onerror = beginListening;
+  // Safety net: some voices never fire boundary or end reliably.
+  setTimeout(beginListening, Math.max(4500, text.length * 100));
+  try{ window.speechSynthesis.speak(utter); } catch(e){ beginListening(); }
+}
+
+function startListening(onResult, onNoAnswer){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){
+    onNoAnswer('unsupported');
+    return;
+  }
+  let recog;
+  try{
+    recog = new SR();
+  } catch(e){
+    onNoAnswer('construct-failed');
+    return;
+  }
+  recog.lang = 'en-US';
+  recog.continuous = false;
+  recog.interimResults = false;
+  recog.maxAlternatives = 1;
+
+  let finished = false;
+  let timer = null;
+  if(voiceState) voiceState.recognition = recog;
+
+  recog.onstart = () => {
+    timer = setTimeout(() => {
+      if(finished) return;
+      finished = true;
+      try{ recog.stop(); } catch(e){}
+      onNoAnswer('timeout');
+    }, 5000);
+  };
+  recog.onresult = (event) => {
+    if(finished) return;
+    finished = true;
+    clearTimeout(timer);
+    const transcript = (event.results && event.results[0] && event.results[0][0]) ? event.results[0][0].transcript : "";
+    onResult(transcript);
+  };
+  recog.onerror = (event) => {
+    if(finished) return;
+    finished = true;
+    clearTimeout(timer);
+    onNoAnswer((event && event.error) || 'error');
+  };
+  recog.onend = () => {
+    if(finished) return;
+    finished = true;
+    clearTimeout(timer);
+    onNoAnswer('no-speech');
+  };
+  try{
+    recog.start();
+  } catch(e){
+    finished = true;
+    clearTimeout(timer);
+    onNoAnswer('start-failed');
+  }
+}
+
+async function startVoiceRound(key){
+  cleanupVoiceTurn();
+  voiceState = { sectionKey: key, pos: 0, correct: 0, total: 0, recognition: null };
+
+  const content = document.getElementById('content');
+  content.innerHTML = renderPanelHead(key) + renderViewToggle(key) +
+    '<div class="card" id="voice-stage"><div class="qtext">Setting up Voice Round…</div></div>';
+  wirePanelHead(key);
+  wireViewToggle(key);
+
+  const stage = document.getElementById('voice-stage');
+  if(!stage) return;
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){
+    stage.innerHTML = `
+      <div class="qtext">This browser doesn't support voice recognition.</div>
+      <div class="answer show">Try Chrome or Edge on desktop or Android, or use List View instead.</div>
+      <div class="voice-controls">
+        <button class="reveal-btn" id="voice-back-1">Return to List View</button>
+      </div>`;
+    stage.querySelector('#voice-back-1').onclick = () => { viewMode[key] = "list"; render(); };
+    return;
+  }
+
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    stage.innerHTML = `
+      <div class="qtext">Voice Round needs microphone access, which isn't available here.</div>
+      <div class="answer show">This usually happens when the page is opened as a local file instead of over https, or the browser doesn't support microphone access on this page. Try opening this quiz from its hosted https link.</div>
+      <div class="voice-controls">
+        <button class="reveal-btn" id="voice-back-2">Return to List View</button>
+      </div>`;
+    stage.querySelector('#voice-back-2').onclick = () => { viewMode[key] = "list"; render(); };
+    return;
+  }
+
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach(t => t.stop());
+  } catch(e){
+    const stageNow = document.getElementById('voice-stage');
+    if(!stageNow) return;
+    stageNow.innerHTML = `
+      <div class="qtext">Couldn't access the microphone.</div>
+      <div class="answer show">This is usually one of two things: the browser app itself hasn't been given microphone permission at the operating-system level, or this page was previously blocked in the browser's own site settings. Check both, then try again.</div>
+      <div class="voice-controls">
+        <button class="check-btn" id="voice-retry">Try again</button>
+        <button class="reveal-btn" id="voice-back-3">Return to List View</button>
+      </div>`;
+    stageNow.querySelector('#voice-retry').onclick = () => startVoiceRound(key);
+    stageNow.querySelector('#voice-back-3').onclick = () => { viewMode[key] = "list"; render(); };
+    return;
+  }
+
+  // Guard: user may have switched tabs/modes while the permission prompt was open.
+  if(!voiceState || voiceState.sectionKey !== key || viewMode[key] !== "voice") return;
+
+  playQuestion(key, 0);
+}
+
+function playQuestion(key, idx){
+  if(!voiceState || voiceState.sectionKey !== key) return;
+  const items = DATA[key].items;
+  const stage = document.getElementById('voice-stage');
+  if(!stage) return;
+
+  if(idx >= items.length){
+    showVoiceSummary(key);
+    return;
+  }
+
+  voiceState.pos = idx;
+  const item = items[idx];
+
+  let spokenText, displayHtml;
+  if(key === 'fill'){
+    const q = item[0];
+    spokenText = q.replace(/_{3,}/g, ' blank ').replace(/\s+/g, ' ').trim();
+    displayHtml = q.replace(/_{3,}/g, '<span class="blank"></span>');
+  } else {
+    // oneword and tf: read the statement/clue itself, nothing appended
+    spokenText = item[0];
+    displayHtml = item[0];
+  }
+
+  stage.innerHTML = `
+    <div class="qnum">Question ${idx+1} of ${items.length}</div>
+    <div class="qtext">${displayHtml}</div>
+    <div class="voice-status" id="voice-status">Reading question…</div>
+    <div class="voice-controls">
+      <button class="reveal-btn" id="voice-skip">Skip</button>
+      <button class="reveal-btn" id="voice-end" style="border-color:var(--wrong); color:var(--wrong);">End round</button>
+    </div>
+  `;
+  stage.querySelector('#voice-skip').onclick = () => {
+    cleanupVoiceTurn();
+    playQuestion(key, idx + 1);
+  };
+  stage.querySelector('#voice-end').onclick = () => {
+    cleanupVoiceTurn();
+    showVoiceSummary(key);
+  };
+
+  speakQuestionThenListen(spokenText, () => {
+    if(!voiceState || voiceState.sectionKey !== key || voiceState.pos !== idx) return;
+    const statusEl = stage.querySelector('#voice-status');
+    if(statusEl) statusEl.textContent = "Listening… (5 seconds)";
+    startListening(
+      (transcript) => handleVoiceResult(key, idx, transcript),
+      () => handleVoiceResult(key, idx, null)
+    );
+  });
+}
+
+function handleVoiceResult(key, idx, transcript){
+  if(!voiceState || voiceState.sectionKey !== key || voiceState.pos !== idx) return;
+  const stage = document.getElementById('voice-stage');
+  if(!stage) return;
+  const item = DATA[key].items[idx];
+  const heard = transcript ? String(transcript).trim() : "";
+  let isCorrect = false;
+
+  if(key === 'tf'){
+    const norm = normalizeText(heard);
+    const trueWords = ['true', 'correct', 'right', 'yes'];
+    const falseWords = ['false', 'incorrect', 'wrong', 'no'];
+    let guess = null;
+    if(trueWords.some(w => norm.indexOf(w) !== -1)) guess = true;
+    else if(falseWords.some(w => norm.indexOf(w) !== -1)) guess = false;
+    isCorrect = guess !== null && guess === item[1];
+    answers.tf[idx] = { chosenValue: guess === null ? undefined : guess };
+    saveSection('tf');
+  } else {
+    const norm = normalizeText(heard);
+    const correctNorm = normalizeText(item[1]);
+    isCorrect = norm.length > 0 && correctNorm.length > 0 && (norm.indexOf(correctNorm) !== -1 || correctNorm.indexOf(norm) !== -1);
+    if(key === 'fill'){
+      answers.fill[idx] = { value: heard, checked: true, correct: isCorrect };
+      saveSection('fill');
+    } else {
+      const prev = answers.oneword[idx] || {};
+      answers.oneword[idx] = Object.assign({}, prev, { shown: true, voiceHeard: heard, voiceCorrect: isCorrect });
+      saveSection('oneword');
+    }
+  }
+
+  voiceState.total++;
+  if(isCorrect) voiceState.correct++;
+
+  const correctAnswerLabel = (typeof item[1] === 'boolean') ? (item[1] ? 'True' : 'False') : item[1];
+  const feedbackText = isCorrect ? "Correct!" : `The answer is ${correctAnswerLabel}`;
+  const statusEl = stage.querySelector('#voice-status');
+  if(statusEl){
+    statusEl.textContent = (heard ? `Heard: "${heard}". ` : "No answer heard. ") + feedbackText;
+    statusEl.className = "voice-status " + (isCorrect ? "right" : "wrong");
+  }
+  updateScoreBar();
+
+  speakThen(feedbackText, () => {
+    if(!voiceState || voiceState.sectionKey !== key || voiceState.pos !== idx) return;
+    playQuestion(key, idx + 1);
+  });
+}
+
+function showVoiceSummary(key){
+  cleanupVoiceTurn();
+  const stage = document.getElementById('voice-stage');
+  if(!stage) return;
+  const c = voiceState ? voiceState.correct : 0;
+  const t = voiceState ? voiceState.total : 0;
+  stage.innerHTML = `
+    <div class="qnum">Round complete</div>
+    <div class="qtext">You scored ${c} out of ${t} answered.</div>
+    <div class="voice-controls">
+      <button class="check-btn" id="voice-redo">Redo round</button>
+      <button class="reveal-btn" id="voice-list">Return to List View</button>
+    </div>
+  `;
+  stage.querySelector('#voice-redo').onclick = () => startVoiceRound(key);
+  stage.querySelector('#voice-list').onclick = () => { viewMode[key] = "list"; voiceState = null; render(); };
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+document.getElementById('resetBtn').onclick = () => {
+  if(confirm("Clear all your saved answers and progress on this quiz?")){
+    resetAllProgress();
+  }
+};
+
+loadAllProgress();
+render();
+</script>
+</body>
+</html>

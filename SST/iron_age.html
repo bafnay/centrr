@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Iron Age — Interactive Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f1e7; --card:#ffffff; --ink:#2b2118; --accent:#a6521c; --accent2:#7a8c3f;
+    --good:#3f7d3f; --bad:#b5432e; --muted:#8a7d6b; --border:#e4d9c4; --info:#3b6e91;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Merriweather', Georgia, serif;background:var(--bg);color:var(--ink);}
+  header{background:linear-gradient(120deg,#8c4a1e,#5a3216);color:#fff;padding:22px 16px 18px;text-align:center;}
+  header h1{margin:0 0 4px;font-size:1.6em;letter-spacing:.5px;}
+  header p{margin:0;opacity:.85;font-size:.9em;font-family:'Nunito',sans-serif;}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px 8px;background:#efe4cf;position:sticky;top:0;z-index:10;border-bottom:2px solid var(--border);}
+  .tab-btn{border:1px solid var(--accent);background:#fff;color:var(--accent);padding:7px 12px;border-radius:20px;cursor:pointer;font-size:.82em;font-family:'Nunito',sans-serif;font-weight:600;}
+  .tab-btn.active{background:var(--accent);color:#fff;}
+  main{max-width:760px;margin:0 auto;padding:16px;}
+  .section{display:none;}
+  .section.active{display:block;}
+  .scorebar{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.9em;font-family:'Nunito',sans-serif;}
+  .scorebar b{color:var(--accent);}
+  .panel-head{margin-bottom:6px;}
+  .panel-head h2{font-size:1.15em;margin:4px 0 2px;}
+  .panel-meta{display:flex;justify-content:space-between;align-items:center;font-family:'Nunito',sans-serif;font-size:.8em;color:var(--muted);margin-bottom:8px;flex-wrap:wrap;gap:6px;}
+  .section-reset-btn{border:1px solid var(--bad);color:var(--bad);background:#fff;padding:4px 10px;border-radius:14px;cursor:pointer;font-size:.78em;font-family:'Nunito',sans-serif;}
+  .mode-toggle-row{display:flex;width:100%;gap:8px;margin:6px 0 14px;}
+  .mode-toggle-row button{flex:1;padding:9px 6px;border-radius:8px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:.88em;}
+  .mode-toggle-row button.active{background:var(--accent);color:#fff;}
+  .q-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+  .q-num{color:var(--muted);font-size:.78em;text-transform:uppercase;letter-spacing:.5px;font-family:'Nunito',sans-serif;}
+  .q-text{font-size:1.02em;margin:4px 0 10px;line-height:1.4;}
+  input[type=text]{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:.95em;background:#fdfbf6;}
+  .opts label{display:block;padding:6px 8px;border:1px solid var(--border);border-radius:6px;margin-bottom:6px;cursor:pointer;font-size:.93em;background:#fdfbf6;}
+  .opts label:hover{background:#f4ead8;}
+  .opts input{margin-right:8px;}
+  .tf-btns{display:flex;gap:8px;}
+  .tf-btns button{flex:1;padding:8px;border-radius:6px;border:1px solid var(--border);background:#fdfbf6;cursor:pointer;font-family:inherit;}
+  .tf-btns button.sel{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .check-btn{margin-top:8px;background:var(--accent2);color:#fff;border:none;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.85em;font-family:'Nunito',sans-serif;font-weight:700;}
+  .feedback{margin-top:8px;font-size:.88em;padding:8px 10px;border-radius:6px;display:none;font-family:'Nunito',sans-serif;}
+  .feedback.correct{display:block;background:#e6f2e2;color:var(--good);border:1px solid #b7d9ab;}
+  .feedback.wrong{display:block;background:#fbe7e2;color:var(--bad);border:1px solid #edb6a7;}
+  .answer-key{font-style:italic;color:var(--muted);font-size:.85em;margin-top:4px;}
+  .toolbar{display:flex;gap:8px;margin:10px 0 18px;flex-wrap:wrap;}
+  .toolbar button{padding:8px 14px;border-radius:6px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;font-family:inherit;font-size:.85em;}
+  .toolbar button.primary{background:var(--accent);color:#fff;}
+  #loadingNote{text-align:center;color:var(--muted);font-size:.85em;padding:20px;}
+  .def-answer{margin-top:8px;}
+  footer{text-align:center;color:var(--muted);font-size:.8em;padding:20px 10px 40px;font-family:'Nunito',sans-serif;}
+
+  /* Voice round styles */
+  .voice-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 16px;text-align:center;}
+  .voice-start-btn{background:var(--info);color:#fff;border:none;padding:12px 20px;border-radius:24px;font-size:1em;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;}
+  .voice-stage{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 16px;}
+  .voice-q-num{font-family:'Nunito',sans-serif;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .voice-q-text{font-size:1.15em;line-height:1.5;margin-bottom:14px;}
+  .voice-status{font-family:'Nunito',sans-serif;font-size:.95em;color:var(--info);min-height:22px;margin-bottom:10px;font-weight:600;}
+  .voice-status.correct{color:var(--good);}
+  .voice-status.wrong{color:var(--bad);}
+  .voice-controls{display:flex;gap:8px;justify-content:center;margin-top:12px;}
+  .voice-controls button{padding:8px 16px;border-radius:20px;border:1px solid var(--muted);background:#fff;color:var(--muted);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;font-size:.85em;}
+  .voice-controls button.danger{border-color:var(--bad);color:var(--bad);}
+  .mic-pulse{display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--bad);margin-right:6px;animation:pulse 1s infinite;}
+  @keyframes pulse{0%{opacity:1;}50%{opacity:.3;}100%{opacity:1;}}
+  .mic-error-box{background:#fbe7e2;border:1px solid #edb6a7;color:var(--bad);border-radius:8px;padding:14px;font-family:'Nunito',sans-serif;font-size:.9em;text-align:left;}
+  .mic-error-box ul{margin:8px 0 0;padding-left:18px;}
+  .mic-error-box button{margin-top:10px;background:var(--bad);color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:700;}
+  .voice-summary{text-align:center;}
+  .voice-summary .big-score{font-size:2em;color:var(--accent);font-family:'Nunito',sans-serif;font-weight:700;margin:10px 0;}
+  .voice-summary-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+  .voice-summary-btns button{padding:9px 16px;border-radius:20px;border:1px solid var(--accent);background:#fff;color:var(--accent);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The Iron Age</h1>
+  <p>Interactive Chapter Quiz — your progress is saved automatically</p>
+</header>
+
+<div class="tabs" id="tabs"></div>
+
+<main>
+  <div class="scorebar">
+    <span>Overall Score: <b id="overallScore">0 / 0</b></span>
+    <button class="check-btn" id="resetAllBtn" style="background:var(--bad);">Reset All Answers</button>
+  </div>
+  <div id="loadingNote">Loading your saved progress…</div>
+  <div id="sections"></div>
+</main>
+
+<footer>The Iron Age — questions across 7 formats, including hands-free Voice Round. Answers save as you go.</footer>
+
+<script>
+/* ================== DATA (unchanged existing questions) ================== */
+const DATA = {
+fib: [
+["Classically, the Iron Age is taken to begin in the ______ Century B.C. in ancient India.","12th"],
+["In ancient India, the Iron Age began with the ______ Civilization.","Post-Rigvedic"],
+["In Europe, the Iron Age started much ______ than in India.","later"],
+["In archaeology, the Iron Age was the stage in which tools and weapons whose main ingredient was ______ became prominent.","iron"],
+["According to historians, the Iron Age is the ______ principal period in the three-age system.","last"],
+["The three-age system classifies the Iron Age as being preceded by the ______ Age.","Bronze"],
+["By the middle Bronze Age, increasing numbers of ______ objects appeared in various places.","iron"],
+["During the Bronze Age, iron was more expensive than ______.","gold"],
+["Some sources suggest iron was created in some places as a by-product of ______ refining.","copper"],
+["Bronze was previously used to make tools because its melting point is ______ than that of iron.","lower"],
+["Around ______ B.C., tin became scarce, causing a decline in bronze production.","1800"],
+["The best tools and weapons during the Iron Age were made from ______, an alloy of iron with carbon.","steel"],
+["Many Iron Age tools were designed of ______ iron because it was less expensive and more easily sharpened.","wrought"],
+["Wrought Iron is an iron alloy with very low ______ contents with respect to cast iron.","carbon"],
+["Iron, unlike bronze, is by itself an adequately strong metal without additional ______.","alloys"],
+["Bronze required copper and ______, which are less common than iron.","tin"],
+["Iron can be sharpened by ______, whereas bronze must be reforged.","grinding"],
+["The ______ Quern was used to grind grain into flour.","Rotary"],
+["The rotary quern was made from two ______ stones, one on top of the other.","flat"],
+["Iron Age blacksmiths made strong swords by heating a bar of iron over a ______ fire.","charcoal"],
+["When the iron was white hot, the smith rested the bar on an ______.","anvil"],
+["Blacksmiths worked with ______ and hammers.","tongs"],
+["Blacksmiths used metal ______ to smooth off rough edges from the finished sword.","files"],
+["People started using the ______ wheel at the end of the Iron Age.","potter's"],
+["Potters used their ______ to turn the wheel while shaping clay with both hands.","feet"],
+["Iron Age ploughs are sometimes known as '______'.","ards"],
+["The iron-tipped plough was pulled by ______.","oxen"],
+["Weavers hung long threads from a tall ______ made from wood.","loom"],
+["The vertical threads on a loom were weighted down with ______.","stones"],
+["Weavers used a wooden tool called a ______ to pass threads between the vertical threads.","shuttle"],
+["The use of chariots was widespread at the height of the ______ Iron Age.","Near East"],
+["The ______ and Egyptians used chariots.","Greeks"],
+["The development of the ______ horse chariot solved the problem of mounting quickly in battle.","two"],
+["In the Iron Age, warriors wore armour made from bronze, iron, or a combination of ______.","both"],
+["Iron Age armour was fashioned like a ______.","tunic"],
+["______ and spears were useful for assaulting an enemy from long range.","Javelins"],
+["Javelins were ______, while spears were wielded by hand.","thrown"],
+["Swords of the late Bronze Age tended to be ______-shaped.","sickle"],
+["Short swords and daggers were the weapons of choice in ______ Iron Age.","early"],
+["The clothes of Iron Age people were made from ______ and dyed with natural vegetable dyes.","wool"],
+["A ______ (gold neck ring) was worn by important people like chieftains and warriors.","torc"],
+["People during the Iron Age believed in powerful ______.","spirits"],
+["______ led religious ceremonies during the Iron Age.","Priests"],
+["Iron tools made ______ much easier than before and settlements grew in size.","farming"],
+["Many people lived in ______ forts to keep themselves safe from attacks.","hill"],
+["Inside hill forts, families lived in ______ houses.","round"],
+["While travelling on rivers, people of the Iron Age used ______.","dugouts"],
+["Dugouts were made from either lime trees or ______ trees.","oak"],
+["A famous example of a bigger sea-travel boat is the ______ boat.","Hjort Spring"],
+["The Hjort Spring boat was pushed forward by ______.","paddles"],
+["Coinage was first minted in ______ around 100 B.C.","Britain"],
+["Iron Age coins were made of gold, silver and ______.","bronze"],
+["The Iron Age was famous for its hunting ______.","dogs"],
+["Archaeological sites such as Malhar, Dadupur, Raja Nala Ka Tila and Lahuradewa are located in present-day ______.","Uttar Pradesh"],
+["The arrival of the ______ marks the beginning of the Iron Age in India.","Aryans"],
+["In Southern India (present-day Mysore), iron appeared as early as the ______ to 12th centuries B.C.","11th"],
+["Quality steel was being produced in Southern India certainly by A.D. ______.","200"]
+],
+mcq: [
+["Classically, the Iron Age is taken to begin in ancient India during which century?",["10th Century B.C.","12th Century B.C.","15th Century B.C.","8th Century B.C."],1],
+["The Iron Age in ancient India began alongside which civilization?",["Harappan Civilization","Post-Rigvedic Civilization","Indus Valley Civilization","Vedic Bronze Civilization"],1],
+["Which age preceded the Iron Age in the three-age system?",["Stone Age","Bronze Age","Copper Age","Vedic Age"],1],
+["During the Bronze Age, how did iron's value compare to gold?",["Iron was cheaper","Iron was more expensive","They were equal in value","Iron had no value"],1],
+["Why was bronze used before iron for tools?",["Bronze was harder","Bronze had a lower melting point","Bronze was more common","Bronze was magnetic"],1],
+["What caused the decline in bronze production around 1800 B.C.?",["War","Scarcity of tin","Scarcity of copper","Flooding"],1],
+["What alloy was used to make the best tools and weapons in the Iron Age?",["Bronze","Wrought iron","Steel","Brass"],2],
+["Why were many Iron Age tools made of wrought iron instead of steel?",["It was stronger","It was less expensive and easier to sharpen","It was rarer","It was lighter"],1],
+["Wrought iron has very low content of which element compared to cast iron?",["Copper","Tin","Carbon","Zinc"],2],
+["What tool was used to grind grain into flour in the Iron Age?",["Loom","Rotary quern","Anvil","Shuttle"],1],
+["What did blacksmiths rest the white-hot iron bar on?",["Furnace","Anvil","Loom","Quern"],1],
+["What did Iron Age people call the iron-tipped plough?",["Shuttle","Torc","Ards","Dugout"],2],
+["What pulled the iron-tipped plough?",["Horses","Oxen","Men","Donkeys"],1],
+["What wooden tool did weavers use to pass threads between vertical threads on a loom?",["Anvil","Quern","Shuttle","Torc"],2],
+["Which two civilizations widely used chariots during the height of the Near East Iron Age?",["Romans and Persians","Greeks and Egyptians","Aryans and Mauryans","Chinese and Indians"],1],
+["What development solved the problem of heavily armored warriors moving quickly in battle?",["Lighter armour","Two-horse chariot","Iron swords","Wooden shields"],1],
+["Which weapons were thrown at the enemy, unlike spears which were wielded by hand?",["Daggers","Swords","Javelins","Shields"],2],
+["Swords of the late Bronze Age tended to be shaped like what?",["Straight blades","Sickle-shaped","Curved hooks","Triangular blades"],1],
+["What were Iron Age clothes typically made from?",["Cotton","Silk","Wool","Linen"],2],
+["What is a torc?",["A weapon","A gold neck ring","A type of boat","A farming tool"],1],
+["Who led religious ceremonies during the Iron Age?",["Chieftains","Warriors","Priests","Blacksmiths"],2],
+["Why did many people live in hill forts?",["To farm better","To keep safe from attacks","To trade goods","To worship spirits"],1],
+["What were dugouts made from?",["Iron","Lime or oak trees","Stone","Clay"],1],
+["What is the Hjort Spring boat an example of?",["A dugout","A bigger sea-travel boat","A wagon","A chariot"],1],
+["Where was coinage first minted around 100 B.C.?",["India","Egypt","Britain","Greece"],2],
+["Iron Age coins were made of which materials?",["Iron, wood, clay","Gold, silver, bronze","Copper, tin, lead","Steel, iron, wood"],1],
+["The Iron Age was famous for which animals?",["Horses","Hunting dogs","Oxen","Sheep"],1],
+["Which of these is NOT listed as an Indian Iron Age site in Uttar Pradesh?",["Malhar","Dadupur","Lahuradewa","Mysore"],3],
+["What marks the beginning of the Iron Age in India, according to the chapter?",["Arrival of the Mauryans","Arrival of the Aryans","Arrival of the Greeks","Arrival of the British"],1],
+["By what century B.C. do some scholars believe iron smelting was practiced on a bigger scale in India?",["10th century B.C.","13th century B.C.","18th century B.C.","5th century B.C."],1],
+["By when was quality steel certainly being produced in Southern India?",["300 B.C.","A.D. 200","A.D. 500","100 B.C."],1],
+["What did the Indian Upnishads mention in relation to Iron Age developments?",["Chariots and boats","Weaving, pottery and metallurgy","Coinage","Hill forts"],1]
+],
+oneword: [
+["The alloy of iron with carbon content used for the best tools and weapons.","Steel"],
+["The tool used to grind grain into flour, made of two flat stones.","Rotary Quern"],
+["The flat iron surface on which blacksmiths hammered hot iron bars.","Anvil"],
+["Another name for the Iron Age plough.","Ards"],
+["The wooden tool used to pass threads between vertical loom threads.","Shuttle"],
+["The gold neck ring worn by chieftains and warriors.","Torc"],
+["The animals used to pull the iron-tipped plough.","Oxen"],
+["The type of boat made from hollowed-out logs used on rivers.","Dugout"],
+["The famous plank boat used for sea travel in the early Iron Age.","Hjort Spring boat"],
+["The metal used with iron to make bronze (besides copper).","Tin"],
+["The civilization whose arrival marks the beginning of the Iron Age in India.","Aryans"],
+["The people who led religious ceremonies in the Iron Age.","Priests"],
+["The structures where people lived to stay safe from attacks.","Hill forts"],
+["The country where coinage was first minted around 100 B.C.","Britain"]
+],
+defs: [
+["Wrought Iron","An iron alloy with very low carbon content compared to cast iron; it is soft, ductile, magnetic, and has high elasticity and tensile strength."],
+["Steel","An alloy of iron with carbon content; steel weapons and tools were nearly the same weight as bronze ones but stronger, though harder to produce."],
+["Torc","A gold neck ring worn by important people such as chieftains and warriors during the Iron Age."],
+["Rotary Quern","A tool made of two flat stones, one on top of the other, used to grind grain into flour; grain was poured into a hole in the upper stone which was turned by a handle."],
+["Manoeuvre","A physical movement requiring skill and care."],
+["Ards (Iron-tipped plough)","An Iron Age plough made mostly of wood but with an iron tip to help it cut through heavy soil; guided by a farmer and pulled by oxen."],
+["Dugout","A boat made from a hollowed-out log of lime or oak wood, used by Iron Age people mainly for travelling short distances on rivers."],
+["Shuttle","A wooden tool used by weavers to pass different threads between the vertical threads on a loom."]
+],
+qa: [
+["Why is the Iron Age considered the last principal period in the three-age system?","Because the three-age system classifies pre-historic societies into Stone, Bronze, and Iron Ages in chronological order, and the Iron Age — where iron tools and weapons became prominent — comes after the Bronze Age, making it the final and last principal period of this classification."],
+["How was iron possibly created as a by-product during the Bronze Age?","Some sources suggest that iron was being created in some places as a by-product of copper refining, and it was not reproducible by the metallurgy techniques of that time, which is why it remained rare and expensive, sometimes even more costly than gold."],
+["Why did bronze production decline around 1800 B.C., and what effect did this have?","Around 1800 B.C., for reasons yet unknown to archaeologists, tin became scarce, causing a decline in bronze production. This led to trade disruption in many places, which forced people to seek an alternative to bronze, making the use of iron more prominent during the ancient period."],
+["Why was iron eventually preferred over bronze, even though steel weapons were hard to produce?","Steel weapons and tools were nearly the same weight as bronze but stronger; however, steel was difficult to produce with the methods available. Therefore, many Iron Age tools were instead made of wrought iron — though weaker than bronze, it was less expensive, more easily sharpened by grinding rather than reforging, and iron itself was more abundant than the copper and tin needed for bronze."],
+["Explain how the rotary quern worked to grind grain.","The rotary quern was made from two flat stones, one on top of the other. Grain was poured into a hole in the upper stone, which was then turned by a handle. Because the lower stone stayed still, the grain was crushed between the two stones, making grinding flour much quicker and easier than before."],
+["Describe the process a blacksmith used to make a sword.","Iron Age blacksmiths made strong swords by heating a bar of iron over a charcoal fire. When the iron became white hot, the smith rested the bar on an anvil and hammered it into shape before it cooled. Blacksmiths worked with tongs and hammers, and used metal files to smooth off any rough edges from the finished sword."],
+["How did the potter's wheel improve pottery-making in the Iron Age?","People started using potter's wheels at the end of the Iron Age. Potters used their feet to turn the wheel, and as it turned, they used both hands to shape the clay. The use of the wheel meant people could make pots in many more shapes and sizes than before."],
+["What was the purpose of the iron-tipped plough, and how did it help farmers?","The iron-tipped plough (also called an 'ard') was made mostly of wood but had an iron tip to help it cut through heavy soil. It was guided by the farmer and pulled by oxen, meaning farmers no longer needed to use antlers and stone tools to dig up their land."],
+["Describe how a loom was used by Iron Age weavers.","Weavers hung long threads from a tall loom made from wood. These vertical threads were weighted down with stones to keep them taut, and the weaver used a wooden tool called a shuttle to pass different threads between the vertical threads to create the fabric."],
+["Why was the use of chariots eventually modified/replaced by other methods in battle?","In battle, a heavily armored warrior could not be expected to move very quickly or mount and ride on horseback, so it was only during the later classical era that chariots were modified for racing; the development of the two-horse chariot had solved the earlier problem of quick mounting."],
+["Describe the armour and shields used by Iron Age warriors.","Warriors wore armour made from bronze, iron, or a combination of both. Fashioned like a tunic, the armour might hang as low as the knees and extend all the way to the wrists. The shields used alongside this armour were cumbersome."],
+["What was the difference between how javelins and spears were used in battle?","Javelins were thrown at the enemy from long range, while spears were wielded by hand. Both were lighter projectile weapons that usually featured a metal tip attached to a wooden shaft, carried by foot soldiers into battle alongside a shield, and kept in a quiver when transported in a chariot."],
+["How did swords change in shape from the late Bronze Age through the Iron Age?","Swords of the late Bronze Age tended to be sickle-shaped, but as iron was introduced, the curve of the blade became less pronounced. These swords were more like large daggers and were usually hung in sheaths across the chest or back; short swords and daggers were the weapons of choice in the early Iron Age."],
+["Describe the typical clothing worn by Iron Age people.","Iron Age clothes were made from wool and dyed with natural vegetable dyes (from plants and berries) in blue, yellow or red. Trousers were worn under a tunic, held at the waist with a belt, and over this people wore a cloak with a striped or checked pattern, fastened by a brooch."],
+["What kind of jewellery did Iron Age people wear, and who wore a torc?","People in the Iron Age wore metal jewellery with symmetrical designs. Brooches and pins were used to fasten their clothes, and a torc — a gold neck ring — was worn by important people like chieftains and warriors."],
+["Describe the religious beliefs and practices of Iron Age people.","People during the Iron Age believed in powerful spirits and met to worship them in sacred places, like the shores of a lake or a clearing in the woods. Priests led religious ceremonies, sacrificed animals and sometimes humans too, and gave precious offerings such as swords and cups to the spirits, burying them in the ground or throwing them into rivers and lakes."],
+["How did the discovery of iron impact everyday life and settlement size?","People in the Iron Age learned how to use iron, and this discovery had a dramatic impact on everyday life. Iron tools made farming much easier than before, and as a result, settlements grew in size."],
+["Why did many Iron Age people live in hill forts? Describe their structure.","The Iron Age was a violent period, with rival tribes fighting using deadly iron weapons, so many people lived in hill forts to keep themselves safe from attacks. The forts were surrounded by walls and ditches, and warriors defended their people from enemy attacks."],
+["Describe the design and daily life of round houses inside hill forts.","Inside the hill forts, families lived in round houses. These were simple one-room homes with a painted, thatched roof and walls made from a mixture of mud and other things."],
+["What kind of livestock and crops did Iron Age farmers keep and grow?","Iron Age farmers grew crops and vegetables. They kept geese, goats and pigs, and had large herds of cows and flocks of sheep. Some people worked as potters, carpenters and metal workers, while men and boys were trained as warriors, prepared to fight at any time."],
+["How were dugouts constructed, and what were they mainly used for?","Dugouts were made from either lime trees or oak trees, with the logs hollowed out. Builders would spread out the wood so that the dugouts could accommodate more people for travel. While dugouts were primarily used to travel small distances on rivers, they were also sometimes used for longer sea travel."],
+["Describe the Hjort Spring boat and its significance in sea travel.","A famous example of a bigger boat used during the early Iron Age is the Hjort Spring boat. This was a plank boat made of wood, specifically lime or oak, that was pushed forward by paddles. Its light weight made it easy to manoeuvre during sea travel."],
+["Describe the different types of land transport used in the Iron Age.","While walking was the most common form of land travel, carriage transport also became increasingly popular during this period. People of higher social status used more expensive carriages, and historical research indicates that only a few individuals travelled by horse; as more roads were created, wagon use became more popular, with oxen towing heavier wagons than those from the Bronze Age."],
+["What do we know about coinage during the Iron Age?","Coinage was first minted in Britain around 100 B.C., and coins were made of gold, silver and bronze."],
+["How was grain stored and preserved during the Iron Age, and how did surplus grain affect trade?","The grain was stored in granaries or in underground vaults, and meat or fish could be preserved by salting or smoking. As people began to produce and store more grains than they could use, they were able to trade the surplus."],
+["What determined a person's wealth and power during the Iron Age?","Land ownership and grain production became the way to gain wealth and power during the Iron Age."],
+["Describe the development of iron metallurgy in India, according to the chapter.","The beginning of the 1st millennium B.C. saw extensive developments in iron metallurgy in India, with technological advancement and mastery of iron metallurgy achieved during this period of peaceful settlements. An iron working centre in east India has been dated to the first millennium B.C., and the Mauryan period in India saw further advancement in technology involving metallurgy."],
+["Name and locate four Iron Age archaeological sites in India.","Malhar, Dadupur, Raja Nala Ka Tila and Lahuradewa are archaeological sites in present-day Uttar Pradesh that show iron implements from the period between 1800 B.C. and 1200 B.C."],
+["What evidence suggests iron appeared very early in Southern India, and what limitation does this evidence have?","In Southern India (present-day Mysore), iron appeared as early as the 11th to 12th centuries B.C.; however, these developments were too early for any significant close contact with the north-west of the country."],
+["What do the Indian Upnishads mention about Iron Age developments, and which later Indian period saw further advancement in metallurgy?","The Indian Upnishads have mentions of weaving, pottery and metallurgy. The Mauryan period in India saw advancement in technology, and this technological change involved metallurgy; quality steel was perhaps being produced as early as 300 B.C., but certainly by A.D. 200, in Southern India."]
+],
+tf: [
+["The Iron Age classically began in the 12th Century B.C. in ancient India.",true],
+["In Europe, the Iron Age started earlier than in India.",false],
+["The Iron Age is preceded by the Bronze Age in the three-age classification system.",true],
+["During the Bronze Age, iron was cheaper than gold.",false],
+["Bronze has a higher melting point than iron.",false],
+["Tin became scarce around 1800 B.C., leading to a decline in bronze production.",true],
+["Steel is an alloy of iron and carbon.",true],
+["Wrought iron is stronger than steel.",false],
+["Iron needs additional alloys to be strong, unlike bronze.",false],
+["Iron can be sharpened by grinding, while bronze must be reforged.",true],
+["The rotary quern was used to make swords.",false],
+["Blacksmiths rested hot iron bars on an anvil before hammering them.",true],
+["The potter's wheel was turned using the potter's hands only.",false],
+["The iron-tipped plough was also known as an 'ard'.",true],
+["Iron-tipped ploughs were pulled by horses.",false],
+["Weavers used a shuttle to pass threads between vertical threads on a loom.",true],
+["Chariots were mainly used by the Greeks and Egyptians.",true],
+["The two-horse chariot solved the problem of warriors mounting horses quickly.",true],
+["Iron Age armour was only made of bronze.",false],
+["Javelins were wielded by hand, while spears were thrown.",false],
+["Swords of the late Bronze Age tended to be sickle-shaped.",true],
+["Iron Age clothes were made from wool dyed with natural vegetable dyes.",true],
+["A torc is a type of iron sword.",false],
+["Priests during the Iron Age sometimes sacrificed animals and humans.",true],
+["Iron tools made farming much easier than before.",true],
+["Hill forts had no walls or ditches for protection.",false],
+["Round houses inside hill forts had thatched roofs and mud walls.",true],
+["Dugouts were made from lime or oak trees.",true],
+["The Hjort Spring boat was pushed forward by paddles.",true],
+["Coinage was first minted in India around 100 B.C.",false],
+["Iron Age coins were made of gold, silver and bronze.",true],
+["The Iron Age was famous for its hunting dogs.",true],
+["Malhar, Dadupur, Raja Nala Ka Tila and Lahuradewa are Iron Age sites in Uttar Pradesh.",true],
+["The arrival of the Aryans marks the beginning of the Iron Age in India.",true],
+["Quality steel was being produced in Southern India certainly by A.D. 200.",true]
+],
+/* ================== NEW: Reasoning section ================== */
+reasoning: [
+["Early iron objects appeared by the middle Bronze Age, but their use 'appears to have been ceremonial' in some places. Combining this with what the chapter says about iron's cost and how it was obtained, explain why early iron may not have been used for everyday tools.","The chapter says that during the Bronze Age iron was an expensive metal, more expensive than gold, and that in some places it was being created only as a by-product of copper refining and 'was not reproducible by the metallurgy' of the time. Because it was rare, costly, and could not reliably be made on purpose, early iron objects were precious rather than practical — which explains why the chapter says their use appears to have been ceremonial rather than for everyday tools."],
+["The chapter says tin became scarce around 1800 B.C., and separately says this 'forced people to seek an alternative to bronze.' Trace the chain of cause and effect the chapter describes, from the tin shortage to iron becoming prominent.","The chain is: tin became scarce (for reasons unknown) → this caused a decline in bronze production → the decline led to trade disruption in many places → this disruption forced people to seek an alternative to bronze → that alternative was iron, which is why iron use became prominent during the ancient period."],
+["Steel is described as the best material for tools and weapons, yet the chapter also says many Iron Age tools were made of wrought iron instead. Using the reasons the chapter gives for each metal, explain why wrought iron — not steel — ended up being used for most tools.","Steel weapons were nearly the same weight as bronze but stronger, making steel the best choice in theory. However, the chapter says steel 'was difficult to produce with the methods available' at the time. Because of this practical limitation, people instead used wrought iron, which the chapter says was weaker than bronze but was chosen anyway because it was less expensive and more easily sharpened — so availability of production methods, not just performance, decided which material was actually used."],
+["The chapter states that iron 'is by itself an adequately strong metal without additional alloys,' but also says the best tools and weapons were made from steel, which is an alloy of iron and carbon. Are these two statements contradictory? Explain using only the chapter's reasoning.","They are not contradictory: the chapter is comparing iron to bronze in the first statement, pointing out that iron does not need alloying just to be usable, unlike bronze which needs copper and tin. The second statement is about getting the best possible performance — combining iron with carbon to form steel — which is a further improvement, not a requirement for basic strength. So iron alone is 'adequately' strong, while steel is used when the strongest possible result is wanted."],
+["The chapter explains that bronze requires copper and tin, both described as 'less common than iron,' and separately explains that tin became scarce around 1800 B.C. How do these two facts together help explain why iron eventually became the dominant material?","Bronze depended on two materials, copper and tin, that were already less common than iron even before any shortage. When tin specifically became scarce around 1800 B.C., bronze production could no longer keep up, while iron — already more abundant — was unaffected by this shortage. Together, iron's greater natural abundance and bronze's dependence on an increasingly scarce material explain why iron became the more practical and dominant choice."],
+["The chapter says iron can be sharpened by grinding, while bronze 'must be reforged.' Considering this along with the fact that wrought iron was 'less expensive and more easily sharpened,' explain what practical advantage this gave Iron Age tool users in daily life.","Because iron tools could simply be ground to restore a sharp edge, while bronze tools needed to be reforged (a more involved process) to be sharpened again, iron tools were more convenient to maintain day to day. Combined with iron being less expensive, this made iron a more practical choice for everyday tools even though it was not always the physically stronger metal."],
+["The chapter describes the iron-tipped plough (the 'ard') as having an iron tip that let it 'cut through heavy soil,' and separately states that farmers 'no longer needed to use antlers and stone tools to dig up their land.' Explain the connection between these two facts.","Before the iron-tipped plough, farmers relied on antlers and stone tools to work the land, which were less effective at cutting through heavy soil. Once the plough was fitted with an iron tip capable of cutting through heavy soil and pulled by oxen, it did the job those older tools used to do, so farmers no longer needed the antlers and stone tools — the iron tip made the older method obsolete."],
+["The chapter says 'iron tools made farming much easier than before' and, separately, that 'settlements grew in size' during the Iron Age. Explain how these two facts are connected.","Because iron tools such as the iron-tipped plough made farming much easier, farmers could work land more effectively and likely produce more food. This increased ease and productivity of farming is presented by the chapter as leading directly to settlements growing in size, since more reliable food production could support more people living together."],
+["The chapter states that the Iron Age 'was a violent period' with 'rival tribes' fighting 'with deadly iron weapons,' and separately explains that 'many people lived in hill forts... surrounded by walls and ditches.' Explain how these two facts are linked.","Because the Iron Age was violent, with rival tribes led by warrior kings fighting each other using deadly iron weapons, people needed protection from these attacks. This need for safety explains why many people lived in hill forts, which were deliberately surrounded by walls and ditches so that warriors could defend their people from enemy attacks."],
+["The chapter says priests worshipped 'powerful spirits' at 'sacred places, like the shores of a lake or a clearing in woods,' and separately says offerings such as swords and cups were 'buried in the ground or thrown into rivers and lakes.' What does combining these two facts suggest about the role of natural features like lakes in Iron Age religious belief?","Since sacred worship sites included lake shores and woodland clearings, and precious offerings were specifically buried in the ground or thrown into rivers and lakes rather than simply kept, natural features like lakes appear to have held special religious significance — they were treated as places where offerings could reach or please the spirits, not just ordinary bodies of water."],
+["The chapter describes a torc as 'a gold neck ring... worn by important people like chieftains and warriors,' and separately states that 'land ownership and grain production became the way to gain wealth and power.' Using both facts, explain why only certain people would have owned a torc.","Since wealth and power in the Iron Age came from land ownership and grain production, only a limited number of people — those who controlled land and resources, such as chieftains and warriors — would have accumulated enough wealth and status to own a valuable gold item. This explains why the torc, made of gold, was reserved for important people rather than being commonly worn."],
+["The chapter says dugouts were 'primarily used to travel small distances on rivers' but 'sometimes used for longer sea travel,' while the Hjort Spring boat is described as a 'bigger boat' built specifically for longer sea journeys. What does this contrast suggest about why the Hjort Spring boat design was needed?","Because dugouts were mainly suited to short river distances and were only occasionally used at sea, they were not ideally designed for longer sea travel. This gap explains why a different, bigger design — the Hjort Spring boat, a light plank boat pushed by paddles and easy to manoeuvre — was developed specifically for longer periods of sea travel, rather than people simply continuing to rely on dugouts."],
+["The chapter notes that javelins 'were thrown' while spears 'were wielded by hand,' and that both were carried by foot soldiers 'into battle alongside a shield.' Why might Iron Age soldiers have carried both types of weapon rather than just one?","Since javelins could be thrown to strike an enemy from long range while spears required hand-to-hand contact, carrying both gave a soldier the ability to attack an enemy at a distance first with the javelin and then engage directly with the spear if the enemy came closer, covering both long-range and close-range combat situations."],
+["The chapter says swords of the late Bronze Age 'tended to be sickle-shaped,' but that 'as iron was introduced, the curve of the blade became less pronounced,' resulting in swords that 'were more like large daggers.' What does this suggest about how the material of a weapon relates to its evolving design in the chapter's account?","The chapter links a specific change in blade shape directly to the change in material — as bronze was replaced by iron in swordmaking, the sickle-like curve gradually straightened out until the blades resembled large daggers. This suggests that the shift from bronze to iron as the sword-making material coincided with, and is presented as connected to, this change in the weapon's overall shape."],
+["The chapter states that as people began to 'produce and store more grains than they could use, they were able to trade the surplus,' and separately says 'land ownership and grain production became the way to gain wealth and power.' Explain how surplus grain production could lead to greater wealth and power.","Once farmers produced more grain than their own households needed, that extra grain became surplus that could be traded with others. Because land ownership determined how much grain a person could produce, owning more land meant being able to generate more surplus to trade, which the chapter identifies as the way people gained wealth and power during the Iron Age."],
+["The chapter dates Iron Age sites in Uttar Pradesh (like Malhar) to iron implements between 1800 B.C. and 1200 B.C., and separately says some scholars believe iron smelting was practiced 'on a bigger scale' in India by the early 13th century B.C. How do these two pieces of evidence fit together?","The Uttar Pradesh sites show that iron implements were already present in that region between 1800 B.C. and 1200 B.C., which is a broad window. The scholarly estimate that large-scale iron smelting began by the early 13th century B.C. fits within this same broad window, suggesting that iron use started on a smaller scale earlier in this range and had grown into larger-scale production by around the 13th century B.C."],
+["The chapter says iron appeared in Southern India (present-day Mysore) 'as early as the 11th to 12th centuries B.C.,' but adds that these developments were 'too early for any significant close contact with the north-west of the country.' What does this imply about how the Iron Age developed in different parts of India?","Since southern iron use appeared around the same time as, or even before, some northern developments, but the chapter says this was too early for meaningful contact with the north-west, it implies that iron technology may have developed independently in the south rather than spreading there from the north — the two regions likely did not learn ironworking from each other at that early stage."],
+["The chapter says the arrival of the Aryans 'marks the beginning of the Iron Age in India,' while classically the Iron Age is said to begin in the 12th century B.C. in India 'with the Post-Rigvedic Civilization.' How do these two statements work together to describe the start of India's Iron Age?","Since the Post-Rigvedic Civilization followed the Rigvedic period associated with the Aryans, linking the Aryans' arrival to the start of the Iron Age is consistent with the chapter's separate statement that the Iron Age classically begins in the 12th century B.C. in India alongside the Post-Rigvedic Civilization — both statements point to the same broad starting period and the same associated people."],
+["The chapter says the Mauryan period in India 'saw advancement in technology' involving metallurgy, and separately says quality steel was 'certainly' being produced in Southern India by A.D. 200. What does connecting these two facts suggest about the direction of India's iron technology over time?","Since the Mauryan period brought advancement in metallurgical technology and, following or during a related span of time, quality steel was certainly being produced in Southern India by A.D. 200, the two facts together suggest that Indian iron technology continued to improve and mature over time, progressing from the earlier appearance of iron implements toward the more advanced production of quality steel."],
+["The chapter states that 'the diets people ate, the houses they lived in, and the customs they followed varied depending on which part of the country they inhabited,' and separately reports that coinage was first minted specifically in Britain, while other developments (hill forts, dugouts, hunting dogs) are described in a more general or European context. What does the statement about regional variation help explain about the chapter's other descriptions?","The chapter's statement that customs, diets, and housing varied by region helps explain why specific details — such as coinage being minted in Britain around 100 B.C. — are tied to a particular place rather than presented as universal to every Iron Age society; it signals that not every practice or technology described in the chapter happened everywhere at the same time or in the same way."],
+["The chapter explains that people 'began to produce and store more grains than they could use' and that grain was kept 'in granaries or in underground vaults,' with meat or fish preserved 'by salting or smoking.' Why would Iron Age communities have needed these storage and preservation methods in the first place?","Because Iron Age farmers were producing more food than they could immediately consume — enough surplus to trade — they needed ways to keep that extra food from spoiling until it was used or traded. This explains why they developed storage methods like granaries and underground vaults for grain, and preservation methods like salting or smoking for meat and fish."]
+]
+};
+
+const VOICE_SECTIONS = ['fib','oneword','tf'];
+const UNSCORED_SECTIONS = ['defs','qa','reasoning'];
+
+const SECTIONS = [
+  {id:'fib', label:'Fill Blanks', title:'Fill in the Blanks'},
+  {id:'mcq', label:'MCQ', title:'Multiple Choice Questions'},
+  {id:'oneword', label:'One Word', title:'One Word Answers'},
+  {id:'defs', label:'Definitions', title:'Definitions'},
+  {id:'qa', label:'Short Q&A', title:'Short Question & Answer'},
+  {id:'tf', label:'True/False', title:'True or False'},
+  {id:'reasoning', label:'Reasoning', title:'Reasoning'}
+];
+
+const STORAGE_KEY = 'quiz-progress-iron-age';
+let progress = {}; // {sectionId: {qIndex: {correct, userVal, revealed, attempted}}}
+let viewMode = {}; // {sectionId: 'list' | 'voice'}  -- only meaningful for VOICE_SECTIONS
+let voiceState = null; // active voice round state, one at a time
+
+function normalize(s){
+  return (s||'').toString().toLowerCase().trim().replace(/[.,'"“”‘’]/g,'').replace(/\s+/g,' ');
+}
+function fuzzyMatch(userText, correctText){
+  const u = normalize(userText), c = normalize(correctText);
+  if(!u) return false;
+  return u === c || u.includes(c) || c.includes(u);
+}
+function speechTextForFib(text){
+  return text.replace(/_{3,}/g, 'blank');
+}
+
+/* ================== PERSISTENCE (localStorage) ================== */
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(parsed && typeof parsed === 'object') progress = parsed;
+    }
+  }catch(e){
+    progress = {};
+  }
+}
+function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }catch(e){
+    console.error('Could not save progress', e);
+  }
+}
+function saveAnswer(sectionId, idx, correct, userVal, revealedOnly){
+  if(!progress[sectionId]) progress[sectionId] = {};
+  progress[sectionId][idx] = { correct: correct, userVal: userVal, revealed: !!revealedOnly, attempted: true };
+  persist();
+}
+
+/* ================== BUILD UI SHELL ================== */
+function buildTabs(){
+  const tabs = document.getElementById('tabs');
+  SECTIONS.forEach((s,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i===0?' active':'');
+    btn.textContent = s.label;
+    btn.onclick = ()=> showSection(s.id);
+    btn.id = 'tabbtn-'+s.id;
+    tabs.appendChild(btn);
+  });
+}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.getElementById('tabbtn-'+id).classList.add('active');
+}
+
+function buildSections(){
+  const root = document.getElementById('sections');
+  SECTIONS.forEach(sec=>{
+    viewMode[sec.id] = 'list';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'section';
+    wrap.id = 'sec-'+sec.id;
+
+    // panel head
+    const head = document.createElement('div');
+    head.className = 'panel-head';
+    const h = document.createElement('h2');
+    h.textContent = sec.title;
+    head.appendChild(h);
+
+    const meta = document.createElement('div');
+    meta.className = 'panel-meta';
+    const countSpan = document.createElement('span');
+    countSpan.id = 'count-'+sec.id;
+    countSpan.textContent = '0 / ' + DATA[sec.id].length + ' answered';
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'section-reset-btn';
+    resetBtn.textContent = 'Reset Section';
+    resetBtn.onclick = ()=> resetSection(sec.id);
+    meta.appendChild(countSpan);
+    meta.appendChild(resetBtn);
+    head.appendChild(meta);
+
+    wrap.appendChild(head);
+
+    // voice/list toggle row (only for voice-capable sections), own full-width row
+    if(VOICE_SECTIONS.includes(sec.id)){
+      const toggleRow = document.createElement('div');
+      toggleRow.className = 'mode-toggle-row';
+      const listBtn = document.createElement('button');
+      listBtn.textContent = 'List View';
+      listBtn.className = 'active';
+      listBtn.id = 'toggle-list-'+sec.id;
+      const voiceBtn = document.createElement('button');
+      voiceBtn.textContent = 'Voice Round';
+      voiceBtn.id = 'toggle-voice-'+sec.id;
+      listBtn.onclick = ()=> switchMode(sec.id, 'list');
+      voiceBtn.onclick = ()=> switchMode(sec.id, 'voice');
+      toggleRow.appendChild(listBtn);
+      toggleRow.appendChild(voiceBtn);
+      wrap.appendChild(toggleRow);
+
+      const voiceContainer = document.createElement('div');
+      voiceContainer.id = 'voicewrap-'+sec.id;
+      voiceContainer.style.display = 'none';
+      wrap.appendChild(voiceContainer);
+    }
+
+    const listContainer = document.createElement('div');
+    listContainer.id = 'list-'+sec.id;
+    wrap.appendChild(listContainer);
+
+    root.appendChild(wrap);
+    renderList(sec.id);
+  });
+}
+
+function switchMode(sectionId, mode){
+  viewMode[sectionId] = mode;
+  document.getElementById('toggle-list-'+sectionId).classList.toggle('active', mode==='list');
+  document.getElementById('toggle-voice-'+sectionId).classList.toggle('active', mode==='voice');
+  document.getElementById('list-'+sectionId).style.display = (mode==='list') ? 'block' : 'none';
+  const vw = document.getElementById('voicewrap-'+sectionId);
+  vw.style.display = (mode==='voice') ? 'block' : 'none';
+  if(mode==='voice'){
+    endActiveVoiceRoundIfAny(false);
+    renderVoiceStartScreen(sectionId);
+  } else {
+    endActiveVoiceRoundIfAny(true);
+  }
+}
+
+/* ================== LIST VIEW RENDERING ================== */
+function renderList(sectionId){
+  const container = document.getElementById('list-'+sectionId);
+  container.innerHTML = '';
+  const items = DATA[sectionId];
+  const secProgress = progress[sectionId] || {};
+
+  items.forEach((item, idx)=>{
+    const card = buildQuestionCard(sectionId, idx, item, secProgress[idx]);
+    container.appendChild(card);
+  });
+  updateSectionCount(sectionId);
+}
+
+function buildQuestionCard(sectionId, idx, item, savedEntry){
+  const card = document.createElement('div');
+  card.className = 'q-card';
+  card.dataset.section = sectionId;
+  card.dataset.idx = idx;
+
+  const num = document.createElement('div');
+  num.className = 'q-num';
+  num.textContent = labelFor(sectionId) + ' — Q' + (idx+1);
+  card.appendChild(num);
+
+  const qtext = document.createElement('div');
+  qtext.className = 'q-text';
+  qtext.textContent = item[0];
+  card.appendChild(qtext);
+
+  if(sectionId==='fib' || sectionId==='oneword'){
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.placeholder = 'Type your answer...';
+    if(savedEntry && savedEntry.userVal!==undefined) inp.value = savedEntry.userVal;
+    card.appendChild(inp);
+    const btn = document.createElement('button');
+    btn.className = 'check-btn';
+    btn.textContent = 'Check';
+    card.appendChild(btn);
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    card.appendChild(fb);
+    const showFeedback = (correct)=>{
+      fb.className = 'feedback ' + (correct?'correct':'wrong');
+      fb.textContent = correct ? 'Correct! ✓' : ('Not quite. Correct answer: ' + item[1]);
+    };
+    btn.onclick = ()=>{
+      const correct = normalize(inp.value) === normalize(item[1]);
+      showFeedback(correct);
+      saveAnswer(sectionId, idx, correct, inp.value);
+      updateSectionCount(sectionId);
+      updateScore();
+    };
+    if(savedEntry && savedEntry.attempted) showFeedback(savedEntry.correct);
+  }
+  else if(sectionId==='mcq'){
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'opts';
+    item[1].forEach((opt,oi)=>{
+      const label = document.createElement('label');
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'mcq-'+idx;
+      radio.value = oi;
+      if(savedEntry && String(savedEntry.userVal)===String(oi)) radio.checked = true;
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(opt));
+      optsDiv.appendChild(label);
+    });
+    card.appendChild(optsDiv);
+    const btn = document.createElement('button');
+    btn.className = 'check-btn';
+    btn.textContent = 'Check';
+    card.appendChild(btn);
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    card.appendChild(fb);
+    const showFeedback = (correct)=>{
+      fb.className = 'feedback ' + (correct?'correct':'wrong');
+      fb.textContent = correct ? 'Correct! ✓' : ('Correct answer: ' + item[1][item[2]]);
+    };
+    btn.onclick = ()=>{
+      const sel = card.querySelector('input[name="mcq-'+idx+'"]:checked');
+      if(!sel){ fb.className='feedback wrong'; fb.textContent='Please select an option.'; return; }
+      const correct = parseInt(sel.value) === item[2];
+      showFeedback(correct);
+      saveAnswer(sectionId, idx, correct, sel.value);
+      updateSectionCount(sectionId);
+      updateScore();
+    };
+    if(savedEntry && savedEntry.attempted) showFeedback(savedEntry.correct);
+  }
+  else if(sectionId==='tf'){
+    const btns = document.createElement('div');
+    btns.className = 'tf-btns';
+    const tBtn = document.createElement('button'); tBtn.textContent='True';
+    const fBtn = document.createElement('button'); fBtn.textContent='False';
+    btns.appendChild(tBtn); btns.appendChild(fBtn);
+    card.appendChild(btns);
+    const fb = document.createElement('div');
+    fb.className = 'feedback';
+    card.appendChild(fb);
+    const showFeedback = (correct)=>{
+      fb.className = 'feedback ' + (correct?'correct':'wrong');
+      fb.textContent = correct ? 'Correct! ✓' : ('Correct answer: ' + (item[1] ? 'True' : 'False'));
+    };
+    const pick = (val, btnEl)=>{
+      [tBtn,fBtn].forEach(b=>b.classList.remove('sel'));
+      btnEl.classList.add('sel');
+      const correct = (val === item[1]);
+      showFeedback(correct);
+      saveAnswer(sectionId, idx, correct, val);
+      updateSectionCount(sectionId);
+      updateScore();
+    };
+    tBtn.onclick = ()=> pick(true, tBtn);
+    fBtn.onclick = ()=> pick(false, fBtn);
+    if(savedEntry && savedEntry.attempted){
+      if(savedEntry.userVal===true) tBtn.classList.add('sel');
+      else if(savedEntry.userVal===false) fBtn.classList.add('sel');
+      showFeedback(savedEntry.correct);
+    }
+  }
+  else if(sectionId==='defs' || sectionId==='qa' || sectionId==='reasoning'){
+    const ta = document.createElement('input');
+    ta.type = 'text';
+    ta.placeholder = 'Type your answer, then reveal the model answer...';
+    if(savedEntry && savedEntry.userVal!==undefined) ta.value = savedEntry.userVal;
+    card.appendChild(ta);
+    const btn = document.createElement('button');
+    btn.className = 'check-btn';
+    btn.textContent = 'Reveal Answer';
+    card.appendChild(btn);
+    const ans = document.createElement('div');
+    ans.className = 'def-answer answer-key';
+    ans.style.display = 'none';
+    ans.textContent = 'Model answer: ' + item[1];
+    card.appendChild(ans);
+    btn.onclick = ()=>{
+      ans.style.display = 'block';
+      saveAnswer(sectionId, idx, null, ta.value, true);
+      updateSectionCount(sectionId);
+    };
+    if(savedEntry && savedEntry.revealed) ans.style.display = 'block';
+  }
+
+  return card;
+}
+
+function labelFor(sectionId){
+  const s = SECTIONS.find(x=>x.id===sectionId);
+  return s ? s.label : sectionId;
+}
+
+function updateSectionCount(sectionId){
+  const el = document.getElementById('count-'+sectionId);
+  if(!el) return;
+  const secProgress = progress[sectionId] || {};
+  const answered = Object.values(secProgress).filter(e=>e.attempted).length;
+  el.textContent = answered + ' / ' + DATA[sectionId].length + ' answered';
+}
+
+function updateScore(){
+  let total = 0, correct = 0;
+  SECTIONS.forEach(sec=>{
+    if(UNSCORED_SECTIONS.includes(sec.id)) return;
+    const items = DATA[sec.id];
+    total += items.length;
+    const secProgress = progress[sec.id] || {};
+    Object.values(secProgress).forEach(e=>{ if(e.correct) correct++; });
+  });
+  document.getElementById('overallScore').textContent = correct + ' / ' + total;
+}
+
+/* ================== RESET ================== */
+function resetSection(sectionId){
+  if(!confirm('Reset all answers in this section? This cannot be undone.')) return;
+  delete progress[sectionId];
+  persist();
+  renderList(sectionId);
+  updateScore();
+  if(VOICE_SECTIONS.includes(sectionId)){
+    endActiveVoiceRoundIfAny(false);
+    if(viewMode[sectionId]==='voice') renderVoiceStartScreen(sectionId);
+  }
+}
+function resetAll(){
+  if(!confirm('This will clear ALL your saved answers across every section. Continue?')) return;
+  progress = {};
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  SECTIONS.forEach(sec=> renderList(sec.id));
+  updateScore();
+  endActiveVoiceRoundIfAny(false);
+  VOICE_SECTIONS.forEach(id=>{ if(viewMode[id]==='voice') renderVoiceStartScreen(id); });
+}
+
+/* ================== VOICE ROUND ================== */
+function endActiveVoiceRoundIfAny(cancelSpeech){
+  if(voiceState && voiceState.recognition){
+    try{ voiceState.recognition.abort(); }catch(e){}
+  }
+  if(cancelSpeech && window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+  }
+  voiceState = null;
+}
+
+function renderVoiceStartScreen(sectionId){
+  const container = document.getElementById('voicewrap-'+sectionId);
+  container.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'voice-wrap';
+  const p = document.createElement('p');
+  p.style.fontFamily = "'Nunito',sans-serif";
+  p.textContent = 'Hands-free mode: I will read each question aloud, then listen for your spoken answer.';
+  const btn = document.createElement('button');
+  btn.className = 'voice-start-btn';
+  btn.textContent = 'Start Voice Round';
+  btn.onclick = ()=> startVoiceRound(sectionId, container);
+  box.appendChild(p);
+  box.appendChild(btn);
+  container.appendChild(box);
+}
+
+function requestMicAccess(){
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){
+    return Promise.resolve(false);
+  }
+  return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    stream.getTracks().forEach(t=>t.stop());
+    return true;
+  }).catch(()=> false);
+}
+
+function renderMicError(sectionId, container){
+  container.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'mic-error-box';
+  const heading = document.createElement('strong');
+  heading.textContent = 'Microphone access is unavailable.';
+  const introText = document.createTextNode(' This is usually one of two things:');
+  const ul = document.createElement('ul');
+  const li1 = document.createElement('li');
+  li1.textContent = 'The browser app itself has not been given microphone permission at the operating-system level.';
+  const li2 = document.createElement('li');
+  li2.textContent = "This page has already been blocked from using the microphone in your browser's own site settings.";
+  ul.appendChild(li1); ul.appendChild(li2);
+  const followUp = document.createElement('div');
+  followUp.textContent = 'Please check those settings, then try again.';
+  box.appendChild(heading);
+  box.appendChild(introText);
+  box.appendChild(ul);
+  box.appendChild(followUp);
+  const btn = document.createElement('button');
+  btn.textContent = 'Try again';
+  btn.onclick = ()=> startVoiceRound(sectionId, container);
+  box.appendChild(btn);
+  container.appendChild(box);
+}
+
+function startVoiceRound(sectionId, container){
+  requestMicAccess().then(ok=>{
+    if(!ok){ renderMicError(sectionId, container); return; }
+    const order = DATA[sectionId].map((_,i)=>i);
+    voiceState = { sectionId, container, order, pos:0, correctCount:0, attempted:0, recognition:null, token:0 };
+    renderVoiceQuestion();
+  });
+}
+
+function buildVoiceStage(){
+  const vs = voiceState;
+  const container = vs.container;
+  container.innerHTML = ''; // never stack stages - single container, always cleared first
+  const stage = document.createElement('div');
+  stage.className = 'voice-stage';
+
+  const numEl = document.createElement('div');
+  numEl.className = 'voice-q-num';
+  numEl.textContent = labelFor(vs.sectionId) + ' — Question ' + (vs.pos+1) + ' of ' + vs.order.length;
+  stage.appendChild(numEl);
+
+  const qTextEl = document.createElement('div');
+  qTextEl.className = 'voice-q-text';
+  stage.appendChild(qTextEl);
+
+  const statusEl = document.createElement('div');
+  statusEl.className = 'voice-status';
+  statusEl.textContent = 'Getting ready…';
+  stage.appendChild(statusEl);
+
+  const controls = document.createElement('div');
+  controls.className = 'voice-controls';
+  const skipBtn = document.createElement('button');
+  skipBtn.textContent = 'Skip';
+  const endBtn = document.createElement('button');
+  endBtn.className = 'danger';
+  endBtn.textContent = 'End Round';
+  controls.appendChild(skipBtn);
+  controls.appendChild(endBtn);
+  stage.appendChild(controls);
+
+  container.appendChild(stage);
+
+  // scope listeners to the stage element just created
+  skipBtn.addEventListener('click', ()=> handleSkip(stage));
+  endBtn.addEventListener('click', ()=> handleEndRound());
+
+  return { stage, qTextEl, statusEl };
+}
+
+function renderVoiceQuestion(){
+  const vs = voiceState;
+  if(!vs) return;
+  if(vs.pos >= vs.order.length){
+    renderVoiceSummary();
+    return;
+  }
+  vs.token = (vs.token||0) + 1;
+  const myToken = vs.token;
+
+  const idx = vs.order[vs.pos];
+  const item = DATA[vs.sectionId][idx];
+  const refs = buildVoiceStage();
+
+  let displayText = item[0];
+  let speechText = item[0];
+  if(vs.sectionId==='fib'){
+    speechText = speechTextForFib(item[0]);
+  }
+  // TF: read ONLY the statement, no "true or false" appended (item[0] already is just the statement)
+
+  refs.qTextEl.textContent = displayText;
+  refs.statusEl.textContent = 'Reading question…';
+
+  speakThenListen(speechText, refs, myToken, (transcript)=>{
+    if(!voiceState || voiceState.token !== myToken) return; // stale callback, ignore
+    evaluateVoiceAnswer(vs.sectionId, idx, item, transcript, refs, myToken);
+  });
+}
+
+function speakThenListen(speechText, refs, myToken, onTranscript){
+  let listeningStarted = false;
+
+  const beginListening = ()=>{
+    if(listeningStarted) return;
+    if(!voiceState || voiceState.token !== myToken) return; // round moved on/ended already
+    listeningStarted = true;
+    beginRecognition(refs, myToken, onTranscript);
+  };
+
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    const utter = new SpeechSynthesisUtterance(speechText);
+    const words = speechText.trim().split(/\s+/);
+    const lastWord = words[words.length-1] || '';
+    const lastWordStart = Math.max(0, speechText.length - lastWord.length);
+    utter.onboundary = (e)=>{
+      if(typeof e.charIndex === 'number' && e.charIndex >= lastWordStart){
+        beginListening();
+      }
+    };
+    utter.onend = ()=>{ beginListening(); };
+    utter.onerror = ()=>{ beginListening(); };
+    try{
+      window.speechSynthesis.speak(utter);
+    }catch(e){
+      beginListening();
+    }
+  } else {
+    // no TTS support at all - go straight to listening
+    beginListening();
+  }
+}
+
+function beginRecognition(refs, myToken, onTranscript){
+  const vs = voiceState;
+  if(!vs || vs.token !== myToken) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  refs.statusEl.innerHTML = '<span class="mic-pulse"></span>Listening… (5 seconds)';
+
+  if(!SR){
+    // no speech recognition support - can't capture a spoken answer
+    setTimeout(()=>{
+      if(voiceState && voiceState.token === myToken) onTranscript(null);
+    }, 300);
+    return;
+  }
+
+  const recognition = new SR();
+  vs.recognition = recognition;
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  let heard = false;
+  let finished = false;
+
+  const finish = (transcript)=>{
+    if(finished) return;
+    finished = true;
+    clearTimeout(timeoutId);
+    try{ recognition.onresult = null; recognition.onend = null; recognition.onerror = null; }catch(e){}
+    if(!voiceState || voiceState.token !== myToken) return; // round moved on/ended - drop stale result
+    onTranscript(transcript);
+  };
+
+  recognition.onresult = (e)=>{
+    heard = true;
+    const transcript = e.results && e.results[0] && e.results[0][0] ? e.results[0][0].transcript : '';
+    finish(transcript);
+  };
+  recognition.onerror = ()=>{
+    if(!heard) finish(null);
+  };
+  recognition.onend = ()=>{
+    if(!heard) finish(null);
+  };
+
+  const timeoutId = setTimeout(()=>{
+    if(!heard){
+      try{ recognition.stop(); }catch(e){}
+      // if onend doesn't fire quickly enough, force resolution
+      setTimeout(()=>{ if(!finished) finish(null); }, 400);
+    }
+  }, 5000);
+
+  try{
+    recognition.start();
+  }catch(e){
+    finish(null);
+  }
+}
+
+function evaluateVoiceAnswer(sectionId, idx, item, transcript, refs, myToken){
+  const vs = voiceState;
+  if(!vs || vs.token !== myToken) return;
+  let correct = false;
+  let correctAnswerDisplay = '';
+
+  if(sectionId==='fib' || sectionId==='oneword'){
+    correctAnswerDisplay = item[1];
+    correct = transcript ? fuzzyMatch(transcript, item[1]) : false;
+  } else if(sectionId==='tf'){
+    correctAnswerDisplay = item[1] ? 'True' : 'False';
+    if(transcript){
+      const t = normalize(transcript);
+      const saysTrue = /\btrue\b/.test(t);
+      const saysFalse = /\bfalse\b/.test(t);
+      if(saysTrue && !saysFalse) correct = (item[1] === true);
+      else if(saysFalse && !saysTrue) correct = (item[1] === false);
+      else correct = false;
+    } else {
+      correct = false;
+    }
+  }
+
+  vs.attempted++;
+  if(correct) vs.correctCount++;
+  saveAnswer(sectionId, idx, correct, transcript, false);
+  updateSectionCount(sectionId);
+  updateScore();
+
+  refs.statusEl.className = 'voice-status ' + (correct ? 'correct' : 'wrong');
+  if(!transcript){
+    refs.statusEl.textContent = 'No answer heard. Correct answer: ' + correctAnswerDisplay;
+  } else if(correct){
+    refs.statusEl.textContent = 'Correct! ✓';
+  } else {
+    refs.statusEl.textContent = 'Not quite. Correct answer: ' + correctAnswerDisplay;
+  }
+
+  const feedbackSpeech = correct ? 'Correct!' : ('The correct answer is: ' + correctAnswerDisplay);
+  const advance = ()=> advanceVoiceRound(myToken);
+  if(window.speechSynthesis){
+    try{
+      window.speechSynthesis.cancel();
+      const utter2 = new SpeechSynthesisUtterance(feedbackSpeech);
+      utter2.onend = advance;
+      utter2.onerror = advance;
+      window.speechSynthesis.speak(utter2);
+    }catch(e){
+      setTimeout(advance, 1600);
+    }
+  } else {
+    setTimeout(advance, 1600);
+  }
+}
+
+function advanceVoiceRound(myToken){
+  if(!voiceState) return;
+  if(typeof myToken === 'number' && voiceState.token !== myToken) return; // round moved on/ended already
+  voiceState.pos++;
+  renderVoiceQuestion();
+}
+
+function handleSkip(stageEl){
+  const vs = voiceState;
+  if(!vs) return;
+  vs.token = (vs.token||0) + 1; // invalidate any in-flight recognition/speech callbacks
+  if(vs.recognition){
+    try{ vs.recognition.abort(); }catch(e){}
+  }
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+  }
+  vs.pos++;
+  renderVoiceQuestion();
+}
+
+function handleEndRound(){
+  const vs = voiceState;
+  if(!vs) return;
+  vs.token = (vs.token||0) + 1; // invalidate any in-flight recognition/speech callbacks
+  if(vs.recognition){
+    try{ vs.recognition.abort(); }catch(e){}
+  }
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+  }
+  renderVoiceSummary();
+}
+
+function renderVoiceSummary(){
+  const vs = voiceState;
+  if(!vs) return;
+  const container = vs.container;
+  container.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'voice-stage voice-summary';
+
+  const title = document.createElement('div');
+  title.style.fontFamily = "'Nunito',sans-serif";
+  title.style.fontWeight = '700';
+  title.textContent = 'Voice Round Complete';
+  box.appendChild(title);
+
+  const scoreEl = document.createElement('div');
+  scoreEl.className = 'big-score';
+  scoreEl.textContent = vs.correctCount + ' / ' + vs.attempted + ' correct';
+  box.appendChild(scoreEl);
+
+  const btns = document.createElement('div');
+  btns.className = 'voice-summary-btns';
+  const redoBtn = document.createElement('button');
+  redoBtn.textContent = 'Redo Round';
+  redoBtn.addEventListener('click', ()=> startVoiceRound(vs.sectionId, container));
+  const listBtn = document.createElement('button');
+  listBtn.textContent = 'Return to List View';
+  listBtn.addEventListener('click', ()=>{
+    const sid = vs.sectionId;
+    voiceState = null;
+    switchMode(sid, 'list');
+    renderList(sid);
+  });
+  btns.appendChild(redoBtn);
+  btns.appendChild(listBtn);
+  box.appendChild(btns);
+
+  container.appendChild(box);
+  if(voiceState){
+    voiceState.recognition = null;
+    voiceState.token = (voiceState.token||0) + 1; // ensure summary state can't be clobbered by late callbacks
+  }
+}
+
+/* ================== INIT ================== */
+function init(){
+  loadProgress();
+  buildTabs();
+  buildSections();
+  showSection(SECTIONS[0].id);
+  updateScore();
+  document.getElementById('resetAllBtn').onclick = resetAll;
+  document.getElementById('loadingNote').style.display = 'none';
+}
+
+init();
+</script>
+</body>
+</html>

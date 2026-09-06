@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Four Stone Ages — Field Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#201b16;
+    --bg-2:#2a2319;
+    --surface:#2f281f;
+    --surface-2:#3a3025;
+    --line:#4a3d2c;
+    --ochre:#c1811c;
+    --ochre-dim:#8f611a;
+    --bone:#ede2cd;
+    --muted:#b0a086;
+    --moss:#7f9a5a;
+    --moss-bg:#2c331f;
+    --rust:#b0492f;
+    --rust-bg:#3a2620;
+    --radius:4px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 10% 0%, #2a2117 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 100%, #241d15 0%, transparent 55%),
+      var(--bg);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:var(--ochre);}
+  ::selection{background:var(--ochre-dim); color:#fff;}
+
+  .wrap{max-width:880px; margin:0 auto; padding:36px 20px 90px;}
+
+  header.top{
+    border-bottom:1px solid var(--line);
+    padding-bottom:26px;
+    margin-bottom:28px;
+    position:relative;
+  }
+  .kicker{
+    font-size:13px;
+    letter-spacing:.04em;
+    color:var(--muted);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    font-weight:700;
+    font-size:clamp(28px, 5vw, 44px);
+    line-height:1.05;
+    margin:0 0 12px;
+    color:var(--bone);
+    text-shadow: 0 1px 0 rgba(0,0,0,.4);
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--ochre);
+  }
+  .sub{
+    color:var(--muted);
+    font-size:15.5px;
+    max-width:60ch;
+  }
+
+  .score-strip{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+    align-items:center;
+  }
+  .score-pill{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:13px;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .score-pill b{color:var(--bone); font-weight:600;}
+  .score-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--ochre);}
+  .reset-all-btn{
+    margin-left:auto;
+    background:transparent;
+    border:1px solid var(--rust);
+    color:var(--rust);
+    font-family:'Work Sans', sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:7px 13px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .reset-all-btn:hover{background:var(--rust-bg);}
+
+  .tabs{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-bottom:26px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:0;
+  }
+  .tab-btn{
+    background:transparent;
+    border:none;
+    color:var(--muted);
+    font-family:'Work Sans', sans-serif;
+    font-size:14.5px;
+    font-weight:600;
+    padding:11px 14px;
+    cursor:pointer;
+    border-bottom:2.5px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab-btn:hover{color:var(--bone);}
+  .tab-btn.active{
+    color:var(--ochre);
+    border-bottom-color:var(--ochre);
+  }
+  .tab-btn .count{
+    color:var(--muted);
+    font-weight:400;
+    font-size:12.5px;
+  }
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .panel-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:22px;
+    color:var(--bone);
+  }
+  .panel-desc{color:var(--muted); font-size:13.5px; margin-top:4px;}
+  .save-note{color:var(--ochre); display:block; margin-top:4px;}
+
+  .btnrow{display:flex; gap:8px; flex-wrap:wrap;}
+  .btn{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:8px 13px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .btn:hover{background:var(--line); border-color:var(--ochre-dim);}
+  .btn.primary{
+    background:var(--ochre);
+    border-color:var(--ochre);
+    color:#1c1610;
+  }
+  .btn.primary:hover{background:#d4901f;}
+  .btn.ghost{background:transparent;}
+  .btn:disabled{opacity:.5; cursor:not-allowed;}
+  .btn.reset-section{border-color:var(--rust-bg); color:var(--rust);}
+  .btn.reset-section:hover{background:var(--rust-bg); border-color:var(--rust);}
+
+  /* View toggle row (Fill in the Blanks / One Word / True-False) */
+  .view-toggle-row{
+    width:100%;
+    margin-bottom:18px;
+  }
+  .view-toggle{
+    display:inline-flex;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:3px;
+    gap:2px;
+  }
+  .vt-btn{
+    background:transparent;
+    border:none;
+    color:var(--muted);
+    font-family:'Work Sans', sans-serif;
+    font-size:13px;
+    font-weight:600;
+    padding:8px 16px;
+    border-radius:999px;
+    cursor:pointer;
+  }
+  .vt-btn.active{
+    background:var(--ochre);
+    color:#1c1610;
+  }
+
+  /* Accordion (Fill in blanks) */
+  .accordion-item{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    margin-bottom:10px;
+    background:var(--surface);
+    overflow:hidden;
+  }
+  .accordion-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 16px;
+    cursor:pointer;
+    gap:10px;
+  }
+  .accordion-head:hover{background:var(--surface-2);}
+  .accordion-title{
+    font-weight:600;
+    font-size:15px;
+    color:var(--bone);
+  }
+  .accordion-meta{
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+  .chevron{
+    width:9px; height:9px;
+    border-right:2px solid var(--ochre);
+    border-bottom:2px solid var(--ochre);
+    transform:rotate(-45deg);
+    transition:transform .18s ease;
+    flex:none;
+  }
+  .accordion-item.open .chevron{transform:rotate(45deg);}
+  .accordion-body{
+    display:none;
+    padding:4px 16px 16px;
+    border-top:1px solid var(--line);
+  }
+  .accordion-item.open .accordion-body{display:block;}
+
+  .q-row{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .q-row:last-child{border-bottom:none;}
+  .q-num{
+    color:var(--ochre);
+    font-weight:700;
+    font-size:12.5px;
+    margin-right:6px;
+  }
+  .q-text{
+    font-size:15px;
+    color:var(--bone);
+    margin-bottom:9px;
+  }
+  .q-text .blank-tag{
+    color:var(--ochre);
+    font-weight:700;
+  }
+  .answer-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  input.blank-input{
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    padding:8px 10px;
+    border-radius:var(--radius);
+    width:220px;
+    max-width:60vw;
+  }
+  input.blank-input:focus{outline:none; border-color:var(--ochre);}
+  .check-btn{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-size:12.5px;
+    font-weight:600;
+    padding:8px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .check-btn:hover{border-color:var(--ochre);}
+  .feedback{
+    font-size:13px;
+    font-weight:600;
+    padding:5px 10px;
+    border-radius:999px;
+    display:none;
+  }
+  .feedback.correct{
+    display:inline-block;
+    background:var(--moss-bg);
+    color:var(--moss);
+  }
+  .feedback.incorrect{
+    display:inline-block;
+    background:var(--rust-bg);
+    color:var(--rust);
+  }
+  .feedback .ans{color:var(--bone); font-weight:400;}
+
+  .tf-row{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .tf-row:last-child{border-bottom:none;}
+  .tf-buttons{display:flex; gap:6px; flex:none;}
+  .tf-btn{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-size:12.5px;
+    font-weight:700;
+    padding:7px 14px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    min-width:56px;
+  }
+  .tf-btn:hover{border-color:var(--ochre-dim);}
+  .tf-btn.selected-correct{background:var(--moss-bg); color:var(--moss); border-color:var(--moss);}
+  .tf-btn.selected-incorrect{background:var(--rust-bg); color:var(--rust); border-color:var(--rust);}
+  .tf-btn.reveal-correct{outline:2px solid var(--moss);}
+
+  .mcq-card{
+    padding:15px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .mcq-card:last-child{border-bottom:none;}
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-top:10px;
+  }
+  @media(max-width:560px){.options{grid-template-columns:1fr;}}
+  .opt-btn{
+    text-align:left;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    font-size:13.5px;
+    padding:9px 12px;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .opt-btn:hover{border-color:var(--ochre-dim);}
+  .opt-btn.correct{background:var(--moss-bg); border-color:var(--moss); color:var(--moss);}
+  .opt-btn.incorrect{background:var(--rust-bg); border-color:var(--rust); color:var(--rust);}
+  .opt-btn.dim{opacity:.55;}
+
+  .sa-card{padding:16px 0; border-bottom:1px solid var(--line);}
+  .sa-card:last-child{border-bottom:none;}
+  textarea.sa-input{
+    width:100%;
+    min-height:64px;
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    font-size:14px;
+    padding:9px 11px;
+    border-radius:var(--radius);
+    resize:vertical;
+    margin-bottom:8px;
+  }
+  textarea.sa-input:focus{outline:none; border-color:var(--ochre);}
+  .model-answer{
+    display:none;
+    background:var(--bg-2);
+    border-left:3px solid var(--ochre);
+    padding:10px 12px;
+    margin-top:8px;
+    font-size:13.5px;
+    color:var(--muted);
+    border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .model-answer.show{display:block;}
+  .model-answer b{color:var(--ochre); font-weight:600; display:block; margin-bottom:3px; font-size:12px; text-transform:none;}
+
+  .term{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:17px;
+    color:var(--ochre);
+    margin-bottom:6px;
+  }
+
+  .pagination{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin-top:22px;
+  }
+  .page-info{font-size:13px; color:var(--muted);}
+  .page-btn{
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--bone);
+    font-size:13px;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:var(--radius);
+    cursor:pointer;
+  }
+  .page-btn:disabled{opacity:.35; cursor:not-allowed;}
+  .page-btn:hover:not(:disabled){border-color:var(--ochre);}
+
+  /* Voice Round */
+  .vr-stage{min-height:220px;}
+  .vr-panel{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:32px 26px;
+    text-align:center;
+  }
+  .vr-icon{font-size:34px; margin-bottom:6px;}
+  .vr-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:20px;
+    color:var(--bone);
+    margin-bottom:10px;
+  }
+  .vr-desc{color:var(--muted); font-size:14px; max-width:48ch; margin:0 auto 16px;}
+  .vr-reasons{
+    text-align:left;
+    max-width:44ch;
+    margin:0 auto 14px;
+    color:var(--muted);
+    font-size:13.5px;
+    padding-left:20px;
+  }
+  .vr-progress{color:var(--muted); font-size:12.5px; margin-bottom:14px; letter-spacing:.03em;}
+  .vr-question-text{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    font-weight:600;
+    color:var(--bone);
+    max-width:52ch;
+    margin:0 auto 20px;
+    line-height:1.35;
+  }
+  .vr-question-text .blank-tag{color:var(--ochre);}
+  .vr-status-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    margin-bottom:22px;
+  }
+  .vr-mic-dot{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--muted);
+  }
+  .vr-mic-dot.live{
+    background:var(--rust);
+    animation:pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(176,73,47,.5); }
+    50%{ box-shadow:0 0 0 8px rgba(176,73,47,0); }
+  }
+  .vr-status{color:var(--muted); font-size:13.5px;}
+  .vr-heard{color:var(--muted); font-size:13.5px; margin-bottom:10px; font-style:italic;}
+  .vr-verdict{
+    display:inline-block;
+    font-weight:700;
+    font-size:15px;
+    padding:8px 16px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .vr-verdict.correct{background:var(--moss-bg); color:var(--moss);}
+  .vr-verdict.incorrect{background:var(--rust-bg); color:var(--rust);}
+  .vr-controls{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
+  .vr-score{font-family:'Fraunces', serif; font-size:28px; font-weight:700; color:var(--ochre); margin-bottom:20px;}
+
+  footer{
+    margin-top:50px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-size:12.5px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">History · Chapter 2 — Prehistory revision</div>
+    <h1>The Four Stone Ages<br><em>a field quiz</em></h1>
+    <p class="sub">Every section of the chapter, turned into questions — from the first chipped flint to the discovery of bronze. Answer at your own pace; nothing here is timed except Voice Round.</p>
+    <div class="score-strip" id="scoreStrip"></div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <div id="panels"></div>
+
+  <footer>Based on "The Four Stone Ages" — Stone Age · Palaeolithic · Mesolithic · Neolithic · Chalcolithic · Bronze Age. Your progress is saved in this browser only.</footer>
+</div>
+
+<script>
+
+const FIB_SECTIONS = [["The Stone Age", [["Stone Age is a period of human technological development characterised by the use of ___ as the principal raw material for tools.", "stone"], ["Human groups in different parts of the world began using stone tools at ___ times.", "different"], ["Human groups abandoned stone for metal tools at ___ times.", "different"], ["Broadly speaking, the Stone Age began roughly ___ years ago.", "2.5 million"], ["In some parts of the world, the Stone Age ended ___ years ago.", "5,000"], ["In other regions, the Stone Age ended much more ___.", "recently"], ["During the Stone Age, our ancestors went through many different stages of biological and ___ evolution.", "cultural"], ["It was long after our lineage became modern that we began to experiment with new innovations such as ___.", "metallurgy"], ["The Stone Age is further divided according to the quality of ___ used.", "stone tools"], ["The Palaeolithic Age lasted from 500,000 B.C. to about ___ B.C.", "10,000"], ["The Mesolithic Age, or the Middle Stone Age, lasted from 10,000 B.C. to ___ B.C.", "8,000"], ["The Neolithic Age lasted from 8,000 B.C. to ___ B.C.", "4,000"], ["The Chalcolithic Age lasted from 4,000 B.C. to ___ B.C.", "2,000"], ["In the Chalcolithic Age, man used both ___ and ___ tools.", "stone and copper"], ["The Stone Age chapter's learning objectives include the discovery of Metal and the ___ Age.", "Bronze"]]], ["The Primitive Age", [["There is no written record for the ancient period of history from 500,000 B.C. to ___ B.C.", "10,000"], ["This age is called the Primitive Age or the ___ Age.", "Pre-Historic"], ["The Primitive Age is also called the ___ Age.", "Palaeolithic"], ["Palaeolithic is a ___ word.", "Greek"], ["'Palaios' means ___.", "old"], ["'Lithos' means ___.", "stone"], ["Hence this age is also called the ___ Stone Age.", "Old"], ["In this age man used stone for his ___ tools and weapons.", "crude"], ["His life was only a little better than that of the ___ in the jungle.", "animals"]]], ["Hunters and Wanderers", [["The primitive man in the Old Stone Age was a ___ and a wanderer.", "hunter"], ["___ was natural to man.", "Hunger"], ["But primitive man did not know how to ___ food.", "produce"], ["Wild growth of plants, fruits, sweetroots or berries became his ___ food.", "natural"], ["He ate plants, fruits and berries in ___ form.", "raw"], ["Primitive man also saw wild animals around in the ___.", "jungle"], ["He began to hunt wild animals and ate their raw ___.", "meat"]]], ["Reasons for Movement", [["The primitive man was not a food producer but a food ___.", "gatherer"], ["If he had stayed at one place for a long time, he would have eaten up all the available plants and ___ resources.", "animal"], ["So primitive man had to move elsewhere in search of ___.", "food"], ["The primitive man was not aware of the ___ of animals.", "domestication"], ["As animals used to move from one place to another in search of food, primitive man followed ___.", "them"], ["Plants and trees bear fruit in ___ seasons.", "different"], ["Primitive man moved from one region to another in search of different kinds of plants and ___.", "fruits"], ["People, plants and animals need ___ to survive.", "water"], ["Many lakes, streams and rivers were perennial, others were ___.", "non-perennial"], ["People used to migrate during the ___ season.", "dry"]]], ["Tools and Weapons", [["The early man used sharp-edged ___ as his tools and weapons.", "stones"], ["Early man's tools were crude and ___.", "rough"], ["Palaeolithic tools were made of bones, horns, wood or ___.", "stone"], ["___ was a commonly used stone for tools.", "Flint"], ["Flint was a hard stone, ___ in colour.", "grey"], ["Flint could be easily chopped or ___.", "shaped"], ["Flint stone was often used to make knives, choppers, hand axes, and flake ___.", "implements"], ["Later on, wooden sticks or rough ___ were tied to stone tools.", "handles"], ["Attaching handles made the use of tools ___ than before.", "easier"], ["Primitive man used tools and weapons to fell trees, kill animals, remove animal skin and dig the ___.", "earth"], ["Specimens of Old Stone Age tools have been found in the river valley of Soan, now in ___.", "Pakistan"], ["Old Stone Age tools were also found in the river valleys of Narmada, Godavari and ___.", "Tungabhadra"]]], ["Discovery of Fire", [["Ability to make ___ was the major discovery of the Old Stone Age.", "fire"], ["Fire changed primitive man's ___.", "life"], ["Man got warmth and ___ from fire.", "light"], ["Man could roast his food which became tastier, more easily digestible and more ___.", "nourishing"], ["Man could scare away wild animals by burning fire at the entrance of his cave during ___.", "night"], ["Early man used to rub ___ to produce fire.", "stones"], ["Early man believed in supernatural or some ___ power that could make or mar him.", "magical"], ["In the Primitive Age, man discovered fire by chance or ___.", "good luck"]]], ["Clothes and Shelter", [["The primitive man is said to have long ___ on his body.", "hair"], ["Primitive man had to protect himself against rain or ___.", "cold"], ["The skin of the hunted animals became primitive man's ___.", "clothing"], ["Primitive man also used the bark of trees or ___ to cover his body.", "leaves"], ["For his shelter, primitive man went to the ___.", "caves"], ["Sometimes, primitive man hid himself behind thick tree leaves for shelter against rough weather and wild ___.", "animals"]]], ["The Mesolithic Age", [["'Mesos' means ___.", "Middle"], ["'Lithos' in Mesolithic means ___.", "Stone"], ["Mesolithic Age is a period of transition from Old Stone Age to the ___.", "New Stone Age"], ["The Mesolithic period began around ___ B.C.", "10,000"], ["During the Mesolithic period, man learnt to make more sophisticated tools using bones and ___ along with stones.", "horns"], ["Bones and horns were more flexible and ___ than stone.", "lighter"], ["Mesolithic man could also make a larger variety of things like bows and arrows and fishing ___.", "hooks"], ["Heavy tools gave way to smaller and more refined ones called ___.", "microliths"], ["'Micro' means ___.", "small"], ["'Lith' means ___.", "stone"], ["Examples of microliths are arrowheads and ___.", "spearheads"], ["Many mesolithic sites have been widely found in Rajasthan, South Uttar Pradesh, Central and Eastern India and in ___.", "Deccan"], ["For most of the Mesolithic period man continued to be a food ___.", "gatherer"], ["It was probably towards the end of the Mesolithic period that man learnt about ___.", "cultivation"], ["Man observed that when seeds fell on the ground and received water, they grew into plants that bore ___.", "grains"], ["Growing crops, or ___, became another means of getting food besides hunting and gathering.", "agriculture"]]], ["The Neolithic Age", [["The Old Stone age lasted till ___ B.C.", "10,000"], ["Thereafter, the ___ age began.", "New Stone"], ["In Greek language, \"Neo\" means ___.", "New"], ["In Greek language, \"Lithos\" means ___.", "stone"], ["The period of the New Stone Age roughly extended from 8,000 B.C. to ___ B.C.", "4000"], ["It was the discovery of fire which marked the end of the Old Stone Age and the beginning of the ___.", "New Stone Age"]]], ["Feature: Changing Environment", [["In the New Stone Age, climatic conditions became relatively ___.", "warmer"], ["Warmer climate led to the development of ___.", "grasslands"], ["Development of grasslands increased the strength of herbivorous animals like deer, antelope, goat, sheep and ___.", "cattle"], ["Those who hunted herbivorous animals started to follow them to know about their food habits and ___ seasons.", "breeding"], ["Following the animals helped early men to herd and ___ them.", "rear"], ["Herbivorous means animals feeding on ___ and other plants.", "grass"], ["Several grain bearing grasses, including wheat, barley and ___ grew naturally in different parts of the subcontinent.", "rice"], ["The natural growth of grain bearing grasses gave the idea of ___ to early men.", "agriculture"]]], ["Feature: Discovery of Agriculture", [["The man in the New Stone Age learnt to produce his own ___.", "food"], ["Learning food production was man's major ___.", "achievement"], ["Like the discovery of fire, man must have learnt food production by ___.", "chance"], ["Rice, wheat and ___ were the major crops grown by man during the New Stone Age.", "barley"]]], ["Feature: Settled Life in Villages", [["The most striking feature of man in the New Stone Age was that he began to live a ___ life.", "settled"], ["Man was no more a nomad or a ___ in search of food or shelter.", "wanderer"], ["Neolithic man built small huts of bamboo and ___ to live in.", "straw"], ["A cluster of huts grew up in each other's ___.", "neighbourhood"], ["Most Neolithic huts were built on river banks or near ___.", "lakes"], ["A cluster of huts looked like a village ___.", "dwelling"]]], ["Feature: Domestication of Animals", [["In the Neolithic Age, man learnt to tame ___.", "animals"], ["Probably, the ___ was the first animal to be tamed.", "dog"], ["In the course of time, man began to tame and domesticate sheep, goats, pigs, donkeys, horses and ___.", "camels"], ["Domestication is the name given to the process in which people grow plants and look after ___.", "animals"]]], ["Feature: Invention of Wheel", [["Neolithic man's ___ led him to invent the wheel.", "intelligence"], ["A round trunk of a felled tree might have given Neolithic man the idea of the ___.", "wheel"], ["When Neolithic man cut the round trunk of wood, it might have rolled down a ___.", "slope"], ["The rolling trunk gave rise to the idea of the ___.", "wheel"], ["The invention of the wheel was one of the most important achievements of man in the ___ age.", "Neolithic"], ["As a result of the wheel's invention, a wheeled ___ appeared.", "cart"], ["The wheeled cart helped to move heavy load from one place to another and made travelling easier and ___.", "comfortable"], ["The wheel was also used for making beautiful ___.", "pots"], ["The wheel was also used for spinning and ___.", "weaving"], ["The wheel helped in the development of art and ___.", "craft"]]], ["Feature: Pottery and Other Arts", [["The man in the New Stone Age needed pots for his daily use to store food and other ___.", "items"], ["Neolithic man began to make pots from ___ and dried them in the sun.", "clay"], ["Neolithic man found that clay pots could be baked on ___ and made stronger.", "fire"], ["___ pots were used for quite sometime before the potter's wheel.", "Hand-made"], ["Later, Neolithic man invented the potter's ___.", "wheel"], ["The potter's wheel helped make better pots of different shapes and at a ___ speed.", "faster"], ["Neolithic man also developed the art of colouring, painting and ___ pots.", "decorating"]]], ["Feature: Better Tools and Weapons", [["Tools and weapons of even the Neolithic man were still made of ___.", "stone"], ["Neolithic tools were far ___ than the earlier ones.", "better"], ["Neolithic man also provided wooden ___ to his tools.", "handles"], ["New tools and weapons like the ___, the bow and arrows were also developed in the Neolithic Age.", "sickle"], ["With the sickle, Neolithic man could ___ his crops.", "harvest"], ["___ axes helped Neolithic man to develop carpentry.", "Handled"]]], ["Feature: Extended Use of Fire", [["Man had discovered fire by the end of the ___.", "Old Stone Age"], ["In the New Stone Age, man learnt to use fire in a ___ way.", "wider"], ["Neolithic man could heat earthenware to a certain degree in order to ___ it for strength.", "harden"], ["Neolithic man learnt to make small fire in an earthen ___.", "bowl"], ["Making fire in an earthen bowl was probably the first ___ man developed.", "lamp"], ["Neolithic man used animal ___ in his earthen lamps.", "fats"], ["Neolithic man had also learnt to cook his food on fire to make it tastier and more ___.", "nourishing"]]], ["The Chalcolithic Age", [["After 4000 B.C. there began the ___ Age.", "Chalcolithic"], ["In the Chalcolithic Age, man had discovered ___.", "copper"], ["Man began to use copper along with the ___.", "stone"], ["Because man used stone and copper together, the age is called the stone-___ age.", "copper"]]], ["Discovery of Metals: Copper Age", [["Man found that nature had scattered ___ around him.", "metals"], ["___ was the first metal man had found.", "Copper"], ["The period between 4000 B.C. and 2000 B.C. is called the ___ Age.", "Copper"]]], ["The Bronze Age", [["Next to copper, man discovered tin, zinc and ___.", "lead"], ["Man realised that copper was a ___ metal.", "soft"], ["So, man learnt to mix copper with tin and ___.", "zinc"], ["This alloy of copper, tin and zinc was called ___.", "bronze"], ["Bronze was harder than copper or ___.", "tin"], ["With the use of bronze and copper for tools and weapons, the use of stone tools decreased ___.", "voluminously"]]], ["Settled Life", [["With the discovery of fire, wheel, agriculture and metals, man began to live a ___ life.", "settled"], ["Settled man lived in ___ huts.", "straw"], ["Settled man had also developed family ___.", "feeling"], ["The oldest male member was the ___ of the family.", "head"], ["Settled families set up their straw huts close to each other, near a river or a ___.", "lake"], ["A cluster of such huts became a small village or a ___.", "settlement"], ["Settlements were usually built on ___ ground.", "high"], ["Settlements were built on high ground to keep safe from rain or ___ waters.", "flood"]]], ["Comparison: Palaeolithic vs Neolithic", [["In the comparison table, the Palaeolithic Age extended roughly from 500,000 B.C. to ___ B.C.", "10,000"], ["In the Palaeolithic Age, man used jungle vegetation and animal ___ for food.", "flesh"], ["In the Palaeolithic Age, men only chased and killed animals for their meat or for their own ___.", "safety"], ["Tools of the Palaeolithic period were mostly made of ___.", "flint"], ["Palaeolithic tools were rough and ___.", "crude"], ["Man in the Palaeolithic Age discovered fire by ___.", "chance"], ["Man in the Palaeolithic Age led a ___ life.", "nomadic"], ["Palaeolithic man's life was only a little better than that of ___.", "animals"], ["In the comparison table, the Neolithic Age extended from 8,000 B.C. to ___ B.C.", "4000"], ["In the Neolithic Age, man became a ___ of his own food.", "producer"], ["Neolithic man developed agriculture and growing of ___.", "foodgrains"], ["In the Neolithic Age, man ___ and domesticated animals.", "tamed"], ["Besides their flesh, Neolithic animals were used for agriculture, riding and ___.", "carriage"], ["Man of the Neolithic Age made better tools and weapons like handled axes, sickles, bows and ___.", "arrows"], ["Neolithic tools were sharper, stronger and more ___.", "beautiful"], ["The discovery of agriculture and invention of the ___ were the major achievements of the Neolithic Age.", "wheel"], ["Man in the Neolithic Age began to live a settled life in small ___.", "villages"], ["Neolithic man made small huts near his ___.", "fields"], ["Some ___ pattern emerged in the Neolithic villages.", "leadership"]]], ["Revision Round", [["The Stone Age began roughly 2.5 million years ago and used stone as the principal raw material for ___.", "tools"], ["The four periods of the Stone Age are classified by the ___ of stone tools used.", "quality"], ["Palaeolithic man's tools were made of bones, horns, wood or stone, and ___ was a commonly used stone.", "flint"], ["Fire gave early man warmth, light, and helped him cook food and scare away ___.", "wild animals"], ["Mesolithic man used bones and horns along with stones because these materials were more flexible and ___.", "lighter"], ["Man learnt cultivation towards the end of the ___ period.", "Mesolithic"], ["The New Stone Age is also called the ___ Age.", "Neolithic"], ["Neolithic man built small huts of bamboo and straw, forming clusters that looked like a ___.", "village"], ["The dog was probably the first animal to be ___.", "tamed"], ["A rolling tree trunk gave Neolithic man the idea of the ___.", "wheel"], ["The wheeled cart made travelling easier and helped move ___ loads.", "heavy"], ["Hand-made pots were later improved with the invention of the ___.", "potter's wheel"], ["The sickle helped Neolithic man ___ his crops.", "harvest"], ["Neolithic man's first lamp was a small fire made in an earthen ___.", "bowl"], ["The Chalcolithic Age is also known as the stone-___ age.", "copper"], ["Copper was the first metal discovered, and the period 4000 B.C. to 2000 B.C. is called the ___ Age.", "Copper"], ["Man mixed copper with tin and zinc to form a harder alloy called ___.", "bronze"], ["With bronze and copper tools becoming common, the use of ___ tools decreased voluminously.", "stone"], ["Settled Neolithic and Chalcolithic families lived in straw huts, with the oldest male member as the ___.", "head of the family"], ["Villages were usually built on high ground to stay safe from rain or ___.", "flood waters"]]]];
+const TF = [["The Stone Age used stone as the principal raw material for tools.", true], ["Human groups everywhere in the world started using stone tools at exactly the same time.", false], ["The Stone Age began roughly 2.5 million years ago.", true], ["The Stone Age ended at the same time in every part of the world.", false], ["The Stone Age is divided into four periods according to the quality of stone tools used.", true], ["The Palaeolithic Age lasted from 500,000 B.C. to about 10,000 B.C.", true], ["The Mesolithic Age lasted from 10,000 B.C. to 8,000 B.C.", true], ["The Neolithic Age lasted from 4,000 B.C. to 2,000 B.C.", false], ["The Chalcolithic Age lasted from 4,000 B.C. to 2,000 B.C.", true], ["In the Chalcolithic Age, man used only copper tools and no stone tools.", false], ["There is a written record for the period from 500,000 B.C. to 10,000 B.C.", false], ["The Primitive Age is also called the Palaeolithic Age.", true], ["'Palaios' is a Greek word meaning 'new'.", false], ["'Lithos' is a Greek word meaning 'stone'.", true], ["The Palaeolithic Age is also called the Old Stone Age.", true], ["Primitive man's life in the Old Stone Age was far better than that of animals in the jungle.", false], ["The primitive man in the Old Stone Age was a hunter and a wanderer.", true], ["Primitive man knew how to produce food in the Old Stone Age.", false], ["Primitive man ate wild plants, fruits and berries in raw form.", true], ["Primitive man hunted wild animals and ate their raw meat.", true], ["Primitive man was a food producer, not a food gatherer.", false], ["If primitive man stayed too long in one place, he would exhaust the plants and animal resources there.", true], ["Primitive man was aware of the domestication of animals.", false], ["Primitive man followed the movement of animals in search of food.", true], ["Plants and trees bear fruit in the same season everywhere.", false], ["People, plants and animals all need water to survive.", true], ["All lakes, streams and rivers were perennial.", false], ["People used to migrate during the dry season in search of water.", true], ["Early man used sharp-edged stones as his tools and weapons.", true], ["Palaeolithic tools were smooth, polished and highly refined.", false], ["Flint stone is grey in colour and can be easily chopped or shaped.", true], ["Flint stone was used to make knives, choppers, hand axes and flake implements.", true], ["Wooden handles were tied to stone tools to make their use easier.", true], ["Old Stone Age tools have been found in the river valley of the Soan, now in Pakistan.", true], ["Old Stone Age tools have never been found near the Narmada or Godavari rivers.", false], ["The ability to make fire was the major discovery of the Old Stone Age.", true], ["Fire gave primitive man warmth and light.", true], ["Roasting food on fire made it tastier, more digestible and more nourishing.", true], ["Primitive man burned fire at the cave entrance during the night to scare away wild animals.", true], ["Early man used electricity to produce fire.", false], ["Early man used to rub stones together to produce fire.", true], ["Primitive man believed in supernatural or magical powers.", true], ["Primitive man discovered fire through planned scientific experiments.", false], ["Primitive man used the skin of hunted animals as clothing.", true], ["Primitive man used the bark of trees and leaves to cover his body.", true], ["Primitive man built brick houses for shelter.", false], ["Primitive man went to caves for shelter.", true], ["The word 'Mesolithic' comes from 'Mesos' (middle) and 'Lithos' (stone).", true], ["The Mesolithic Age is a period of transition from the Old Stone Age to the New Stone Age.", true], ["The Mesolithic period began around 10,000 B.C.", true], ["Mesolithic man used only stone and never used bones or horns for tools.", false], ["Microliths were smaller and more refined tools than earlier heavy tools.", true], ["Arrowheads and spearheads are examples of microliths.", true], ["Mesolithic sites have been found in Rajasthan, South Uttar Pradesh and the Deccan.", true], ["For most of the Mesolithic period, man remained a food gatherer.", true], ["Man learnt about cultivation at the very beginning of the Mesolithic Age.", false], ["Man observed that seeds which fell on the ground and received water grew into grain-bearing plants.", true], ["Agriculture became another means of getting food besides hunting and gathering.", true], ["The Old Stone Age lasted till 10,000 B.C.", true], ["In Greek, 'Neo' means 'old' and 'Lithos' means 'new'.", false], ["The Neolithic Age roughly extended from 8,000 B.C. to 4000 B.C.", true], ["The climate became relatively warmer in the New Stone Age, leading to the development of grasslands.", true], ["Herbivorous animals feed only on meat.", false], ["Wheat, barley and rice grew naturally in different parts of the subcontinent.", true], ["Discovering agriculture was a major achievement of New Stone Age man.", true], ["Rice, wheat and barley were the major crops grown by Neolithic man.", true], ["In the New Stone Age, man began to live a settled life for the first time.", true], ["Neolithic man remained a nomad, wandering constantly in search of shelter.", false], ["Neolithic huts were built of bamboo and straw.", true], ["A cluster of Neolithic huts looked like a village dwelling.", true], ["Man learnt to tame animals during the Neolithic Age.", true], ["The dog was probably the first animal to be tamed.", true], ["Neolithic man tamed animals such as sheep, goats, pigs, donkeys, horses and camels.", true], ["Domestication means growing plants and looking after animals.", true], ["The invention of the wheel is credited to Palaeolithic man.", false], ["A round tree trunk rolling down a slope may have given Neolithic man the idea of the wheel.", true], ["The wheeled cart helped move heavy loads and made travel easier.", true], ["The wheel was also used for making pots, spinning and weaving.", true], ["Neolithic man first made pots from clay and dried them in the sun.", true], ["Baking clay pots on fire made them weaker.", false], ["Hand-made pots were used before the potter's wheel was invented.", true], ["The potter's wheel allowed faster pot-making in different shapes.", true], ["Neolithic man developed the art of colouring, painting and decorating pots.", true], ["Neolithic tools were still made of stone but were far better than earlier ones.", true], ["The sickle helped Neolithic man harvest his crops.", true], ["Handled axes helped Neolithic man develop carpentry.", true], ["Man discovered fire for the first time in the Neolithic Age.", false], ["Neolithic man learnt to heat earthenware to harden it for strength.", true], ["The first lamp developed by man used animal fats as fuel.", true], ["Cooking food on fire made it tastier and more nourishing.", true], ["The Chalcolithic Age began after 4000 B.C.", true], ["In the Chalcolithic Age, man used only copper tools.", false], ["The Chalcolithic Age is called the stone-copper age.", true], ["Man found that nature had scattered metals around him.", true], ["Copper was the first metal man discovered and learnt to use.", true], ["The period between 4000 B.C. and 2000 B.C. is called the Copper Age.", true], ["Man discovered tin, zinc and lead after discovering copper.", true], ["Copper was found to be a very hard metal.", false], ["Bronze is an alloy made by mixing copper with tin and zinc.", true], ["Bronze was softer than both copper and tin.", false], ["With the use of bronze and copper, the use of stone tools decreased voluminously.", true], ["Man began to live a settled life with the discovery of fire, wheel, agriculture and metals.", true], ["Settled families lived in straw huts.", true], ["The youngest male member was the head of a settled family.", false], ["Settled families set up their huts close to each other near a river or lake.", true], ["A cluster of huts became a small village or settlement.", true], ["Settlements were usually built on low ground close to the riverbank to save effort.", false], ["Settlements were built on high ground to stay safe from rain or flood waters.", true], ["In the Palaeolithic Age, man used jungle vegetation and animal flesh for food.", true], ["In the Palaeolithic Age, men only chased and killed animals for meat or safety.", true], ["Palaeolithic tools were mostly made of flint and were rough and crude.", true], ["Palaeolithic man discovered fire deliberately through experimentation.", false], ["Palaeolithic man led a nomadic life.", true], ["In the Neolithic Age, man became a producer of his own food.", true], ["Neolithic man used animals only for meat and never for riding or carriage.", false], ["Neolithic tools were sharper, stronger and more beautiful than Palaeolithic tools.", true], ["The discovery of agriculture and invention of the wheel were major achievements of the Neolithic Age.", true], ["A leadership pattern emerged in Neolithic villages.", true], ["The Stone Age, Bronze Age and Iron Age together make up the four Stone Ages described in this chapter.", false], ["Man's tools became progressively more refined from the Palaeolithic to the Neolithic Age.", true]];
+const MCQ = [["What was the principal raw material for tools during the Stone Age?", ["Bronze", "Stone", "Iron", "Copper"], 1], ["Roughly how long ago did the Stone Age begin?", ["25,000 years ago", "250,000 years ago", "2.5 million years ago", "25 million years ago"], 2], ["Into how many periods is the Stone Age divided?", ["Two", "Three", "Four", "Five"], 2], ["The Palaeolithic Age lasted from:", ["500,000 B.C. \u2013 10,000 B.C.", "10,000 B.C. \u2013 8,000 B.C.", "8,000 B.C. \u2013 4,000 B.C.", "4,000 B.C. \u2013 2,000 B.C."], 0], ["The Mesolithic Age is also known as the:", ["Old Stone Age", "Middle Stone Age", "New Stone Age", "Copper Age"], 1], ["The Neolithic Age lasted from:", ["500,000 B.C. \u2013 10,000 B.C.", "10,000 B.C. \u2013 8,000 B.C.", "8,000 B.C. \u2013 4,000 B.C.", "4,000 B.C. \u2013 2,000 B.C."], 2], ["The Chalcolithic Age is also called the:", ["Iron Age", "Bronze Age", "Stone-Copper Age", "Wood Age"], 2], ["During the Chalcolithic Age, man used:", ["Only stone tools", "Only copper tools", "Both stone and copper tools", "Only bronze tools"], 2], ["The period 500,000 B.C. to 10,000 B.C., for which there is no written record, is called the:", ["Bronze Age", "Iron Age", "Primitive Age", "Modern Age"], 2], ["'Palaios' in Greek means:", ["New", "Middle", "Old", "Stone"], 2], ["'Lithos' in Greek means:", ["Water", "Fire", "Wheel", "Stone"], 3], ["Primitive man in the Old Stone Age was primarily a:", ["Farmer and trader", "Hunter and wanderer", "Potter and weaver", "Blacksmith"], 1], ["Primitive man ate wild plants, fruits and meat in what form?", ["Cooked", "Raw", "Fermented", "Dried"], 1], ["Which of these was NOT a reason for the movement of primitive man?", ["Search for food", "Movement of animals", "Need of water", "Search for a marketplace"], 3], ["Why did primitive man have to keep moving instead of staying in one place?", ["He disliked caves", "He would exhaust the local food resources", "He wanted to build cities", "He was searching for metal"], 1], ["Which stone was commonly used to make knives, choppers and hand axes?", ["Marble", "Flint", "Granite", "Limestone"], 1], ["Flint stone is best described as:", ["Soft and white", "Hard and grey", "Blue and brittle", "Black and heavy"], 1], ["What did primitive man tie to stone tools to make them easier to use?", ["Metal rings", "Wooden handles", "Leather straps only", "Nothing at all"], 1], ["Tools of the Old Stone Age have been found in river valleys such as:", ["Ganga and Yamuna", "Soan, Narmada, Godavari and Tungabhadra", "Indus and Sutlej", "Krishna and Kaveri"], 1], ["What was the major discovery of the Old Stone Age?", ["The wheel", "Agriculture", "Fire", "Pottery"], 2], ["What benefit did fire NOT give to primitive man?", ["Warmth", "Light", "Tastier food", "Written language"], 3], ["How did primitive man produce fire?", ["Using matchsticks", "By rubbing stones", "Using electricity", "Using sunlight through glass"], 1], ["Primitive man burned fire at the cave entrance at night mainly to:", ["Cook food only", "Scare away wild animals", "Signal to other tribes", "Melt metal"], 1], ["What did primitive man believe could make or mar him?", ["Science", "Supernatural or magical power", "Written law", "The government"], 1], ["What did primitive man use as clothing?", ["Cotton cloth", "Skin of hunted animals", "Woven wool", "Silk"], 1], ["Where did primitive man go for shelter?", ["Wooden houses", "Caves", "Brick huts", "Tents made of cloth"], 1], ["The word 'Mesolithic' is made from which two words?", ["Mesos + Neo", "Mesos + Lithos", "Palaios + Lithos", "Neo + Lithos"], 1], ["Mesolithic man made more sophisticated tools using stones along with:", ["Iron and copper", "Bones and horns", "Bronze and tin", "Clay and sand"], 1], ["Microliths were mainly used as:", ["Cooking pots", "Arrowheads and spearheads", "Wheels", "Lamps"], 1], ["The word 'microlith' comes from 'micro' meaning small and 'lith' meaning:", ["Fire", "Water", "Stone", "Wheel"], 2], ["Which region was NOT mentioned as a site where Mesolithic tools were found?", ["Rajasthan", "South Uttar Pradesh", "Deccan", "Kashmir Valley"], 3], ["What did man learn towards the end of the Mesolithic Age?", ["Metal smelting", "Cultivation", "Writing", "Pottery painting"], 1], ["What did man observe that led to the discovery of cultivation?", ["Animals grazing on grass", "Seeds falling on ground and growing with water", "Fire spreading in forests", "Stones changing shape"], 1], ["The Old Stone Age lasted till approximately:", ["4,000 B.C.", "8,000 B.C.", "10,000 B.C.", "2,000 B.C."], 2], ["In Greek, 'Neo' means:", ["Old", "Middle", "New", "Metal"], 2], ["The Neolithic Age roughly extended from:", ["500,000 B.C. to 10,000 B.C.", "10,000 B.C. to 8,000 B.C.", "8,000 B.C. to 4000 B.C.", "4000 B.C. to 2000 B.C."], 2], ["What led to the development of grasslands in the New Stone Age?", ["Heavy rainfall only", "Relatively warmer climatic conditions", "Volcanic eruptions", "Deforestation"], 1], ["Animals that feed on grass and plants are called:", ["Carnivorous", "Omnivorous", "Herbivorous", "Domestic"], 2], ["Which grain-bearing grasses grew naturally and inspired agriculture?", ["Maize, oats, rye", "Wheat, barley and rice", "Millet and sorghum only", "Cotton and jute"], 1], ["What was man's major achievement in the New Stone Age, alongside the discovery of fire?", ["Building ships", "Food production", "Making bronze", "Inventing writing"], 1], ["Which of these was NOT one of the major crops grown by Neolithic man?", ["Rice", "Wheat", "Barley", "Maize"], 3], ["The most striking feature of man in the New Stone Age was:", ["Hunting bigger animals", "The beginning of settled life", "The discovery of fire", "The use of iron"], 1], ["What materials were Neolithic huts made of?", ["Brick and cement", "Bamboo and straw", "Stone and mortar", "Iron sheets"], 1], ["Where were most Neolithic huts built?", ["On mountain tops", "In deep forests", "On river banks or near lakes", "In deserts"], 2], ["Which animal was probably the first to be tamed by man?", ["Cat", "Horse", "Dog", "Cow"], 2], ["Which of these animals was NOT mentioned as domesticated by Neolithic man?", ["Sheep", "Goats", "Camels", "Elephants"], 3], ["Domestication is best defined as:", ["Hunting animals for food", "Growing plants and looking after animals", "Building houses", "Making pottery"], 1], ["What gave Neolithic man the idea of the wheel?", ["A round stone rolling downhill", "A round tree trunk rolling down a slope", "A spinning leaf", "A rolling fruit"], 1], ["The invention of the wheel led to the appearance of a:", ["Flying machine", "Wheeled cart", "Sailing ship", "Bridge"], 1], ["Which of these was NOT a use of the wheel in the Neolithic Age?", ["Making pots", "Spinning and weaving", "Moving heavy loads", "Producing fire"], 3], ["What material were the first Neolithic pots made from, before firing?", ["Bronze", "Clay", "Wood", "Stone"], 1], ["What did Neolithic man discover about clay pots that made them stronger?", ["Painting them", "Baking them on fire", "Soaking them in water", "Burying them underground"], 1], ["What invention allowed Neolithic man to make pots faster and in different shapes?", ["The plough", "The potter's wheel", "The bow and arrow", "The sickle"], 1], ["Which new tools were developed in the Neolithic Age?", ["Sickle, bow and arrows", "Iron sword", "Bronze spear", "Printing press"], 0], ["What did the sickle help Neolithic man do?", ["Hunt animals", "Harvest crops", "Make fire", "Build huts"], 1], ["What skill did handled axes help Neolithic man develop?", ["Weaving", "Carpentry", "Pottery", "Farming"], 1], ["In the Neolithic Age, man learnt to heat earthenware in order to:", ["Cook meat faster", "Harden it for strength", "Change its colour", "Make it lighter"], 1], ["What was probably the first lamp developed by man?", ["A candle made of wax", "A small fire in an earthen bowl", "A torch of dry grass", "An oil-filled metal lamp"], 1], ["What fuel did Neolithic man use in his earthen lamps?", ["Plant oil", "Animal fats", "Coal", "Kerosene"], 1], ["The Chalcolithic Age began:", ["Before 500,000 B.C.", "After 4000 B.C.", "After 2000 B.C.", "After 10,000 B.C."], 1], ["Which metal did man discover first?", ["Iron", "Copper", "Bronze", "Zinc"], 1], ["The period between 4000 B.C. and 2000 B.C. is called the:", ["Iron Age", "Bronze Age", "Copper Age", "Stone Age"], 2], ["After copper, which metals did man discover?", ["Iron, steel and lead", "Tin, zinc and lead", "Gold, silver and platinum", "Aluminium and nickel"], 1], ["Why did man mix copper with tin and zinc?", ["To make it colourful", "Because copper alone was too soft", "To make it lighter", "To make it cheaper"], 1], ["What is the alloy of copper, tin and zinc called?", ["Steel", "Bronze", "Brass", "Iron"], 1], ["Bronze was:", ["Softer than copper", "Harder than copper or tin", "The same hardness as stone", "Impossible to shape"], 1], ["With the rise of bronze and copper use, the use of stone tools:", ["Increased sharply", "Remained unchanged", "Decreased voluminously", "Disappeared before the Stone Age began"], 2], ["Which of these was NOT mentioned as leading man to settled life?", ["Discovery of fire", "Invention of the wheel", "Discovery of agriculture and metals", "Discovery of writing"], 3], ["In settled Neolithic/Chalcolithic families, who was the head of the family?", ["The youngest member", "The oldest male member", "A chosen village leader", "The village priest"], 1], ["Why were settlements usually built on high ground?", ["To get better sunlight", "To stay safe from rain or flood waters", "To be closer to forests", "To avoid wild animals only"], 1], ["In the comparison table, what did Palaeolithic man eat?", ["Only grains and vegetables", "Jungle vegetation and animal flesh", "Only fish", "Cooked bread"], 1], ["In the comparison table, why did Palaeolithic men kill animals?", ["For their meat or for safety", "For trade", "For pets", "For ceremonies"], 0], ["According to the comparison table, Palaeolithic tools were mostly made of:", ["Bronze", "Flint", "Clay", "Iron"], 1], ["According to the comparison table, how did Palaeolithic man discover fire?", ["Through science", "By chance", "Through trade", "By copying animals"], 1], ["According to the comparison table, Palaeolithic man's way of life was:", ["Settled", "Nomadic", "Urban", "Agricultural"], 1], ["According to the comparison table, in the Neolithic Age man became a:", ["Food gatherer only", "Producer of his own food", "Trader of metals", "Hunter only"], 1], ["According to the comparison table, besides flesh, Neolithic animals were used for:", ["Entertainment only", "Agriculture, riding and carriage", "Nothing else", "Building only"], 1], ["According to the comparison table, Neolithic tools were:", ["Rough and crude", "Sharper, stronger and more beautiful", "Made only of bronze", "Never used for farming"], 1], ["According to the comparison table, what were the major achievements of the Neolithic Age?", ["Fire and clothing", "Agriculture and the wheel", "Bronze and iron", "Writing and printing"], 1], ["According to the comparison table, Neolithic man's way of life was:", ["Nomadic", "Settled, in small villages", "Underground", "Seafaring"], 1]];
+const SA = [["Into how many periods is the Stone Age divided? Name them with their approximate time periods.", "Four periods: Palaeolithic Age (500,000 B.C.\u201310,000 B.C.), Mesolithic Age (10,000 B.C.\u20138,000 B.C.), Neolithic Age (8,000 B.C.\u20134,000 B.C.), and Chalcolithic Age (4,000 B.C.\u20132,000 B.C.)."], ["Why did the Stone Age not end at the same time everywhere in the world?", "Different human groups in different parts of the world began using stone tools and switched to metal tools at different times, so the Stone Age ended earlier in some regions and much later in others."], ["Why is the period from 500,000 B.C. to 10,000 B.C. called the Primitive Age or Prehistoric Age?", "Because there is no written record for this period of history, so it is called the Primitive or Prehistoric Age."], ["What do the Greek words 'Palaios' and 'Lithos' mean, and what age do they together name?", "'Palaios' means old and 'Lithos' means stone; together they give the name Palaeolithic Age, or the Old Stone Age."], ["Describe the primitive man's life in the Old Stone Age in one or two sentences.", "He was a hunter and wanderer who gathered wild plants, fruits and berries and hunted animals for raw meat; his life was only a little better than that of animals in the jungle."], ["Why did primitive man eat his food raw?", "Because he had not yet discovered fire, so he could not cook; he ate wild plants, fruits, berries and meat in their raw form."], ["Give four reasons why primitive man moved from place to place.", "1) Search for food, since staying too long would exhaust local resources. 2) Movement of animals, which he followed for food. 3) Different seasons, as plants fruited in different regions at different times. 4) Need of water, since he had to migrate during the dry season when water sources dried up."], ["Why was flint stone commonly used by primitive man?", "Flint was a hard, grey stone that could be easily chopped or shaped, making it ideal for making knives, choppers, hand axes and flake implements."], ["How did tying handles to stone tools help primitive man?", "It made the tools easier to use for felling trees, killing animals, removing animal skin and digging the earth."], ["Name the river valleys where specimens of Old Stone Age tools have been found.", "The Soan (now in Pakistan), Narmada, Godavari and Tungabhadra river valleys."], ["How did the discovery of fire change the life of primitive man? Give at least three benefits.", "Fire gave him warmth and light, allowed him to roast food (making it tastier, more digestible and more nourishing), and let him scare away wild animals by burning fire at his cave entrance at night."], ["How did primitive man produce fire?", "Early man used to rub stones together to produce fire."], ["What did primitive man believe about fire and nature?", "He believed in a supernatural or magical power that could make or mar him."], ["What did primitive man use for clothes and shelter?", "He used the skin of hunted animals and the bark of trees or leaves as clothing, and went to caves or hid behind thick tree leaves for shelter."], ["What does the word 'Mesolithic' mean and where does it come from?", "It comes from 'Mesos' meaning middle and 'Lithos' meaning stone, so Mesolithic means the Middle Stone Age."], ["Why is the Mesolithic Age called a period of transition?", "Because it lies between the Old Stone Age and the New Stone Age, marking a shift in tools and lifestyle from one to the other."], ["What new materials did Mesolithic man use for tools, and why?", "He used bones and horns along with stone, because these materials were more flexible and lighter than stone, allowing a larger variety of tools like bows, arrows and fishing hooks."], ["What are microliths? Give two examples.", "Microliths are smaller, more refined stone tools that replaced heavier ones; examples include arrowheads and spearheads."], ["Name any three regions where Mesolithic sites have been found in India.", "Rajasthan, South Uttar Pradesh, and Central and Eastern India (also the Deccan)."], ["How did man discover cultivation, according to the chapter?", "Man observed that seeds which fell on the ground and received water grew into plants that bore grains, which gave him the idea of growing crops, or agriculture."], ["What do 'Neo' and 'Lithos' mean in Greek, and what age do they name together?", "'Neo' means new and 'Lithos' means stone; together they give the name Neolithic Age, or the New Stone Age."], ["What environmental change occurred in the New Stone Age, and what effect did it have?", "The climate became relatively warmer, which led to the development of grasslands; this increased the number of herbivorous animals like deer, antelope, goat, sheep and cattle."], ["What does 'herbivorous' mean?", "Herbivorous means animals that feed on grass and other plants."], ["How did grasslands and herbivorous animals contribute to the idea of agriculture?", "Grain-bearing grasses like wheat, barley and rice grew naturally in the grasslands, which gave early men the idea of growing crops themselves."], ["What was the major achievement of man in the New Stone Age regarding food?", "Man learnt to produce his own food; like fire, he probably discovered food production by chance, growing crops such as rice, wheat and barley."], ["What was the most striking feature of man in the New Stone Age?", "The beginning of settled life \u2014 man was no longer a nomad wandering in search of food or shelter."], ["Describe how Neolithic villages were formed.", "Man built small huts of bamboo and straw; clusters of such huts grew up close together, usually on river banks or near lakes, looking like a village dwelling."], ["What is domestication? Which animal was probably tamed first?", "Domestication is the process in which people grow plants and look after animals. The dog was probably the first animal to be tamed."], ["Name any four animals, besides the dog, that Neolithic man domesticated.", "Sheep, goats, pigs, donkeys, horses and camels (any four)."], ["How might Neolithic man have got the idea of the wheel?", "A round trunk of a felled tree, when cut, might have rolled down a slope, giving him the idea of the wheel."], ["What were the major uses of the wheel in the Neolithic Age?", "It was used to make a wheeled cart for moving heavy loads and easier travel, for making pots, and for spinning and weaving, which helped develop art and craft."], ["Describe how New Stone Age man made and improved his pottery.", "He first made pots from clay and dried them in the sun, then found that baking them on fire made them stronger. Hand-made pots were used before he invented the potter's wheel."], ["How did the potter's wheel improve pot-making?", "It allowed man to make better pots of different shapes at a faster speed, and also to develop colouring, painting and decorating."], ["How were Neolithic tools different from Palaeolithic tools, even though both were made of stone?", "Neolithic tools were still made of stone but were far better, sharper and stronger than earlier crude tools, and often had wooden handles."], ["Name two new tools/weapons developed in the Neolithic Age and their uses.", "The sickle, used to harvest crops, and handled axes, which helped develop carpentry (bows and arrows were also developed)."], ["What is meant by the 'extended use of fire' in the Neolithic Age?", "Man learnt to use fire more widely \u2014 to heat and harden earthenware, to make the first lamp using an earthen bowl and animal fats, and to cook food to make it tastier and more nourishing."], ["Describe the first lamp developed by man.", "It was a small fire made in an earthen bowl, using animal fats as fuel, giving light and warmth in his hut."], ["Why is the Chalcolithic Age called the 'stone-copper age'?", "Because during this age man had discovered copper and began using it along with stone, so tools of both materials were used together."], ["What led to man's discovery of metals?", "Man found that nature had scattered metals around him; copper was the first metal he discovered and learnt to use."], ["Why did man learn to mix copper with tin and zinc?", "Because copper alone was a soft metal, so mixing it with tin and zinc made a harder alloy called bronze."], ["What effect did the discovery of bronze and copper have on the use of stone tools?", "The use of stone tools and weapons decreased voluminously as bronze and copper tools became common."], ["What factors together led man to begin living a settled life?", "The discovery of fire, the wheel, agriculture and metals together led man to begin living a settled life."], ["Describe how a Neolithic/Chalcolithic family and village were typically organised.", "Families lived in straw huts with the oldest male member as the head; several such families set up their huts close together near a river or lake, forming a small village or settlement, usually on high ground for safety from floods."], ["Give two differences between the Palaeolithic Age and the Neolithic Age in terms of food.", "Palaeolithic man used jungle vegetation and animal flesh gathered or hunted; Neolithic man became a producer of his own food, developing agriculture and growing foodgrains."], ["Give two differences between the Palaeolithic Age and the Neolithic Age in terms of tools.", "Palaeolithic tools were mostly rough and crude flint tools; Neolithic tools were sharper, stronger, more beautiful, and included handled axes, sickles, bows and arrows."], ["Give two differences between the Palaeolithic Age and the Neolithic Age in terms of way of life.", "Palaeolithic man led a nomadic life, only a little better than animals; Neolithic man began to live a settled life in small villages, with a leadership pattern emerging."], ["What were the major achievements of the Neolithic Age, according to the comparison table?", "The discovery of agriculture and the invention of the wheel were the major achievements of the Neolithic Age."], ["How did the treatment of animals differ between the Palaeolithic and Neolithic Ages?", "Palaeolithic men only chased and killed animals for meat or safety; Neolithic man tamed and domesticated animals, using them for agriculture, riding and carriage besides their flesh."], ["Summarise, in your own words, the overall journey of man described in this chapter from the Palaeolithic to the Bronze Age.", "Man moved from being a wandering hunter-gatherer using crude stone tools, through discovering fire, more refined Mesolithic tools, and Neolithic advances like farming, domestication, the wheel and pottery, to finally discovering copper and bronze and settling permanently in villages."]];
+const OW = [["The metal that man discovered first.", "Copper"], ["The tool invented by observing a rolling tree trunk.", "Wheel"], ["The hard, grey stone used for making early tools.", "Flint"], ["The alloy made by mixing copper with tin and zinc.", "Bronze"], ["The small, refined stone tools of the Mesolithic Age.", "Microliths"], ["The first animal believed to be tamed by man.", "Dog"], ["The Greek word meaning 'old'.", "Palaios"], ["The Greek word meaning 'new'.", "Neo"], ["The Greek word meaning 'stone'.", "Lithos"], ["The Greek word meaning 'middle'.", "Mesos"], ["The device used by Neolithic man to make pots faster and in different shapes.", "Potter's wheel"], ["The tool Neolithic man used to harvest his crops.", "Sickle"], ["Animals that feed on grass and plants are called this.", "Herbivorous"], ["The material Neolithic man used as fuel in earthen lamps.", "Animal fats"], ["The age during which man used both stone and copper tools.", "Chalcolithic Age"], ["The process of growing plants and looking after animals.", "Domestication"], ["The stone from which knives, choppers and hand axes were commonly made.", "Flint"], ["The Old Stone Age is also known by this name.", "Palaeolithic Age"], ["The New Stone Age is also known by this name.", "Neolithic Age"], ["The river valley (now in Pakistan) where Old Stone Age tools were found.", "Soan"], ["The material of which Neolithic huts were built (besides straw).", "Bamboo"], ["The skill Neolithic man developed with the help of handled axes.", "Carpentry"], ["The vessel type man made from clay and later baked on fire.", "Pots"], ["The metal that man realised was too soft to use alone.", "Copper"], ["The additional metals, besides copper, discovered by man (name one).", "Tin"], ["The age period between 4000 B.C. and 2000 B.C., named after a metal.", "Copper Age"], ["The person who was head of a settled Neolithic family.", "Oldest male member"], ["The type of ground on which settlements were usually built for safety.", "High ground"], ["The word for small stone tools like arrowheads and spearheads.", "Microliths"], ["The grain crop, besides wheat and barley, grown by Neolithic man.", "Rice"], ["The natural resource that people, plants and animals need to survive.", "Water"], ["The season during which people used to migrate in search of water.", "Dry season"], ["The type of life Palaeolithic man led, always moving from place to place.", "Nomadic"], ["The name for man's earliest attempt at lighting, made in an earthen bowl.", "Lamp"], ["The word describing tools that were rough and unrefined in the Old Stone Age.", "Crude"], ["The material Palaeolithic man used, besides stone, wood and bones, for tools.", "Horns"], ["The invention that appeared as a result of the wheel, used to carry loads.", "Wheeled cart"], ["The season-related factor (besides food and water) that made primitive man move.", "Different seasons"], ["What primitive man's shelter usually was.", "Caves"], ["The term for the age when there is no written historical record.", "Primitive Age"]];
+const DEFS = [["Stone Age", "The age when men used stones to make weapons and tools."], ["Primitive Age", "The age of human history for which no written record is available."], ["Palaeolithic Age", "The early Stone Age when man led the life of a food gatherer and a wanderer, and used stone for his tools and weapons."], ["Mesolithic Age", "A period of transition from the Old Stone Age to the New Stone Age (10,000 B.C.\u20138,000 B.C.), when man used more sophisticated tools made of bones, horns, and stone."], ["Neolithic Age", "The New Stone Age (8,000 B.C.\u20134,000 B.C.), when man began to live a settled life, practise agriculture, and make better tools."], ["Chalcolithic Age", "The period (4,000 B.C.\u20132,000 B.C.) when man used both stone and copper tools; also called the stone-copper age."], ["Copper Age", "The period between 4000 B.C. and 2000 B.C. when copper, the first metal discovered by man, came into use."], ["Bronze Age", "The period when man discovered tin, zinc and lead, and learnt to mix copper with tin and zinc to form the harder alloy bronze."], ["Microliths", "Small, refined stone tools (like arrowheads and spearheads) used in the Mesolithic Age, replacing heavier earlier tools."], ["Domestication", "The process in which people grow plants and look after (tame and rear) animals."], ["Herbivorous", "Animals that feed on grass and other plants."], ["Bronze", "An alloy made by mixing copper with tin and zinc; harder than copper or tin."], ["Flint", "A hard, grey stone that could be easily chopped or shaped, commonly used by primitive man to make knives, choppers and hand axes."], ["Cultivation/Agriculture", "The practice of growing crops or foodgrains, discovered when man observed that seeds falling on the ground and receiving water grew into grain-bearing plants."], ["Settlement", "A cluster of huts built close together, usually near a river or lake and often on high ground, forming a small village."]];
+const REASONING = [["The chapter says human groups in different parts of the world began using stone tools, and later abandoned them for metal, at different times. Why could two regions be considered to be in different Stone Age periods at the very same calendar date?", "Because the age names (Palaeolithic, Mesolithic, Neolithic, Chalcolithic) describe the quality of tools a group had reached rather than a fixed universal date, a region that adopted better tools earlier could already be in a later age while another region, still using older tools, remained in an earlier one at the same real time."], ["Fire is described as the major discovery of the Old Stone Age, but 'extended use of fire' \u2014 hardening pottery and making lamps \u2014 is listed as a New Stone Age feature. What does this gap tell you about how technology spread in this chapter's account?", "Discovering fire and mastering its fuller uses were two separate, widely spaced steps: fire was found by chance very early in the Old Stone Age, but it took until the much later Neolithic Age for man to apply it to new tasks like hardening earthenware and lighting lamps, showing that early technological progress built up slowly rather than all at once."], ["Two reasons the chapter gives for primitive man's constant movement are 'search for food' and not being aware of the 'domestication of animals'. Why did both of these reasons disappear once the Neolithic Age began?", "Since Neolithic man learned agriculture and domestication of animals, he could now produce and store his own food instead of gathering wild plants or following wild animals, so both original causes of wandering were solved at the same time \u2014 which is why settled life is described as a New Stone Age feature and not earlier."], ["Flint is described as both 'hard' and easy to 'chop or shape'. How do these two qualities together explain why it became the most commonly used stone for early tools?", "Hardness gave flint tools a durable, sharp edge for cutting, killing and digging, while being easy to shape meant primitive man, with only crude toolmaking skill, could still work it into knives, choppers and hand axes \u2014 it was the combination of durability and workability, not either quality alone, that made flint so useful."], ["The chapter mentions fire being burned at the cave entrance to scare off wild animals, and separately says shelter was needed 'against rough weather and wild animals'. How are these two facts connected?", "The cave gave passive protection from weather and animals, while fire at its entrance added an active layer of defence against the same threat \u2014 together they show primitive man combining a physical shelter with an active deterrent to guard against the same danger."], ["The Mesolithic Age is called a 'period of transition'. Using the change from stone-only tools to bone-and-horn tools, and the timing of learning cultivation, explain what this transition actually consisted of.", "The Mesolithic bridges the two Stone Ages by first refining tool-making \u2014 using bones and horns alongside stone to create smaller microliths \u2014 and only later, towards the very end of the period, introducing the idea of growing food through cultivation, so the transition moved from purely hunting-gathering with better tools toward the beginnings of food production that the Neolithic Age then fully develops."], ["Man observed that seeds which 'fell on the ground and received water' grew into grain-bearing plants, and the chapter also says Mesolithic man remained a food gatherer for most of that period. What does this timing suggest about how agriculture began?", "Since man stayed a gatherer for most of the Mesolithic Age and only noticed the seed-growing pattern near its end, agriculture was not planned from the start; it emerged from long years of gathering wild plants, during which the link between fallen seeds, water and new grain plants was eventually noticed \u2014 much like fire was discovered 'by chance'."], ["The chapter links a warmer climate, the growth of grasslands, and larger herbivorous animal populations. Trace this chain and explain how it also connects to the discovery of agriculture.", "Warmer conditions led to grasslands; grasslands supported more herbivorous animals such as deer, goat, sheep and cattle, which men began to follow and herd; the same grasslands also grew grain-bearing grasses like wheat, barley and rice naturally, giving early men a separate but related idea \u2014 growing crops themselves \u2014 so one environmental change produced two connected outcomes: animal domestication and plant agriculture."], ["The chapter separately calls the discovery of agriculture and the domestication of animals major New Stone Age achievements, and also calls settled village life the 'most striking feature' of the age. How are these three facts related?", "Farming and taming animals both meant man no longer needed to wander after wild food, removing the very reasons \u2014 searching for food and following moving animals \u2014 that made Palaeolithic man a wanderer; settled life in villages was therefore only possible because agriculture and domestication had already solved the food-supply problem."], ["Neolithic man got the idea of the wheel from a cut tree trunk that 'rolled down a slope', and the wheel was later used for transport, pottery, and spinning and weaving. What does this reveal about how one invention can have unplanned wider effects?", "The wheel began from a simple accidental observation, yet the chapter shows it was then applied to several unrelated purposes \u2014 carrying loads, shaping pots, and spinning fibres \u2014 showing that a single idea, the rotating wheel shape, could be adapted to solve very different problems once it existed."], ["Hand-made pots were used 'for quite sometime' before the potter's wheel, and pots were needed to 'store food and other items'. Why would farming, which produces surplus grain, make good pottery increasingly necessary?", "Because farming let man produce and store grains like rice, wheat and barley instead of eating food as soon as it was gathered, he needed containers to hold this surplus \u2014 this is why pottery, first hand-made and then improved with the potter's wheel, developed alongside agriculture rather than before it."], ["The sickle was developed to 'harvest crops' and handled axes helped Neolithic man develop 'carpentry'. What does the appearance of these two specific tools show about how Neolithic tool-making responded to new activities described elsewhere in the chapter?", "Both tools match needs created by other Neolithic changes described in the chapter \u2014 the sickle answers the new activity of growing crops (agriculture), and the axe answers the need to build huts and wooden items for settled village life \u2014 so tools were invented to match the demands of farming and settling down, not before them."], ["Compare fire's role in the Old Stone Age (warmth, light, scaring animals, roasting food) with its 'extended use' in the New Stone Age (hardening pottery, fuelling lamps, cooking food to be more nourishing). What is the common thread?", "In both ages fire is used to improve or protect something for man's benefit \u2014 protecting him and improving raw food earlier on, then hardening man-made pottery and providing controlled light later \u2014 showing fire's role expanded from a natural survival tool into a technology applied to man-made objects."], ["The Chalcolithic Age is called the 'stone-copper age' because both materials were used together, while the Bronze Age began only after man realised copper was 'soft'. How do these two facts show a gradual sequence rather than a sudden jump from stone to bronze?", "Man first supplemented stone tools with newly found copper without abandoning stone (the Chalcolithic Age), and only later, on discovering copper alone was too soft for demanding uses, improved it by alloying it with tin and zinc into bronze \u2014 metal technology therefore developed in gradual, tested steps rather than an instant replacement of stone."], ["Bronze is described as 'harder than copper or tin', and the chapter also says stone tool use 'decreased voluminously' once bronze and copper were used. Explain the cause-and-effect relationship.", "Because bronze was harder and more effective than copper, tin, or stone for tools and weapons, man increasingly preferred it once it was available, and this preference directly caused the sharp decline in stone tool use described in the same passage."], ["The chapter lists fire, the wheel, agriculture and metals together as leading to settled life, and separately describes settlements on 'high ground' with the 'oldest male member' as family head. What does combining these facts suggest about how technology shaped society?", "The material advances (fire, wheel, farming, metals) solved the survival problems that once forced nomadic wandering, allowing permanent settlements to form; once settled, these communities then developed social structures \u2014 family hierarchy, chosen settlement sites \u2014 that were neither needed nor possible during the wandering Palaeolithic stage."], ["The comparison table says Palaeolithic tools were 'rough and crude' while Neolithic tools were 'sharper, stronger and more beautiful'. Using facts from elsewhere in the chapter, give two specific reasons for this improvement.", "Tool quality improved partly because Mesolithic man began using more flexible bone and horn tools alongside stone, refining them into microliths, and partly because Neolithic man added wooden handles and designed specific new tools \u2014 sickles for harvesting, handled axes for carpentry \u2014 suited to new farming and building tasks; both material innovation and purpose-driven design explain the improvement."], ["The comparison table contrasts Palaeolithic man's nomadic life with the Neolithic settled life in small villages with 'some leadership pattern'. What earlier-described achievements made this social change possible?", "The discovery of agriculture and the invention of the wheel \u2014 named as the age's major achievements \u2014 allowed a food surplus and easier movement of goods, which could support permanent villages large enough to require some form of leadership, unlike small wandering hunting bands."], ["Why does the chapter describe the Chalcolithic Age as coming after the Neolithic Age even though both share straw huts, a family head, and village clusters?", "The two ages share the same settled way of life because settlement was already established in the Neolithic Age through agriculture, domestication, the wheel and fire; what changes in the Chalcolithic Age is only the addition of copper alongside stone tools, not the overall lifestyle, which is why the description of settled life applies to both."], ["The chapter never states a fixed order for agriculture and domestication, but says cultivation was learnt 'towards the end' of the Mesolithic Age while domestication of animals is listed as a Neolithic feature. What can you infer about which came first?", "Because cultivation is described as beginning near the end of the Mesolithic period \u2014 before the Neolithic Age even starts \u2014 while domestication of animals is specifically listed as a Neolithic achievement, the chapter implies plant cultivation was discovered slightly earlier than animal domestication."], ["Microliths were used for arrowheads, spearheads and fishing hooks, and Mesolithic sites are found across Rajasthan, South Uttar Pradesh, and Central and Eastern India. What does the variety of microlith tools suggest about the environments Mesolithic people lived in across these regions?", "Since microliths served purposes like hunting on land (arrowheads and spearheads) and fishing (hooks), their presence across such varied regions suggests Mesolithic people adapted the same refined tool technology to different local food sources \u2014 land animals in some areas, fish near water bodies in others."], ["Primitive man moved due to 'different seasons' affecting fruiting plants and separately due to 'need of water' during the dry season. How do these two reasons describe the same underlying problem?", "Both stem from primitive man's total dependence on nature's uncontrolled cycles \u2014 seasonal fruiting and seasonal water availability \u2014 meaning that until he could produce and store his own food and manage water (achieved only with Neolithic farming and settlement), his life was dictated by natural rhythms he could not influence, forcing repeated migration."], ["Early man believed in 'supernatural or magical power' around the time fire was discovered 'by chance'. What connection might explain why an accidental discovery like fire led to such beliefs?", "Because fire was found by chance rather than through understood cause and effect, primitive man likely could not explain why or how it worked, which fits with the chapter's statement that he attributed unexplained, powerful natural events like fire to supernatural or magical forces."], ["Using the comparison table's entries on animals for both ages, explain how the purpose of interacting with animals changed from the Palaeolithic to the Neolithic Age.", "In the Palaeolithic Age, men 'only chased and killed animals for their meat or for safety' \u2014 a purely consumptive, defensive relationship; in the Neolithic Age, animals were tamed and used for agriculture, riding and carriage besides their flesh, showing animals became ongoing working resources rather than one-time hunted targets."], ["The chapter credits both the discovery of fire and the discovery of food production as things man 'must have learnt... by chance'. What does this repeated phrase suggest about how the chapter frames early human progress?", "By describing both of the era's most important discoveries as chance events rather than deliberate inventions, the chapter frames early technological progress as driven largely by accidental observation of nature, only later refined and deliberately extended by man \u2014 as seen in fire's 'extended use' and agriculture's growth into full farming."], ["Copper was the first metal because nature had 'scattered metals around' early man, and flint was likewise a naturally occurring material used earlier. What pattern links the Old Stone Age's flint and the Chalcolithic Age's copper?", "Both flint and copper were materials that already existed naturally in the environment and simply needed to be found and worked rather than manufactured, showing that across both ages man's early technological materials came from discovering and adapting what nature provided, before the Bronze Age introduced a man-made combination."], ["Bronze is an alloy of copper mixed with tin and zinc. How does this differ in kind from the flint and copper tools described earlier in the chapter?", "Flint and copper were both used more or less as found in nature, whereas bronze required man to deliberately combine two or three different metals to engineer a new, harder material \u2014 marking a shift from simply using natural resources to actively creating an improved material through combination."], ["The chapter says stone tool use 'decreased voluminously' with bronze and copper, yet also defines the Chalcolithic Age by the combined use of stone and copper. Is this a contradiction, and how can it be resolved using the chapter's own timeline?", "There is no real contradiction: the Chalcolithic Age (4000\u20132000 B.C.) is specifically when stone and copper were used together, while the sharp decline in stone tool use is linked to the later spread of bronze, made after tin, zinc and lead were discovered 'next to copper' \u2014 so stone use fell mainly in this later stage, not throughout the whole Chalcolithic period."], ["The chapter explains that 'Palaios' means old, 'Mesos' means middle, and 'Neo' means new, each paired with 'Lithos' meaning stone. What does this shared naming pattern tell you about how these period names were created?", "Because all three age names combine the same root word 'Lithos' (stone) with a different Greek prefix describing relative time \u2014 old, middle, new \u2014 the names were deliberately built as a matched set describing stages of one broader Stone Age, based on the age's defining material rather than unrelated labels for each period."], ["The Chalcolithic Age breaks the '-lithic' naming pattern, since it is named for stone-copper rather than a stone-quality prefix. What does this suggest about how it differs from the three earlier ages?", "Unlike the Palaeolithic, Mesolithic and Neolithic ages, whose names all describe different qualities of stone tools alone, the Chalcolithic Age is named for the combination of two materials, stone and copper, reflecting the chapter's own description of this age as the joint use of both \u2014 marking the point where the pure Stone Age classification system starts to end."]];
+
+
+/* ============================================================
+   PERSISTENCE (localStorage — this page is a normal static
+   webpage hosted over https, not a Claude.ai artifact)
+   ============================================================ */
+const STORAGE_KEY = 'quiz-progress-four-stone-ages';
+
+function defaultProgress(){
+  return { fib:{}, tf:{}, mcq:{}, ow:{}, sa:{}, defs:{}, reasoning:{} };
+}
+
+let progress = defaultProgress();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      const merged = defaultProgress();
+      Object.keys(merged).forEach(k=>{
+        if(parsed && typeof parsed[k] === 'object' && parsed[k] !== null){
+          merged[k] = parsed[k];
+        }
+      });
+      progress = merged;
+    } else {
+      progress = defaultProgress();
+    }
+  }catch(e){
+    progress = defaultProgress();
+  }
+}
+
+function saveProgress(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+  }catch(e){
+    console.error('Could not save quiz progress', e);
+  }
+}
+
+function resetSection(name){
+  progress[name] = {};
+  saveProgress();
+}
+
+function resetAllProgress(){
+  progress = defaultProgress();
+  saveProgress();
+}
+
+function sectionScore(name){
+  const obj = progress[name] || {};
+  const vals = Object.keys(obj).map(k=>obj[k]);
+  return { attempted: vals.length, correct: vals.filter(v=>v && v.correct).length };
+}
+
+/* ============================================================
+   GENERAL STATE
+   ============================================================ */
+const TABS = [
+  {id:'fib', label:'Fill in the Blanks', count: FIB_SECTIONS.reduce((n,s)=>n+s[1].length,0)},
+  {id:'tf', label:'True or False', count: TF.length},
+  {id:'mcq', label:'Multiple Choice', count: MCQ.length},
+  {id:'sa', label:'Short Answer', count: SA.length},
+  {id:'ow', label:'One Word', count: OW.length},
+  {id:'defs', label:'Definitions', count: DEFS.length},
+  {id:'reasoning', label:'Reasoning', count: REASONING.length},
+];
+
+const state = {
+  active: 'fib',
+  fibMode: 'list', tfMode: 'list', owMode: 'list',
+  tfPage: 0, mcqPage: 0, saPage: 0, owPage: 0, defsPage: 0, reasoningPage: 0,
+};
+const PAGE_SIZE = 12;
+
+function norm(s){
+  return String(s).toLowerCase().trim().replace(/[.,]/g,'').replace(/\s+/g,' ');
+}
+function fuzzyMatch(guess, answer){
+  const g = norm(guess);
+  const a = norm(answer);
+  if(!g) return false;
+  return g === a || (a.includes(g) && g.length>2) || (g.includes(a) && a.length>2);
+}
+function blankDisplay(sentence){
+  return sentence.replace(/_{3,}/g, '<span class="blank-tag">______</span>');
+}
+function blankSpeech(sentence){
+  return sentence.replace(/_{3,}/g, ' blank ');
+}
+
+function renderTabs(){
+  const nav = document.getElementById('tabs');
+  nav.innerHTML = TABS.map(t=>`
+    <button class="tab-btn ${t.id===state.active?'active':''}" data-tab="${t.id}">
+      ${t.label} <span class="count">(${t.count})</span>
+    </button>`).join('');
+  nav.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      stopVoiceRound();
+      state.active = btn.dataset.tab;
+      renderTabs();
+      renderPanels();
+    });
+  });
+}
+
+function renderScoreStrip(){
+  const el = document.getElementById('scoreStrip');
+  const fibS = sectionScore('fib'), tfS = sectionScore('tf'), mcqS = sectionScore('mcq'), owS = sectionScore('ow');
+  el.innerHTML = `
+    <div class="score-pill"><span class="dot"></span>Fill in the Blanks: <b>${fibS.correct}/${fibS.attempted}</b> checked</div>
+    <div class="score-pill"><span class="dot"></span>True/False: <b>${tfS.correct}/${tfS.attempted}</b> checked</div>
+    <div class="score-pill"><span class="dot"></span>MCQ: <b>${mcqS.correct}/${mcqS.attempted}</b> checked</div>
+    <div class="score-pill"><span class="dot"></span>One Word: <b>${owS.correct}/${owS.attempted}</b> checked</div>
+    <button class="reset-all-btn" id="resetAllBtn">Reset all answers</button>
+  `;
+  document.getElementById('resetAllBtn').addEventListener('click', ()=>{
+    if(confirm('Reset every saved answer in every section? This cannot be undone.')){
+      stopVoiceRound();
+      resetAllProgress();
+      renderPanels();
+    }
+  });
+}
+
+/* ============================================================
+   VOICE ROUND ENGINE (shared by Fill in the Blanks, One Word,
+   True or False)
+   ============================================================ */
+let voiceRound = null;
+
+function stopVoiceRound(){
+  if(voiceRound){
+    voiceRound.aborted = true;
+    clearTimeout(voiceRound.timer);
+    if(voiceRound.recognition){
+      try{ voiceRound.recognition.stop(); }catch(e){}
+    }
+    if(window.speechSynthesis){
+      try{ window.speechSynthesis.cancel(); }catch(e){}
+    }
+  }
+  voiceRound = null;
+}
+
+function buildFIBQueue(){
+  const list = [];
+  FIB_SECTIONS.forEach((sec, si)=>{
+    sec[1].forEach((item, qi)=>{
+      const sentence = item[0], answer = item[1];
+      list.push({
+        key: si+'-'+qi,
+        kind: 'fib',
+        displayText: blankDisplay(sentence),
+        speakText: blankSpeech(sentence),
+        answer: answer
+      });
+    });
+  });
+  return list;
+}
+function buildOWQueue(){
+  return OW.map((item, idx)=>({
+    key: String(idx), kind:'ow',
+    displayText: item[0], speakText: item[0], answer: item[1]
+  }));
+}
+function buildTFQueue(){
+  return TF.map((item, idx)=>({
+    key: String(idx), kind:'tf',
+    displayText: item[0], speakText: item[0], answer: item[1]
+  }));
+}
+
+async function ensureMicAccess(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    return { ok:false, reason:'unsupported' };
+  }
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!Recognition){
+    return { ok:false, reason:'no-recognition' };
+  }
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    stream.getTracks().forEach(t=>{ try{ t.stop(); }catch(e){} });
+    return { ok:true };
+  }catch(e){
+    return { ok:false, reason:'denied' };
+  }
+}
+
+function renderStartScreen(label){
+  return `
+    <div class="vr-panel">
+      <div class="vr-icon">&#127908;</div>
+      <div class="vr-title">Voice Round — ${label}</div>
+      <div class="vr-desc">I'll read each question aloud, then listen for five seconds after each one. Find a quiet spot and make sure your microphone is on.</div>
+      <button class="btn primary vr-start">Start Voice Round</button>
+    </div>`;
+}
+function renderMicErrorScreen(reason){
+  let detail = 'Microphone access was blocked or denied.';
+  if(reason === 'unsupported') detail = "This browser doesn't support microphone access on this page.";
+  if(reason === 'no-recognition') detail = "This browser doesn't support speech recognition, so Voice Round can't listen for answers here.";
+  return `
+    <div class="vr-panel">
+      <div class="vr-icon">&#128683;</div>
+      <div class="vr-title">Microphone not available</div>
+      <div class="vr-desc">${detail}</div>
+      <ul class="vr-reasons">
+        <li>The browser app itself may not have microphone permission at the operating-system level.</li>
+        <li>This page may have already been blocked for microphone access in the browser's own site settings.</li>
+      </ul>
+      <div class="vr-desc">Check your device and browser microphone settings for this site, then try again — or use List View instead.</div>
+      <button class="btn primary vr-retry">Try again</button>
+    </div>`;
+}
+function voiceQuestionHTML(item, idx, total){
+  return `
+    <div class="vr-panel">
+      <div class="vr-progress">Question ${idx+1} of ${total}</div>
+      <div class="vr-question-text">${item.displayText}</div>
+      <div class="vr-status-row">
+        <span class="vr-mic-dot"></span>
+        <span class="vr-status">Reading question…</span>
+      </div>
+      <div class="vr-controls">
+        <button class="btn ghost vr-skip">Skip</button>
+        <button class="btn ghost vr-end">End round</button>
+      </div>
+    </div>`;
+}
+function answerLabel(item){
+  if(item.kind === 'tf') return item.answer ? 'True' : 'False';
+  return item.answer;
+}
+function voiceFeedbackHTML(item, result, transcript, idx, total){
+  const heard = transcript ? ('You said: "' + transcript + '"') : 'No answer heard.';
+  const verdict = result.isCorrect ? 'Correct!' : ('Answer: ' + answerLabel(item));
+  return `
+    <div class="vr-panel">
+      <div class="vr-progress">Question ${idx+1} of ${total}</div>
+      <div class="vr-question-text">${item.displayText}</div>
+      <div class="vr-heard">${heard}</div>
+      <div class="vr-verdict ${result.isCorrect?'correct':'incorrect'}">${verdict}</div>
+      <div class="vr-controls">
+        <button class="btn ghost vr-skip">Next now</button>
+        <button class="btn ghost vr-end">End round</button>
+      </div>
+    </div>`;
+}
+function voiceSummaryHTML(ctl){
+  return `
+    <div class="vr-panel">
+      <div class="vr-icon">&#127937;</div>
+      <div class="vr-title">Round complete</div>
+      <div class="vr-score">${ctl.correct} / ${ctl.attempted}</div>
+      <div class="vr-desc">correct out of ${ctl.attempted} answered (${ctl.queue.length} total in this round)</div>
+      <div class="vr-controls">
+        <button class="btn primary vr-redo">Redo round</button>
+        <button class="btn ghost vr-back">Back to List View</button>
+      </div>
+    </div>`;
+}
+
+function createVoiceController(sectionName, stage, queue, onExit){
+  const ctl = {
+    sectionName, stage, queue, idx:0, correct:0, attempted:0,
+    aborted:false, recognition:null, timer:null
+  };
+
+  function persistResult(item, isCorrect, chosenValue){
+    if(sectionName === 'tf'){
+      progress.tf[item.key] = { answer: (chosenValue===undefined? null : chosenValue), correct: isCorrect };
+    } else if(sectionName === 'ow'){
+      progress.ow[item.key] = { value: chosenValue || '', correct: isCorrect };
+    } else if(sectionName === 'fib'){
+      progress.fib[item.key] = { value: chosenValue || '', correct: isCorrect };
+    }
+    saveProgress();
+  }
+
+  function renderStage(htmlStr){
+    if(ctl.aborted) return;
+    stage.innerHTML = htmlStr;
+  }
+
+  function speak(text, onNearEnd){
+    if(!window.speechSynthesis){
+      onNearEnd();
+      return;
+    }
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+    let started = false;
+    const utter = new SpeechSynthesisUtterance(text);
+    const words = text.trim().split(/\s+/);
+    const lastWord = words[words.length-1] || '';
+    const lastWordStart = Math.max(0, text.length - lastWord.length);
+    utter.onboundary = function(e){
+      if(!started && e.name === 'word' && typeof e.charIndex === 'number' && e.charIndex >= lastWordStart){
+        started = true;
+        onNearEnd();
+      }
+    };
+    utter.onend = function(){
+      if(!started){ started = true; onNearEnd(); }
+    };
+    utter.onerror = function(){
+      if(!started){ started = true; onNearEnd(); }
+    };
+    try{
+      window.speechSynthesis.speak(utter);
+    }catch(e){
+      if(!started){ started = true; onNearEnd(); }
+    }
+  }
+
+  function listen(onResult){
+    const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!Recognition){ onResult(null); return; }
+    let finished = false;
+    const recognition = new Recognition();
+    ctl.recognition = recognition;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 3;
+    recognition.continuous = false;
+
+    function finish(transcript){
+      if(finished) return;
+      finished = true;
+      clearTimeout(ctl.timer);
+      try{ recognition.stop(); }catch(e){}
+      onResult(transcript);
+    }
+    recognition.onresult = function(e){
+      try{
+        const transcript = e.results[0][0].transcript;
+        finish(transcript);
+      }catch(e2){ finish(null); }
+    };
+    recognition.onerror = function(){ finish(null); };
+    recognition.onend = function(){ finish(null); };
+    recognition.onstart = function(){
+      ctl.timer = setTimeout(function(){ finish(null); }, 5000);
+    };
+    try{
+      recognition.start();
+    }catch(e){
+      finish(null);
+    }
+  }
+
+  function checkAnswer(item, transcript){
+    if(transcript === null || transcript === undefined){
+      return { isCorrect:false, noAnswer:true, chosen: undefined };
+    }
+    if(item.kind === 'tf'){
+      const t = transcript.toLowerCase();
+      let chosen = null;
+      if(/\bfalse\b/.test(t)) chosen = false;
+      else if(/\btrue\b/.test(t)) chosen = true;
+      if(chosen === null) return { isCorrect:false, noAnswer:false, chosen: undefined };
+      return { isCorrect: chosen === item.answer, noAnswer:false, chosen };
+    }
+    const isCorrect = fuzzyMatch(transcript, item.answer);
+    return { isCorrect, noAnswer:false, chosen: transcript };
+  }
+
+  function askQuestion(){
+    if(ctl.aborted) return;
+    if(ctl.idx >= ctl.queue.length){ showSummary(); return; }
+    const item = ctl.queue[ctl.idx];
+    renderStage(voiceQuestionHTML(item, ctl.idx, ctl.queue.length));
+    const skipBtn = stage.querySelector('.vr-skip');
+    const endBtn = stage.querySelector('.vr-end');
+    if(skipBtn) skipBtn.addEventListener('click', function(){ clearTimeout(ctl.timer); nextQuestion(); });
+    if(endBtn) endBtn.addEventListener('click', function(){ clearTimeout(ctl.timer); showSummary(); });
+
+    speak(item.speakText, function(){
+      if(ctl.aborted) return;
+      const statusEl = stage.querySelector('.vr-status');
+      if(statusEl) statusEl.textContent = 'Listening…';
+      const dot = stage.querySelector('.vr-mic-dot');
+      if(dot) dot.classList.add('live');
+      listen(function(transcript){
+        if(ctl.aborted) return;
+        handleResult(item, transcript);
+      });
+    });
+  }
+
+  function handleResult(item, transcript){
+    const result = checkAnswer(item, transcript);
+    ctl.attempted++;
+    if(result.isCorrect) ctl.correct++;
+    persistResult(item, result.isCorrect, item.kind==='tf' ? result.chosen : transcript);
+    renderScoreStrip();
+    renderStage(voiceFeedbackHTML(item, result, transcript, ctl.idx, ctl.queue.length));
+    const skipBtn = stage.querySelector('.vr-skip');
+    const endBtn = stage.querySelector('.vr-end');
+    if(skipBtn) skipBtn.addEventListener('click', function(){ clearTimeout(ctl.timer); nextQuestion(); });
+    if(endBtn) endBtn.addEventListener('click', function(){ clearTimeout(ctl.timer); showSummary(); });
+
+    const feedbackText = result.isCorrect ? 'Correct!' : ('The answer was ' + answerLabel(item));
+    speak(feedbackText, function(){});
+    ctl.timer = setTimeout(function(){ nextQuestion(); }, 1800);
+  }
+
+  function nextQuestion(){
+    if(ctl.aborted) return;
+    clearTimeout(ctl.timer);
+    if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    if(ctl.recognition){ try{ ctl.recognition.stop(); }catch(e){} }
+    ctl.idx++;
+    askQuestion();
+  }
+
+  function showSummary(){
+    if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+    if(ctl.recognition){ try{ ctl.recognition.stop(); }catch(e){} }
+    renderStage(voiceSummaryHTML(ctl));
+    const redoBtn = stage.querySelector('.vr-redo');
+    const backBtn = stage.querySelector('.vr-back');
+    if(redoBtn) redoBtn.addEventListener('click', function(){
+      ctl.idx = 0; ctl.correct = 0; ctl.attempted = 0;
+      askQuestion();
+    });
+    if(backBtn) backBtn.addEventListener('click', function(){ onExit(); });
+  }
+
+  ctl.start = askQuestion;
+  return ctl;
+}
+
+function mountVoicePanel(sectionName, stageId, buildQueueFn, label){
+  const stage = document.getElementById(stageId);
+  if(!stage) return;
+  stopVoiceRound();
+  stage.innerHTML = renderStartScreen(label);
+  const startBtn = stage.querySelector('.vr-start');
+  startBtn.addEventListener('click', async function(){
+    startBtn.disabled = true;
+    startBtn.textContent = 'Checking microphone…';
+    const access = await ensureMicAccess();
+    if(!access.ok){
+      stage.innerHTML = renderMicErrorScreen(access.reason);
+      const retryBtn = stage.querySelector('.vr-retry');
+      if(retryBtn) retryBtn.addEventListener('click', function(){
+        mountVoicePanel(sectionName, stageId, buildQueueFn, label);
+      });
+      return;
+    }
+    const queue = buildQueueFn();
+    voiceRound = createVoiceController(sectionName, stage, queue, function(){
+      if(sectionName==='fib') state.fibMode='list';
+      if(sectionName==='tf') state.tfMode='list';
+      if(sectionName==='ow') state.owMode='list';
+      renderPanels();
+    });
+    voiceRound.start();
+  });
+}
+
+function viewToggleRow(modeKey, currentMode){
+  return `
+    <div class="view-toggle-row">
+      <div class="view-toggle">
+        <button class="vt-btn ${currentMode==='list'?'active':''}" data-mode="list" data-key="${modeKey}">List View</button>
+        <button class="vt-btn ${currentMode==='voice'?'active':''}" data-mode="voice" data-key="${modeKey}">Voice Round</button>
+      </div>
+    </div>`;
+}
+function wireViewToggle(container, modeKey){
+  container.querySelectorAll('.vt-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const mode = btn.dataset.mode;
+      if(modeKey==='fibMode') state.fibMode = mode;
+      if(modeKey==='tfMode') state.tfMode = mode;
+      if(modeKey==='owMode') state.owMode = mode;
+      stopVoiceRound();
+      renderPanels();
+    });
+  });
+}
+
+/* ---------- FILL IN THE BLANKS ---------- */
+function renderFIB(){
+  const total = FIB_SECTIONS.reduce((n,s)=>n+s[1].length,0);
+  let listBlock = '';
+  if(state.fibMode === 'list'){
+    listBlock = `<div id="fibAccordion"></div>`;
+  } else {
+    listBlock = `<div class="vr-stage" id="fibVoiceStage"></div>`;
+  }
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Fill in the Blanks</div>
+        <div class="panel-desc">${total} blanks, grouped by topic in the order they appear in the chapter. <span class="save-note">Your answers are saved automatically — come back anytime.</span></div>
+      </div>
+      <div class="btnrow">
+        ${state.fibMode==='list' ? '<button class="btn" id="fibCheckAll">Check all open</button>' : ''}
+        <button class="btn reset-section" id="fibReset">Reset section</button>
+      </div>
+    </div>
+    ${viewToggleRow('fibMode', state.fibMode)}
+    ${listBlock}
+  `;
+}
+function mountFIB(){
+  document.getElementById('fibReset').addEventListener('click', ()=>{
+    stopVoiceRound();
+    resetSection('fib');
+    renderPanels();
+  });
+  const toggleRow = document.querySelector('.panel.active .view-toggle-row');
+  if(toggleRow) wireViewToggle(toggleRow, 'fibMode');
+
+  if(state.fibMode === 'voice'){
+    mountVoicePanel('fib', 'fibVoiceStage', buildFIBQueue, 'Fill in the Blanks');
+    return;
+  }
+
+  const wrap = document.getElementById('fibAccordion');
+  wrap.innerHTML = FIB_SECTIONS.map((sec, si)=>{
+    const title = sec[0], items = sec[1];
+    const rows = items.map((it, qi)=>{
+      const sentence = it[0], answer = it[1];
+      const displayed = blankDisplay(sentence);
+      const key = si + '-' + qi;
+      const saved = progress.fib[key];
+      return `
+        <div class="q-row" data-sec="${si}" data-q="${qi}" data-key="${key}" data-answer="${answer.replace(/"/g,'&quot;')}">
+          <div class="q-text"><span class="q-num">${qi+1}.</span>${displayed}</div>
+          <div class="answer-row">
+            <input type="text" class="blank-input" placeholder="Your answer" value="${saved ? saved.value.replace(/"/g,'&quot;') : ''}" />
+            <button class="check-btn">Check</button>
+            <span class="feedback ${saved ? (saved.correct?'correct':'incorrect') : ''}">${saved ? (saved.correct? '✓ Correct' : ('✗ Answer: <span class="ans">'+answer+'</span>')) : ''}</span>
+          </div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="accordion-item" data-idx="${si}">
+        <div class="accordion-head">
+          <div class="accordion-title">${title}</div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span class="accordion-meta">${items.length} blanks</span>
+            <span class="chevron"></span>
+          </div>
+        </div>
+        <div class="accordion-body">${rows}</div>
+      </div>`;
+  }).join('');
+
+  wrap.querySelectorAll('.accordion-head').forEach(h=>{
+    h.addEventListener('click', ()=>{ h.parentElement.classList.toggle('open'); });
+  });
+
+  wrap.querySelectorAll('.q-row').forEach(row=>{
+    if(progress.fib[row.dataset.key]) row.dataset.graded = '1';
+  });
+
+  function checkRow(row){
+    const input = row.querySelector('.blank-input');
+    const fb = row.querySelector('.feedback');
+    const answer = row.dataset.answer;
+    const key = row.dataset.key;
+    if(!input.value.trim()) return;
+    const isCorrect = fuzzyMatch(input.value, answer);
+    row.dataset.graded = '1';
+    progress.fib[key] = { value: input.value, correct: isCorrect };
+    saveProgress();
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    fb.innerHTML = isCorrect ? '✓ Correct' : `✗ Answer: <span class="ans">${answer}</span>`;
+    renderScoreStrip();
+  }
+
+  wrap.querySelectorAll('.q-row').forEach(row=>{
+    row.querySelector('.check-btn').addEventListener('click', ()=>checkRow(row));
+    row.querySelector('.blank-input').addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){ e.preventDefault(); checkRow(row); }
+    });
+  });
+
+  document.getElementById('fibCheckAll').addEventListener('click', ()=>{
+    wrap.querySelectorAll('.accordion-item.open .q-row').forEach(checkRow);
+  });
+}
+
+/* ---------- TRUE / FALSE ---------- */
+function renderTF(){
+  const totalPages = Math.ceil(TF.length / PAGE_SIZE);
+  let block = '';
+  if(state.tfMode === 'list'){
+    block = `
+      <div id="tfList"></div>
+      <div class="pagination">
+        <button class="page-btn" id="tfPrev" ${state.tfPage===0?'disabled':''}>← Previous</button>
+        <span class="page-info">Page ${state.tfPage+1} of ${totalPages}</span>
+        <button class="page-btn" id="tfNext" ${state.tfPage>=totalPages-1?'disabled':''}>Next →</button>
+      </div>`;
+  } else {
+    block = `<div class="vr-stage" id="tfVoiceStage"></div>`;
+  }
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">True or False</div>
+        <div class="panel-desc">${TF.length} statements covering every part of the chapter. <span class="save-note">Answers are saved automatically.</span></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn reset-section" id="tfReset">Reset section</button>
+      </div>
+    </div>
+    ${viewToggleRow('tfMode', state.tfMode)}
+    ${block}
+  `;
+}
+function mountTF(){
+  document.getElementById('tfReset').addEventListener('click', ()=>{
+    stopVoiceRound();
+    resetSection('tf');
+    renderPanels();
+  });
+  const toggleRow = document.querySelector('.panel.active .view-toggle-row');
+  if(toggleRow) wireViewToggle(toggleRow, 'tfMode');
+
+  if(state.tfMode === 'voice'){
+    mountVoicePanel('tf', 'tfVoiceStage', buildTFQueue, 'True or False');
+    return;
+  }
+
+  const start = state.tfPage * PAGE_SIZE;
+  const pageItems = TF.slice(start, start+PAGE_SIZE);
+  const list = document.getElementById('tfList');
+  list.innerHTML = pageItems.map((item, i)=>{
+    const idx = start+i;
+    const statement = item[0], answer = item[1];
+    const saved = progress.tf[idx];
+    return `
+      <div class="tf-row" data-idx="${idx}" data-answer="${answer}">
+        <div class="q-text" style="margin-bottom:0;"><span class="q-num">${idx+1}.</span>${statement}</div>
+        <div class="tf-buttons">
+          <button class="tf-btn" data-val="true">True</button>
+          <button class="tf-btn" data-val="false">False</button>
+        </div>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.tf-row').forEach(row=>{
+    const idx = row.dataset.idx;
+    const correct = row.dataset.answer === 'true';
+    const btns = row.querySelectorAll('.tf-btn');
+    const saved = progress.tf[idx];
+    if(saved){
+      row.dataset.graded = '1';
+      btns.forEach(b=>{
+        const bVal = b.dataset.val === 'true';
+        if(saved.answer !== null && bVal === saved.answer){
+          b.classList.add(saved.correct ? 'selected-correct' : 'selected-incorrect');
+        }
+        if(bVal === correct) b.classList.add('reveal-correct');
+      });
+    }
+    btns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(row.dataset.graded==='1') return;
+        row.dataset.graded='1';
+        const chosenTrue = btn.dataset.val === 'true';
+        const isCorrect = chosenTrue === correct;
+        progress.tf[idx] = { answer: chosenTrue, correct: isCorrect };
+        saveProgress();
+        btns.forEach(b=>{
+          const bVal = b.dataset.val === 'true';
+          if(b===btn) b.classList.add(isCorrect?'selected-correct':'selected-incorrect');
+          if(bVal===correct) b.classList.add('reveal-correct');
+        });
+        renderScoreStrip();
+      });
+    });
+  });
+
+  document.getElementById('tfPrev').addEventListener('click', ()=>{ state.tfPage=Math.max(0,state.tfPage-1); renderPanels(); });
+  document.getElementById('tfNext').addEventListener('click', ()=>{ state.tfPage++; renderPanels(); });
+}
+
+/* ---------- MCQ ---------- */
+function renderMCQ(){
+  const start = state.mcqPage * PAGE_SIZE;
+  const totalPages = Math.ceil(MCQ.length / PAGE_SIZE);
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Multiple Choice Questions</div>
+        <div class="panel-desc">${MCQ.length} questions, four options each. <span class="save-note">Answers are saved automatically.</span></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn reset-section" id="mcqReset">Reset section</button>
+      </div>
+    </div>
+    <div id="mcqList"></div>
+    <div class="pagination">
+      <button class="page-btn" id="mcqPrev" ${state.mcqPage===0?'disabled':''}>← Previous</button>
+      <span class="page-info">Page ${state.mcqPage+1} of ${totalPages}</span>
+      <button class="page-btn" id="mcqNext" ${state.mcqPage>=totalPages-1?'disabled':''}>Next →</button>
+    </div>
+  `;
+}
+function mountMCQ(){
+  const start = state.mcqPage * PAGE_SIZE;
+  const pageItems = MCQ.slice(start, start+PAGE_SIZE);
+  const list = document.getElementById('mcqList');
+  list.innerHTML = pageItems.map((item, i)=>{
+    const idx = start+i;
+    const q = item[0], opts = item[1], correctIdx = item[2];
+    const optsHtml = opts.map((o,oi)=>`<button class="opt-btn" data-idx="${oi}">${o}</button>`).join('');
+    return `
+      <div class="mcq-card" data-idx="${idx}" data-correct="${correctIdx}">
+        <div class="q-text"><span class="q-num">${idx+1}.</span>${q}</div>
+        <div class="options">${optsHtml}</div>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.mcq-card').forEach(card=>{
+    const idx = card.dataset.idx;
+    const correctIdx = parseInt(card.dataset.correct);
+    const btns = card.querySelectorAll('.opt-btn');
+    const saved = progress.mcq[idx];
+    if(saved){
+      card.dataset.graded = '1';
+      btns.forEach(b=>{
+        const bi = parseInt(b.dataset.idx);
+        if(bi===correctIdx) b.classList.add('correct');
+        else if(bi===saved.chosen) b.classList.add('incorrect');
+        else b.classList.add('dim');
+      });
+    }
+    btns.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(card.dataset.graded==='1') return;
+        card.dataset.graded='1';
+        const chosen = parseInt(btn.dataset.idx);
+        const isCorrect = chosen === correctIdx;
+        progress.mcq[idx] = { chosen, correct: isCorrect };
+        saveProgress();
+        btns.forEach(b=>{
+          const bi = parseInt(b.dataset.idx);
+          if(bi===correctIdx) b.classList.add('correct');
+          else if(bi===chosen) b.classList.add('incorrect');
+          else b.classList.add('dim');
+        });
+        renderScoreStrip();
+      });
+    });
+  });
+
+  document.getElementById('mcqPrev').addEventListener('click', ()=>{ state.mcqPage=Math.max(0,state.mcqPage-1); renderPanels(); });
+  document.getElementById('mcqNext').addEventListener('click', ()=>{ state.mcqPage++; renderPanels(); });
+  document.getElementById('mcqReset').addEventListener('click', ()=>{ resetSection('mcq'); renderPanels(); });
+}
+
+/* ---------- SHORT ANSWER ---------- */
+function renderSA(){
+  const totalPages = Math.ceil(SA.length / PAGE_SIZE);
+  const reviewed = Object.keys(progress.sa).length;
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Short Answer Questions</div>
+        <div class="panel-desc">${SA.length} questions — ${reviewed} reviewed. Write your answer, then reveal the model answer to compare.</div>
+      </div>
+      <div class="btnrow">
+        <button class="btn reset-section" id="saReset">Reset section</button>
+      </div>
+    </div>
+    <div id="saList"></div>
+    <div class="pagination">
+      <button class="page-btn" id="saPrev" ${state.saPage===0?'disabled':''}>← Previous</button>
+      <span class="page-info">Page ${state.saPage+1} of ${totalPages}</span>
+      <button class="page-btn" id="saNext" ${state.saPage>=totalPages-1?'disabled':''}>Next →</button>
+    </div>
+  `;
+}
+function mountSA(){
+  const start = state.saPage * PAGE_SIZE;
+  const pageItems = SA.slice(start, start+PAGE_SIZE);
+  const list = document.getElementById('saList');
+  list.innerHTML = pageItems.map((item,i)=>{
+    const idx = start+i;
+    const q = item[0], a = item[1];
+    const saved = progress.sa[idx];
+    return `
+      <div class="sa-card" data-idx="${idx}">
+        <div class="q-text"><span class="q-num">${idx+1}.</span>${q}</div>
+        <textarea class="sa-input" placeholder="Write your answer here...">${saved && saved.typed ? saved.typed : ''}</textarea>
+        <button class="btn">${saved && saved.revealed ? 'Hide model answer' : 'Show model answer'}</button>
+        <div class="model-answer ${saved && saved.revealed ? 'show' : ''}"><b>Model answer</b>${a}</div>
+      </div>`;
+  }).join('');
+  list.querySelectorAll('.sa-card').forEach(card=>{
+    const idx = card.dataset.idx;
+    card.querySelector('.btn').addEventListener('click', (e)=>{
+      const ma = card.querySelector('.model-answer');
+      const typed = card.querySelector('.sa-input').value;
+      ma.classList.toggle('show');
+      const revealed = ma.classList.contains('show');
+      e.target.textContent = revealed ? 'Hide model answer' : 'Show model answer';
+      progress.sa[idx] = { revealed, typed };
+      saveProgress();
+    });
+  });
+  document.getElementById('saPrev').addEventListener('click', ()=>{ state.saPage=Math.max(0,state.saPage-1); renderPanels(); });
+  document.getElementById('saNext').addEventListener('click', ()=>{ state.saPage++; renderPanels(); });
+  document.getElementById('saReset').addEventListener('click', ()=>{ resetSection('sa'); renderPanels(); });
+}
+
+/* ---------- ONE WORD ---------- */
+function renderOW(){
+  const totalPages = Math.ceil(OW.length / PAGE_SIZE);
+  let block = '';
+  if(state.owMode === 'list'){
+    block = `
+      <div id="owList"></div>
+      <div class="pagination">
+        <button class="page-btn" id="owPrev" ${state.owPage===0?'disabled':''}>← Previous</button>
+        <span class="page-info">Page ${state.owPage+1} of ${totalPages}</span>
+        <button class="page-btn" id="owNext" ${state.owPage>=totalPages-1?'disabled':''}>Next →</button>
+      </div>`;
+  } else {
+    block = `<div class="vr-stage" id="owVoiceStage"></div>`;
+  }
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">One Word Answers</div>
+        <div class="panel-desc">${OW.length} questions. Answer in a single word or short phrase. <span class="save-note">Answers are saved automatically.</span></div>
+      </div>
+      <div class="btnrow">
+        <button class="btn reset-section" id="owReset">Reset section</button>
+      </div>
+    </div>
+    ${viewToggleRow('owMode', state.owMode)}
+    ${block}
+  `;
+}
+function mountOW(){
+  document.getElementById('owReset').addEventListener('click', ()=>{
+    stopVoiceRound();
+    resetSection('ow');
+    renderPanels();
+  });
+  const toggleRow = document.querySelector('.panel.active .view-toggle-row');
+  if(toggleRow) wireViewToggle(toggleRow, 'owMode');
+
+  if(state.owMode === 'voice'){
+    mountVoicePanel('ow', 'owVoiceStage', buildOWQueue, 'One Word');
+    return;
+  }
+
+  const start = state.owPage * PAGE_SIZE;
+  const pageItems = OW.slice(start, start+PAGE_SIZE);
+  const list = document.getElementById('owList');
+  list.innerHTML = pageItems.map((item,i)=>{
+    const idx = start+i;
+    const q = item[0], a = item[1];
+    const saved = progress.ow[idx];
+    return `
+      <div class="q-row" data-idx="${idx}" data-answer="${a.replace(/"/g,'&quot;')}">
+        <div class="q-text"><span class="q-num">${idx+1}.</span>${q}</div>
+        <div class="answer-row">
+          <input type="text" class="blank-input" placeholder="Your answer" value="${saved ? saved.value.replace(/"/g,'&quot;') : ''}" />
+          <button class="check-btn">Check</button>
+          <span class="feedback ${saved ? (saved.correct?'correct':'incorrect') : ''}">${saved ? (saved.correct? '✓ Correct' : ('✗ Answer: <span class="ans">'+a+'</span>')) : ''}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  list.querySelectorAll('.q-row').forEach(row=>{
+    if(progress.ow[row.dataset.idx]) row.dataset.graded = '1';
+  });
+
+  function checkRow(row){
+    const idx = row.dataset.idx;
+    const input = row.querySelector('.blank-input');
+    const fb = row.querySelector('.feedback');
+    const answer = row.dataset.answer;
+    if(!input.value.trim()) return;
+    const isCorrect = fuzzyMatch(input.value, answer);
+    row.dataset.graded='1';
+    progress.ow[idx] = { value: input.value, correct: isCorrect };
+    saveProgress();
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    fb.innerHTML = isCorrect ? '✓ Correct' : `✗ Answer: <span class="ans">${answer}</span>`;
+    renderScoreStrip();
+  }
+  list.querySelectorAll('.q-row').forEach(row=>{
+    row.querySelector('.check-btn').addEventListener('click', ()=>checkRow(row));
+    row.querySelector('.blank-input').addEventListener('keydown',(e)=>{ if(e.key==='Enter'){e.preventDefault(); checkRow(row);} });
+  });
+
+  document.getElementById('owPrev').addEventListener('click', ()=>{ state.owPage=Math.max(0,state.owPage-1); renderPanels(); });
+  document.getElementById('owNext').addEventListener('click', ()=>{ state.owPage++; renderPanels(); });
+}
+
+/* ---------- DEFINITIONS ---------- */
+function renderDefs(){
+  const totalPages = Math.ceil(DEFS.length / PAGE_SIZE);
+  const reviewed = Object.keys(progress.defs).length;
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Definitions</div>
+        <div class="panel-desc">${DEFS.length} key terms — ${reviewed} reviewed. Try defining each before revealing the answer.</div>
+      </div>
+      <div class="btnrow">
+        <button class="btn reset-section" id="defsReset">Reset section</button>
+      </div>
+    </div>
+    <div id="defsList"></div>
+    <div class="pagination">
+      <button class="page-btn" id="defsPrev" ${state.defsPage===0?'disabled':''}>← Previous</button>
+      <span class="page-info">Page ${state.defsPage+1} of ${totalPages}</span>
+      <button class="page-btn" id="defsNext" ${state.defsPage>=totalPages-1?'disabled':''}>Next →</button>
+    </div>
+  `;
+}
+function mountDefs(){
+  const start = state.defsPage * PAGE_SIZE;
+  const pageItems = DEFS.slice(start, start+PAGE_SIZE);
+  const list = document.getElementById('defsList');
+  list.innerHTML = pageItems.map((item,i)=>{
+    const idx = start+i;
+    const term = item[0], def = item[1];
+    const saved = progress.defs[idx];
+    return `
+      <div class="sa-card" data-idx="${idx}">
+        <div class="term">${idx+1}. ${term}</div>
+        <textarea class="sa-input" placeholder="Define this term in your own words...">${saved && saved.typed ? saved.typed : ''}</textarea>
+        <button class="btn">${saved && saved.revealed ? 'Hide definition' : 'Show definition'}</button>
+        <div class="model-answer ${saved && saved.revealed ? 'show' : ''}"><b>Definition</b>${def}</div>
+      </div>`;
+  }).join('');
+  list.querySelectorAll('.sa-card').forEach(card=>{
+    const idx = card.dataset.idx;
+    card.querySelector('.btn').addEventListener('click', (e)=>{
+      const ma = card.querySelector('.model-answer');
+      const typed = card.querySelector('.sa-input').value;
+      ma.classList.toggle('show');
+      const revealed = ma.classList.contains('show');
+      e.target.textContent = revealed ? 'Hide definition' : 'Show definition';
+      progress.defs[idx] = { revealed, typed };
+      saveProgress();
+    });
+  });
+  document.getElementById('defsPrev').addEventListener('click', ()=>{ state.defsPage=Math.max(0,state.defsPage-1); renderPanels(); });
+  document.getElementById('defsNext').addEventListener('click', ()=>{ state.defsPage++; renderPanels(); });
+  document.getElementById('defsReset').addEventListener('click', ()=>{ resetSection('defs'); renderPanels(); });
+}
+
+/* ---------- REASONING ---------- */
+function renderReasoning(){
+  const totalPages = Math.ceil(REASONING.length / PAGE_SIZE);
+  const reviewed = Object.keys(progress.reasoning).length;
+  return `
+    <div class="panel-head">
+      <div>
+        <div class="panel-title">Reasoning</div>
+        <div class="panel-desc">${REASONING.length} questions — ${reviewed} reviewed. These connect facts from different parts of the chapter — write your reasoning, then compare it with the model answer.</div>
+      </div>
+      <div class="btnrow">
+        <button class="btn reset-section" id="reasoningReset">Reset section</button>
+      </div>
+    </div>
+    <div id="reasoningList"></div>
+    <div class="pagination">
+      <button class="page-btn" id="reasoningPrev" ${state.reasoningPage===0?'disabled':''}>← Previous</button>
+      <span class="page-info">Page ${state.reasoningPage+1} of ${totalPages}</span>
+      <button class="page-btn" id="reasoningNext" ${state.reasoningPage>=totalPages-1?'disabled':''}>Next →</button>
+    </div>
+  `;
+}
+function mountReasoning(){
+  const start = state.reasoningPage * PAGE_SIZE;
+  const pageItems = REASONING.slice(start, start+PAGE_SIZE);
+  const list = document.getElementById('reasoningList');
+  list.innerHTML = pageItems.map((item,i)=>{
+    const idx = start+i;
+    const q = item[0], a = item[1];
+    const saved = progress.reasoning[idx];
+    return `
+      <div class="sa-card" data-idx="${idx}">
+        <div class="q-text"><span class="q-num">${idx+1}.</span>${q}</div>
+        <textarea class="sa-input" placeholder="Explain your reasoning here...">${saved && saved.typed ? saved.typed : ''}</textarea>
+        <button class="btn">${saved && saved.revealed ? 'Hide model answer' : 'Show model answer'}</button>
+        <div class="model-answer ${saved && saved.revealed ? 'show' : ''}"><b>Reasoning chain</b>${a}</div>
+      </div>`;
+  }).join('');
+  list.querySelectorAll('.sa-card').forEach(card=>{
+    const idx = card.dataset.idx;
+    card.querySelector('.btn').addEventListener('click', (e)=>{
+      const ma = card.querySelector('.model-answer');
+      const typed = card.querySelector('.sa-input').value;
+      ma.classList.toggle('show');
+      const revealed = ma.classList.contains('show');
+      e.target.textContent = revealed ? 'Hide model answer' : 'Show model answer';
+      progress.reasoning[idx] = { revealed, typed };
+      saveProgress();
+    });
+  });
+  document.getElementById('reasoningPrev').addEventListener('click', ()=>{ state.reasoningPage=Math.max(0,state.reasoningPage-1); renderPanels(); });
+  document.getElementById('reasoningNext').addEventListener('click', ()=>{ state.reasoningPage++; renderPanels(); });
+  document.getElementById('reasoningReset').addEventListener('click', ()=>{ resetSection('reasoning'); renderPanels(); });
+}
+
+/* ---------- ROUTER ---------- */
+function renderPanels(){
+  const el = document.getElementById('panels');
+  if(state.active==='fib'){ el.innerHTML = `<div class="panel active">${renderFIB()}</div>`; mountFIB(); }
+  else if(state.active==='tf'){ el.innerHTML = `<div class="panel active">${renderTF()}</div>`; mountTF(); }
+  else if(state.active==='mcq'){ el.innerHTML = `<div class="panel active">${renderMCQ()}</div>`; mountMCQ(); }
+  else if(state.active==='sa'){ el.innerHTML = `<div class="panel active">${renderSA()}</div>`; mountSA(); }
+  else if(state.active==='ow'){ el.innerHTML = `<div class="panel active">${renderOW()}</div>`; mountOW(); }
+  else if(state.active==='defs'){ el.innerHTML = `<div class="panel active">${renderDefs()}</div>`; mountDefs(); }
+  else if(state.active==='reasoning'){ el.innerHTML = `<div class="panel active">${renderReasoning()}</div>`; mountReasoning(); }
+  renderScoreStrip();
+}
+
+function init(){
+  loadProgress();
+  renderTabs();
+  renderPanels();
+}
+init();
+</script>
+</body>
+</html>
