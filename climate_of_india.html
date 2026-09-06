@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Climate of India — Chapter Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#161D28;
+    --bg2:#1C2534;
+    --panel:#212B3B;
+    --line:#33405633;
+    --text:#EEEAE0;
+    --muted:#9CACC2;
+    --summer:#E8A33D;
+    --summer-soft:#E8A33D22;
+    --monsoon:#3F9AAE;
+    --monsoon-soft:#3F9AAE22;
+    --winter:#8CA0C4;
+    --spring:#D9B54A;
+    --correct:#5BBE8A;
+    --wrong:#E0707A;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:radial-gradient(ellipse at 20% -10%, #24314522 0%, transparent 60%), var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:28px 20px 80px;}
+
+  /* ---- Hero ---- */
+  .hero{display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px 0 8px;text-align:center;}
+  .kicker{color:var(--muted);font-size:13px;letter-spacing:.02em;}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,6vw,44px);margin:2px 0 0;}
+  h1 .accent{color:var(--summer);font-style:italic;}
+  .subtitle{color:var(--muted);font-size:15px;max-width:540px;margin:0 auto;}
+
+  .wheel-box{position:relative;width:220px;height:220px;margin:14px 0 4px;}
+  .wheel-box svg{width:100%;height:100%;}
+  .wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+  .wheel-center .num{font-family:'Fraunces',serif;font-size:26px;font-weight:600;}
+  .wheel-center .lbl{font-size:10.5px;color:var(--muted);}
+
+  .legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:12.5px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+
+  .voice-banner{
+    display:flex;gap:10px;align-items:center;background:var(--monsoon-soft);
+    border:1px solid #3F9AAE55;border-radius:12px;padding:10px 14px;margin:18px 0 0;
+    font-size:12.5px;color:var(--muted);
+  }
+  .voice-banner b{color:var(--text);}
+  .voice-banner svg{flex:0 0 auto;}
+
+  /* ---- Score bar ---- */
+  .scorebar{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:12px 16px;margin:18px 0 18px;font-size:13.5px;flex-wrap:wrap;
+  }
+  .scorebar .totals{color:var(--muted);}
+  .scorebar .totals b{color:var(--text);}
+  button.reset{
+    background:transparent;border:1px solid var(--line);color:var(--muted);
+    padding:7px 12px;border-radius:9px;font-size:12.5px;cursor:pointer;font-family:inherit;
+  }
+  button.reset:hover{color:var(--text);border-color:#5a6a86;}
+
+  /* ---- Tabs ---- */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;}
+  .tab{
+    flex:1 1 auto;min-width:96px;text-align:center;
+    background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    padding:10px 8px;border-radius:11px;cursor:pointer;font-size:12.5px;font-weight:600;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .tab .count{display:block;font-weight:400;font-size:10.5px;opacity:.75;margin-top:1px;}
+  .tab.active{color:#12161f;background:var(--summer);border-color:var(--summer);}
+  .tab:hover:not(.active){border-color:#5a6a86;color:var(--text);}
+
+  section.panel{display:none;}
+  section.panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .panel-head h2{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:0;}
+  .panel-head .desc{color:var(--muted);font-size:12.5px;}
+
+  .mode-toggle{
+    display:flex;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:5px;width:100%;margin:2px 0 16px;
+  }
+  .mode-btn{
+    flex:1;padding:11px 12px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;color:var(--muted);
+    display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid transparent;
+  }
+  .mode-btn.active{background:var(--summer);color:#12161f;border-color:var(--summer);}
+  .mode-btn:not(.active):hover{border-color:#5a6a86;color:var(--text);}
+  .mode-btn svg{width:15px;height:15px;flex:0 0 auto;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+  .qnum{color:var(--muted);font-size:11.5px;font-weight:600;margin-bottom:6px;letter-spacing:.02em;}
+  .qtext{font-size:15px;margin-bottom:10px;}
+  .qtext .blank{border-bottom:2px dotted #5a6a86;padding:0 4px;}
+
+  .answer-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  input.fill{
+    flex:1 1 160px;background:var(--bg2);border:1px solid var(--line);color:var(--text);
+    border-radius:9px;padding:9px 11px;font-size:14px;font-family:inherit;
+  }
+  input.fill:focus{outline:none;border-color:var(--summer);}
+  textarea.fill{
+    width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--text);
+    border-radius:9px;padding:10px 12px;font-size:14px;font-family:inherit;min-height:64px;resize:vertical;
+  }
+  textarea.fill:focus{outline:none;border-color:var(--summer);}
+  button.check{
+    background:var(--monsoon-soft);border:1px solid var(--monsoon);color:var(--monsoon);
+    padding:8px 14px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;
+    white-space:nowrap;
+  }
+  button.check:hover{background:var(--monsoon);color:#0d1620;}
+  .reveal{margin-top:9px;font-size:13px;padding:8px 11px;border-radius:9px;display:none;}
+  .reveal.show{display:block;}
+  .reveal.ok{background:#5bbe8a1c;color:var(--correct);border:1px solid #5bbe8a55;}
+  .reveal.no{background:#e0707a1c;color:var(--wrong);border:1px solid #e0707a55;}
+  .reveal b{color:var(--text);}
+
+  .opts{display:flex;flex-direction:column;gap:7px;}
+  .opt{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:14px;cursor:pointer;display:flex;gap:9px;align-items:center;}
+  .opt:hover{border-color:#5a6a86;}
+  .opt .tag{width:20px;height:20px;border-radius:50%;border:1px solid #5a6a86;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);}
+  .opt.correct{border-color:var(--correct);background:#5bbe8a14;}
+  .opt.correct .tag{background:var(--correct);border-color:var(--correct);color:#0d1620;}
+  .opt.wrong{border-color:var(--wrong);background:#e0707a14;}
+  .opt.wrong .tag{background:var(--wrong);border-color:var(--wrong);color:#0d1620;}
+  .opt.disabled{cursor:default;}
+  .tf-row{display:flex;gap:9px;}
+  .tf-row .opt{flex:1;justify-content:center;}
+
+  /* ---- Voice round ---- */
+  .voice-stage{
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:26px 22px;text-align:center;
+  }
+  .voice-progress{color:var(--muted);font-size:12px;margin-bottom:12px;}
+  .voice-q{font-family:'Fraunces',serif;font-size:clamp(19px,3.4vw,25px);font-weight:600;margin:8px 0 18px;line-height:1.35;}
+  .voice-q .blank{border-bottom:2px dotted var(--summer);padding:0 6px;}
+
+  .mic-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px;}
+  .mic-btn{
+    width:74px;height:74px;border-radius:50%;border:2px solid var(--monsoon);background:var(--monsoon-soft);
+    color:var(--monsoon);display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .mic-btn svg{width:30px;height:30px;}
+  .mic-btn.listening{
+    background:var(--monsoon);color:#0d1620;
+    animation:pulse 1.1s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 #3F9AAE66;}
+    70%{box-shadow:0 0 0 16px #3F9AAE00;}
+    100%{box-shadow:0 0 0 0 #3F9AAE00;}
+  }
+  .mic-status{font-size:12.5px;color:var(--muted);min-height:18px;}
+  .transcript{
+    min-height:22px;font-size:14.5px;color:var(--text);font-style:italic;margin:4px 0 6px;
+  }
+  .voice-feedback{
+    margin-top:6px;font-size:14.5px;padding:10px 14px;border-radius:10px;display:none;
+  }
+  .voice-feedback.show{display:inline-block;}
+  .voice-feedback.ok{background:#5bbe8a1c;color:var(--correct);border:1px solid #5bbe8a55;}
+  .voice-feedback.no{background:#e0707a1c;color:var(--wrong);border:1px solid #e0707a55;}
+  .voice-feedback b{color:var(--text);}
+  .voice-controls{display:flex;gap:8px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
+  .voice-controls button{
+    font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:9px;cursor:pointer;border:1px solid var(--line);
+    background:var(--bg2);color:var(--muted);
+  }
+  .voice-controls button:hover{color:var(--text);border-color:#5a6a86;}
+  .voice-controls button.primary{background:var(--summer);border-color:var(--summer);color:#12161f;}
+  .voice-summary{font-size:15px;}
+  .voice-summary .big{font-family:'Fraunces',serif;font-size:38px;font-weight:600;color:var(--summer);}
+  .unsupported{color:var(--muted);font-size:13.5px;line-height:1.6;}
+
+  footer.note{color:var(--muted);font-size:12px;text-align:center;margin-top:34px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="kicker">School Geography · Chapter Quiz</div>
+    <h1>Climate of <span class="accent">India</span></h1>
+    <p class="subtitle">Every sentence of the chapter, turned into a question — weather &amp; climate basics, the three seasons, and the "Do You Know" facts.</p>
+
+    <div class="wheel-box">
+      <svg viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="90" fill="none" stroke="#33405633" stroke-width="1"/>
+        <path d="M100,100 L100,10 A90,90 0 0,1 190,100 Z" fill="var(--summer)" opacity="0.85"/>
+        <path d="M100,100 L190,100 A90,90 0 0,1 100,190 Z" fill="var(--monsoon)" opacity="0.85"/>
+        <path d="M100,100 L100,190 A90,90 0 0,1 34,166 Z" fill="var(--spring)" opacity="0.85"/>
+        <path d="M100,100 L34,166 A90,90 0 0,1 100,10 Z" fill="var(--winter)" opacity="0.85"/>
+        <circle cx="100" cy="100" r="46" fill="var(--bg)"/>
+        <text x="145" y="55" fill="#161D28" font-size="10" font-family="Inter" font-weight="700" text-anchor="middle">SUMMER</text>
+        <text x="152" y="150" fill="#161D28" font-size="10" font-family="Inter" font-weight="700" text-anchor="middle">MONSOON</text>
+        <text x="65" y="180" fill="#161D28" font-size="9" font-family="Inter" font-weight="700" text-anchor="middle">SPRING</text>
+        <text x="52" y="55" fill="#161D28" font-size="10" font-family="Inter" font-weight="700" text-anchor="middle">WINTER</text>
+      </svg>
+      <div class="wheel-center">
+        <div class="num" id="wheelPct">0%</div>
+        <div class="lbl">answered</div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--summer)"></i>April–June</span>
+      <span><i class="dot" style="background:var(--monsoon)"></i>Mid-June–Aug</span>
+      <span><i class="dot" style="background:var(--spring)"></i>March (Spring)</span>
+      <span><i class="dot" style="background:var(--winter)"></i>Nov–Feb</span>
+    </div>
+
+    <div class="voice-banner" id="voiceBanner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>
+      <span><b>New: Voice Round.</b> Open Fill in the Blanks, One Word, or True/False and switch to "Voice Round" for hands-free, auto-advancing revision — Claude reads the question, you speak the answer.</span>
+    </div>
+  </div>
+
+  <div class="scorebar">
+    <div class="totals">Score: <b id="scoreVal">0</b> / <b id="scoreMax">0</b> attempted correctly &nbsp;·&nbsp; <span id="answeredVal">0</span>/<span id="totalVal">0</span> answered</div>
+    <button class="reset" onclick="resetAll()">Reset all answers</button>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="panels"></div>
+
+  <footer class="note">Voice Round needs microphone access and works best in Chrome or Edge on desktop/Android. List View (typing / tapping) always works as a fallback.</footer>
+</div>
+
+<script>
+/* ================= DATA (unchanged coverage) ================= */
+
+const fillBlanks = [
+["Weather is a state of the ______ for a particular day or time.","atmosphere"],
+["The weather on a given day may be sunny, hot, cold, cloudy or ______.","rainy"],
+["Places near the ______ are neither too hot nor too cold.","sea"],
+["Climate of a region is the ______ weather of a place taken over many years.","average"],
+["Climate of a place is worked out over a period of about 25 to ______ years.","30"],
+["______ and rainfall affect the climate of a place.","Temperature"],
+["Our food, clothing and way of ______ are greatly influenced by climate.","life"],
+["Climate also influences the ______ and plant life of a region.","animal"],
+["India has a large variation in climate from region to region because of its vast ______.","size"],
+["The climate of India is divided into three main seasons — summer, rainy season and ______.","winter"],
+["Places near the ______ are hotter.","equator"],
+["As we go away from the equator, it gets ______.","cooler"],
+["Places on the mountains have a ______ climate.","cold"],
+["The ______ areas are warmer than the mountains.","plain"],
+["In India, the summer season begins in the month of ______.","April"],
+["In April, the sun shines ______ overhead.","vertically"],
+["______ is even warmer than April.","May"],
+["______ is the hottest month of summer in India.","June"],
+["In summer, days are ______ and nights are short.","long"],
+["______ storms are quite common during Indian summers.","Dust"],
+["In desert areas, the summer temperature is almost ______ in the sun.","unbearable"],
+["Southern India is covered on ______ sides by the sea.","three"],
+["______ breezes from the sea keep coastal areas cool.","Sea"],
+["It is hottest in the month of ______ in Southern India.","April"],
+["The ______ Mountains remain cool during the summer.","Northern"],
+["People go to ______ stations during summer to escape the scorching heat.","hill"],
+["In coastal plains, the moisture in the atmosphere results in high ______.","humidity"],
+["Schools are closed for ______ vacations for about two months.","summer"],
+["The peak summer months are ______ and June.","May"],
+["The rainy season is also known as the ______ season.","Monsoon"],
+["The rainy season begins from mid-______ and continues up to August.","June"],
+["Monsoon winds blow from the Arabian Sea and the ______ Ocean.","Indian"],
+["Monsoon winds carry dark clouds full of ______.","moisture"],
+["The first monsoon showers are experienced in the first week of ______.","June"],
+["By the middle of ______, monsoon covers the whole of India.","July"],
+["______ in Meghalaya gets the heaviest rainfall in the world.","Mawsynram"],
+["The desert areas of ______ and Kutch receive very little rainfall during monsoon.","Rajasthan"],
+["The ______ Coast remains dry during the monsoon season.","Coromandel"],
+["The Coromandel Coast receives rainfall in the months of ______ and December.","November"],
+["Scanty rainfall in India can cause ______ conditions.","drought"],
+["Heavy, excessive rains can cause ______ and destruction.","floods"],
+["Failure of rains, or excessive rains, bring misery and ______ to farmers.","poverty"],
+["By the end of ______, days begin to get shorter and nights become longer.","October"],
+["The rays of the sun get ______ as winter begins.","inclined"],
+["The winter season lasts from November to ______.","February"],
+["There is heavy ______ in the Northern Mountains during winter.","snowfall"],
+["______ is the coldest month in North India.","January"],
+["Occasional showers lower the ______ even further in North India during winter.","temperature"],
+["In the Western Desert, the ______ are very cold, though days are pleasant, in winter.","nights"],
+["______ India experiences a moderate winter.","Southern"],
+["By ______, it begins to get warmer again — it is spring time.","March"],
+];
+
+const mcqs = [
+["What is weather?",["The average condition of the atmosphere over years","The state of the atmosphere for a particular day or time","A type of season","A wind pattern over the ocean"],1],
+["Climate of a place is worked out as the average weather over about how many years?",["5–10 years","10–15 years","25–30 years","50–60 years"],2],
+["Which of these is NOT mentioned as a factor affecting climate?",["Distance from the equator","Height of the place","Distance from the sea","Colour of the soil"],3],
+["Places near the equator are:",["Colder","Hotter","Always rainy","Always snow-covered"],1],
+["Which of these is NOT one of India's three main seasons, as per the chapter?",["Summer","Autumn","Rainy season","Winter"],1],
+["In which month does the summer season begin in India?",["March","April","May","June"],1],
+["Which month is the hottest in India?",["April","May","June","July"],2],
+["Southern India is covered by the sea on how many sides?",["One","Two","Three","Four"],2],
+["What keeps Southern India's coastal areas cool in summer?",["Mountains","Sea breezes","Heavy rainfall","Snow"],1],
+["Where do people go in summer to escape the scorching heat?",["Deserts","Coastal plains","Hill stations","River plains"],2],
+["What causes high humidity in coastal plains during summer?",["Dust in the air","Moisture in the atmosphere","Cold winds","Snowfall"],1],
+["For about how long are schools closed for summer vacation?",["1 month","2 months","3 months","4 months"],1],
+["The rainy season is also called the:",["Winter season","Spring season","Monsoon season","Dry season"],2],
+["When does the rainy season begin in India?",["Mid-May","Mid-June","Mid-July","Mid-August"],1],
+["Monsoon winds blow towards India's West coast from:",["Only the Bay of Bengal","The Arabian Sea and the Indian Ocean","The Pacific Ocean","The Himalayas"],1],
+["When are the first monsoon showers experienced?",["First week of May","First week of June","First week of July","First week of August"],1],
+["By when does the monsoon cover the whole of India?",["End of June","Middle of July","End of August","Middle of September"],1],
+["Which place gets the heaviest rainfall in the world?",["Kutch","Rajasthan","Mawsynram","Coromandel Coast"],2],
+["Mawsynram, which gets the world's heaviest rainfall, is in which state?",["Assam","Meghalaya","Kerala","Sikkim"],1],
+["Which areas receive very little rainfall during the monsoon?",["The West coast","Rajasthan and Kutch","Meghalaya","The Coromandel Coast"],1],
+["When does the Coromandel Coast receive its rainfall?",["June–August","November–December","March–April","September–October"],1],
+["What condition can scanty (very little) rainfall cause?",["Floods","Drought","Cyclones","Heavy snowfall"],1],
+["What condition can excessive, heavy rainfall cause?",["Drought","Floods and destruction","Nothing unusual","Sandstorms"],1],
+["When does winter begin in India, as per the chapter?",["End of September","End of October","End of November","End of December"],1],
+["What happens to the sun's rays as winter approaches?",["They become vertical","They get inclined","They disappear","They get stronger"],1],
+["The winter season lasts from November to:",["January","February","March","April"],1],
+["Which region gets heavy snowfall in winter?",["Coromandel Coast","Northern Mountains","Western Desert","Southern India"],1],
+["Which month is the coldest in North India?",["November","December","January","February"],2],
+["What lowers the temperature further in North India during winter?",["Sea breezes","Occasional showers","Dust storms","Bright sunshine"],1],
+["In the Western Desert, winter nights are:",["Warm","Very cold","Rainy","Foggy but mild"],1],
+["Southern India experiences which kind of winter?",["Severe","Moderate","No winter at all","Heavy snowfall"],1],
+["What forms when water vapour condenses on tiny dust particles in the air?",["Fog only","Droplets that form clouds","Rain directly, with no clouds","Ice crystals only"],1],
+["Warm air, being lighter than cool air, does what in the atmosphere?",["Sinks","Rises","Stays still","Disappears"],1],
+["By which month does it begin to get warmer again, marking spring?",["January","February","March","April"],2],
+["According to the chapter, spring paves the way for:",["Winter","The rainy season","The hot summer","Autumn"],2],
+];
+
+const oneWord = [
+["The state of the atmosphere for a particular day or time.","Weather"],
+["The average weather condition of a place taken over many years.","Climate"],
+["Another name for the rainy season.","Monsoon"],
+["The place in Meghalaya that gets the heaviest rainfall in the world.","Mawsynram"],
+["The coast that stays dry in the monsoon but gets rain in November–December.","Coromandel Coast"],
+["The desert state (along with Kutch) that gets very little monsoon rain.","Rajasthan"],
+["The hottest month of the year in India.","June"],
+["The month in which the summer season begins in India.","April"],
+["The coldest month in North India.","January"],
+["The imaginary line near which places are hotter.","Equator"],
+["The places people go to in summer to escape the heat.","Hill stations"],
+["What monsoon winds carry, which brings rain to India.","Moisture"],
+["The season that comes between winter and summer, around March.","Spring"],
+["The condition caused by very scanty (little) rainfall.","Drought"],
+["The condition caused by very heavy, excessive rainfall.","Floods"],
+["What forms in the sky when water vapour condenses on dust particles.","Clouds"],
+["The season that lasts from November to February.","Winter"],
+["The cool wind from the sea that lowers coastal temperatures in summer.","Sea breeze"],
+["What rises in the atmosphere because it is lighter than cool air.","Warm air"],
+["The month by the end of which winter is said to begin.","October"],
+];
+
+const definitions = [
+["Define Weather, as given in the chapter.","The state of the atmosphere for a particular day or time — e.g. sunny, hot, cold, cloudy or rainy."],
+["Define Climate, as given in the chapter.","The average weather condition of a place, taken over a period of many years (about 25–30 years)."],
+["What is the Monsoon?","The rainy season in India, from mid-June to August, caused by moisture-laden winds blowing from the Arabian Sea and the Indian Ocean towards the West coast."],
+["What is drought?","A condition caused when rainfall is so scanty (little) that there is a severe shortage of water, harming crops and people."],
+["What is humidity?","The amount of moisture present in the atmosphere, which feels 'sticky' or damp — high in coastal plains during summer."],
+["What are hill stations?","Places in the mountains that people visit during summer, since the Northern Mountains stay cool and offer relief from the scorching heat."],
+["What is a dust storm?","A common summer weather event in India, in which strong winds blow dust and sand through the air."],
+["Explain 'distance from the equator' as a factor affecting climate.","Places near the equator receive more direct heat and are hotter; as a place gets farther from the equator, its climate becomes cooler."],
+["Explain how a cloud forms, as described in the chapter.","Warm air, being lighter, rises and cools. Cool air cannot hold much water, so water vapour condenses onto dust particles, forming droplets — millions of these droplets together form a visible cloud."],
+["What is meant by 'moisture-laden winds' in the chapter?","Monsoon winds that have picked up a great deal of water vapour from the Arabian Sea and Indian Ocean, carrying dark clouds full of moisture that bring rain to India."],
+["Describe the spring season as given in the chapter.","A short period, beginning by March, that is neither hot nor cold — it comes between winter and summer and paves the way for the hot summer season."],
+["What does 'vast size' of India mean for its climate, per the chapter?","Because India covers such a huge area, its climate shows a large variation from one region to another."],
+];
+
+const shortAnswers = [
+["What are the three main seasons of India, as per the chapter?","Summer, the rainy season (monsoon), and winter."],
+["Why is Southern India not as hot as North India in summer?","Southern India is covered on three sides by the sea, and sea breezes keep the coastal and nearby areas cool, even though it is very warm."],
+["Why do people go to hill stations during summer?","Because the Northern Mountains remain cool during summer, giving people a way to escape the scorching heat elsewhere in India."],
+["From where do monsoon winds blow, and what do they carry?","They blow from the Arabian Sea and the Indian Ocean towards the West coast of India, carrying dark clouds full of moisture, which they bring as rain."],
+["Why does the Coromandel Coast remain dry during the main monsoon season?","Unlike most of India, the Coromandel Coast does not get its rain during the mid-June to August monsoon; it instead receives rainfall later, in November and December."],
+["What problems can unpredictable rainfall cause for farmers?","Scanty rainfall causes drought, while heavy rainfall causes floods and destruction; since India is an agricultural country, both failure of rains and excessive rains bring misery and poverty to farmers."],
+["Describe winter conditions in the Northern Plains.","The Northern Plains experience severe cold winters, with January being the coldest month; occasional showers lower the temperature even further."],
+["Why are nights very cold in the Western Desert in winter, even though days are pleasant?","The chapter notes this as a feature of desert climate — days stay pleasant, but with no cloud cover or moisture to hold in heat, temperatures fall sharply and nights become very cold."],
+["How does climate affect our daily life, according to the chapter?","Climate affects our lives in many ways — our food, clothing and way of life are greatly influenced by the climate of the place we live in, and it also influences the animal and plant life of the region."],
+["Explain the three factors that affect the climate of a place.","Distance from the equator (places nearer the equator are hotter), distance from the sea (places near the sea are neither too hot nor too cold), and height of the place (mountains are colder, plains are warmer)."],
+["How are clouds formed, according to the chapter?","Warm air rises and cools; since cool air cannot hold water, the water vapour condenses on dust particles in the air, forming droplets, and millions of these droplets together form a visible cloud."],
+["Why is summer less hot in coastal plains, and what side-effect does this bring?","The sea breeze cools down the surrounding areas, making summer comparatively less hot — but the moisture in the atmosphere results in high humidity."],
+["Describe what happens to daylight hours in summer and around the start of winter.","In summer, days are long and nights are short; by the end of October, as winter begins, days start getting shorter and nights become longer."],
+["Why does India have such a large variation in climate from region to region?","Because of its vast size, India has a large variation in climate — its climate is divided into three main seasons that are experienced differently across regions."],
+["Describe the cycle of seasons in India as explained in the chapter.","Summer (April–June) is followed by the rainy/monsoon season (mid-June–August), then winter (November–February); by March it turns warmer again into spring, which paves the way for the next hot summer — and this cycle repeats every year."],
+];
+
+const trueFalse = [
+["Weather is the average condition of the atmosphere taken over many years.",false,"That describes climate — weather is the state of the atmosphere for a particular day or time."],
+["Climate of a place is generally worked out over a period of about 25–30 years.",true,""],
+["Places near the sea are neither too hot nor too cold.",true,""],
+["Places near the equator are cooler than places far away from it.",false,"Places near the equator are hotter; it gets cooler as you move away from it."],
+["Mountainous places generally have a warmer climate than plains.",false,"Mountains have a colder climate; plains are warmer."],
+["India's climate is divided into three main seasons.",true,""],
+["The summer season in India begins in April.",true,""],
+["June is the hottest month of the year in India.",true,""],
+["During Indian summers, days are shorter than nights.",false,"Days are long and nights are short in summer."],
+["Dust storms are quite common during the Indian summer.",true,""],
+["Southern India is covered by the sea on three sides.",true,""],
+["Sea breezes help make coastal areas cooler in summer.",true,""],
+["The Northern Mountains get extremely hot during summer.",false,"The Northern Mountains remain cool during summer, which is why people visit hill stations."],
+["Coastal plains have very low humidity during summer.",false,"Coastal plains have high humidity in summer due to moisture in the atmosphere."],
+["Schools in India are closed for about two months during peak summer.",true,""],
+["The rainy season is also called the Monsoon season.",true,""],
+["The Monsoon season begins from mid-June and continues up to August.",true,""],
+["Monsoon winds blow towards India from the Arabian Sea and the Indian Ocean.",true,""],
+["The first monsoon showers of the season are experienced in the southern part of the West coast.",true,""],
+["The monsoon covers the whole of India by the end of May.",false,"The monsoon covers the whole of India only by the middle of July."],
+["Mawsynram in Meghalaya gets the heaviest rainfall in the world.",true,""],
+["Rajasthan and Kutch receive very heavy rainfall during the monsoon.",false,"These desert areas receive very little rainfall during the monsoon."],
+["The Coromandel Coast receives its rainfall in November and December.",true,""],
+["The rainy season in India is always steady and predictable.",false,"The chapter says the rainy season is unpredictable — it can be scanty (drought) or excessive (floods)."],
+["Winter in India begins by the end of October, as per the chapter.",true,""],
+["The winter season lasts from November to February.",true,""],
+["The Northern Mountains receive heavy snowfall in winter.",true,""],
+["January is the coldest month in North India.",true,""],
+["In the Western Desert, days are very cold and nights are pleasant in winter.",false,"It is the opposite — days are pleasant, but nights are very cold."],
+["Southern India experiences a moderate winter.",true,""],
+];
+
+/* ================= CONFIG ================= */
+
+const sections = [
+  {key:"fill", label:"Fill in the Blanks", data:fillBlanks, type:"fill", voice:true, mode:"list"},
+  {key:"mcq", label:"MCQ", data:mcqs, type:"mcq", voice:false, mode:"list"},
+  {key:"oneword", label:"One Word", data:oneWord, type:"fill", voice:true, mode:"list"},
+  {key:"defs", label:"Definitions", data:definitions, type:"text", voice:false, mode:"list"},
+  {key:"short", label:"Short Answer", data:shortAnswers, type:"text", voice:false, mode:"list"},
+  {key:"tf", label:"True / False", data:trueFalse, type:"tf", voice:true, mode:"list"},
+];
+const sectionByKey = {}; sections.forEach(s=>sectionByKey[s.key]=s);
+
+let state = {};
+function initState(){
+  sections.forEach(s=>{ state[s.key] = s.data.map(()=>({done:false, correct:null})); });
+}
+initState();
+
+/* ================= SPEECH SETUP ================= */
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const speechSupported = !!SR;
+let recognition = null;
+if(speechSupported){
+  recognition = new SR();
+  recognition.lang = 'en-IN';
+  recognition.interimResults = true;
+  recognition.maxAlternatives = 3;
+  recognition.continuous = false;
+}
+function safeSpeechCancel(){
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+}
+function speak(text){
+  return new Promise(resolve=>{
+    if(!window.speechSynthesis){ resolve(); return; }
+    safeSpeechCancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.98;
+    u.onend = resolve;
+    u.onerror = resolve;
+    window.speechSynthesis.speak(u);
+  });
+}
+function speakable(q){
+  return q.replace('______',' blank ');
+}
+function normalize(str){
+  return (str||'').toLowerCase().replace(/[^a-z0-9 ]/g,'').trim();
+}
+function fillIsCorrect(spoken, correctAns){
+  const userN = normalize(spoken);
+  if(!userN) return false;
+  const variants = correctAns.split('/').map(x=>normalize(x));
+  return variants.some(c=> c===userN || c.includes(userN) || userN.includes(c));
+}
+function tfFromSpeech(spoken){
+  const n = normalize(spoken);
+  if(!n) return null;
+  if(n.includes('false') || n.includes('no ') || n==='no' || n.includes('incorrect')) return false;
+  if(n.includes('true') || n.includes('yes') || n.includes('correct')) return true;
+  return null;
+}
+
+/* ================= LIST-VIEW RENDER (unchanged interaction) ================= */
+
+function fillTemplate(q){ return q.replace('______','<span class="blank">______</span>'); }
+
+function checkFillLike(idx, s, inputEl, revealEl){
+  const val = inputEl.value;
+  const correctAns = s.data[idx][1];
+  const isCorrect = fillIsCorrect(val, correctAns);
+  state[s.key][idx].done = true;
+  state[s.key][idx].correct = isCorrect;
+  revealEl.className = 'reveal show ' + (isCorrect ? 'ok':'no');
+  revealEl.innerHTML = (isCorrect ? '✓ Correct — ' : '✗ Not quite — ') + '<b>Answer: '+correctAns+'</b>';
+  updateScore();
+}
+function checkTextLike(idx, s, revealEl){
+  state[s.key][idx].done = true;
+  state[s.key][idx].correct = true;
+  revealEl.className = 'reveal show ok';
+  revealEl.innerHTML = '<b>Model answer:</b> ' + s.data[idx][1];
+  updateScore();
+}
+function renderFillCard(s, idx){
+  const [q] = s.data[idx];
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = `<div class="qnum">Question ${idx+1}</div><div class="qtext">${fillTemplate(q)}</div>
+    <div class="answer-row"><input type="text" class="fill" placeholder="Type your answer…"><button class="check">Check</button></div>
+    <div class="reveal"></div>`;
+  const input = card.querySelector('input'), btn = card.querySelector('button'), reveal = card.querySelector('.reveal');
+  const go = ()=>checkFillLike(idx, s, input, reveal);
+  btn.onclick = go;
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') go(); });
+  return card;
+}
+function renderTextCard(s, idx){
+  const [q, ans] = s.data[idx];
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = `<div class="qnum">Question ${idx+1}</div><div class="qtext">${q}</div>
+    <textarea class="fill" placeholder="Write your answer, then check the model answer…"></textarea>
+    <div class="answer-row" style="margin-top:8px;"><button class="check">Show model answer</button></div>
+    <div class="reveal"></div>`;
+  const btn = card.querySelector('button'), reveal = card.querySelector('.reveal');
+  btn.onclick = ()=>checkTextLike(idx, s, reveal);
+  return card;
+}
+function renderMcqCard(s, idx){
+  const [q, opts, correctI] = s.data[idx];
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = `<div class="qnum">Question ${idx+1}</div><div class="qtext">${q}</div>`;
+  const optsWrap = document.createElement('div'); optsWrap.className = 'opts';
+  const letters = ['A','B','C','D'];
+  opts.forEach((optText,i)=>{
+    const o = document.createElement('div'); o.className = 'opt';
+    o.innerHTML = `<span class="tag">${letters[i]}</span><span>${optText}</span>`;
+    o.onclick = ()=>{
+      if(state[s.key][idx].done) return;
+      state[s.key][idx].done = true;
+      const correct = i===correctI;
+      state[s.key][idx].correct = correct;
+      [...optsWrap.children].forEach((child,ci)=>{
+        child.classList.add('disabled');
+        if(ci===correctI) child.classList.add('correct');
+        if(ci===i && !correct) child.classList.add('wrong');
+      });
+      updateScore();
+    };
+    optsWrap.appendChild(o);
+  });
+  card.appendChild(optsWrap);
+  return card;
+}
+function renderTfCard(s, idx){
+  const [q, answer, note] = s.data[idx];
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = `<div class="qnum">Question ${idx+1}</div><div class="qtext">${q}</div>`;
+  const row = document.createElement('div'); row.className = 'tf-row';
+  [['True',true],['False',false]].forEach(([label,val])=>{
+    const o = document.createElement('div'); o.className = 'opt';
+    o.innerHTML = `<span>${label}</span>`;
+    o.onclick = ()=>{
+      if(state[s.key][idx].done) return;
+      state[s.key][idx].done = true;
+      const correct = val===answer;
+      state[s.key][idx].correct = correct;
+      [...row.children].forEach((child,ci)=>{
+        child.classList.add('disabled');
+        const cv = ci===0;
+        if(cv===answer) child.classList.add('correct');
+        if(cv===val && !correct) child.classList.add('wrong');
+      });
+      if(note){
+        const n = document.createElement('div');
+        n.className = 'reveal show ' + (correct?'ok':'no');
+        n.innerHTML = (correct?'✓ ':'✗ ') + note;
+        card.appendChild(n);
+      }
+      updateScore();
+    };
+    row.appendChild(o);
+  });
+  card.appendChild(row);
+  return card;
+}
+
+function renderListView(s, container){
+  s.data.forEach((_,idx)=>{
+    let card;
+    if(s.type==='fill') card = renderFillCard(s, idx);
+    else if(s.type==='mcq') card = renderMcqCard(s, idx);
+    else if(s.type==='tf') card = renderTfCard(s, idx);
+    else card = renderTextCard(s, idx);
+    container.appendChild(card);
+  });
+}
+
+/* ================= VOICE ROUND ================= */
+
+const micIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>`;
+
+let voiceCtl = { active:false, sectionKey:null, idx:0, aborted:false };
+
+function stopVoiceRound(){
+  voiceCtl.active = false;
+  voiceCtl.aborted = true;
+  if(speechSupported){ try{ recognition.abort(); }catch(e){} }
+  safeSpeechCancel();
+}
+
+function renderVoiceStage(s, container, content){
+  const old = container.querySelector('.voice-stage');
+  if(old) old.remove();
+  const stage = document.createElement('div');
+  stage.className = 'voice-stage';
+  stage.innerHTML = content;
+  container.appendChild(stage);
+  return stage;
+}
+
+function voiceIntro(s, container){
+  const total = s.data.length;
+  let doneCount = state[s.key].filter(x=>x.done).length;
+  const stage = renderVoiceStage(s, container, `
+    <div class="mic-wrap">
+      <div class="mic-btn" id="voiceStartBtn" style="cursor:pointer;">${micIcon}</div>
+    </div>
+    <div class="voice-q" style="font-size:17px;">Ready for a hands-free ${s.label.toLowerCase()} round?</div>
+    <div class="mic-status">${total} questions · Claude reads each one aloud, you speak the answer, and it auto-advances.<br>${doneCount>0 ? doneCount+' already answered this session — starting fresh from Q1.' : ''}</div>
+    <div class="voice-controls">
+      <button class="primary" id="beginVoiceBtn">Start Voice Round</button>
+    </div>
+    ${!speechSupported ? '<div class="unsupported" style="margin-top:14px;">Voice input is not supported in this browser. Please try Chrome or Edge, or use List View instead.</div>' : ''}
+  `);
+  const start = ()=> startVoiceRound(s, container);
+  const startBtn = stage.querySelector('#voiceStartBtn');
+  const beginBtn = stage.querySelector('#beginVoiceBtn');
+  if(speechSupported){
+    startBtn.onclick = start;
+    beginBtn.onclick = start;
+  } else {
+    startBtn.style.cursor = 'not-allowed';
+    startBtn.style.opacity = 0.5;
+    beginBtn.disabled = true; beginBtn.style.opacity = 0.5; beginBtn.style.cursor='not-allowed';
+  }
+}
+
+function startVoiceRound(s, container){
+  voiceCtl = { active:true, sectionKey:s.key, idx:0, aborted:false };
+  checkMicAccess(s, container);
+}
+
+function checkMicAccess(s, container){
+  if(!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)){
+    // Can't pre-check; just try the round and let per-question errors handle it.
+    runVoiceStep(s, container);
+    return;
+  }
+  const stage = renderVoiceStage(s, container, `
+    <div class="mic-wrap"><div class="mic-btn listening">${micIcon}</div></div>
+    <div class="voice-q" style="font-size:16px;">Requesting microphone access…</div>
+  `);
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream=>{
+      stream.getTracks().forEach(t=>t.stop());
+      if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key) return;
+      runVoiceStep(s, container);
+    })
+    .catch(err=>{
+      if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key) return;
+      showMicError(s, container, err && err.name);
+    });
+}
+
+function showMicError(s, container, reason){
+  voiceCtl.aborted = true;
+  const stage = renderVoiceStage(s, container, `
+    <div class="voice-q" style="font-size:18px;">Couldn't access the microphone</div>
+    <div class="unsupported">
+      ${reason ? 'Reason: '+reason+'.<br><br>' : ''}
+      A blocked prompt with no popup usually means one of two things:<br><br>
+      <b>1. Chrome itself lacks mic permission</b> — check your phone's Settings → Apps → Chrome → Permissions → Microphone (Android), or Settings → Chrome → Microphone (iPhone), and make sure it's allowed.<br><br>
+      <b>2. Chrome already blocked this page once</b> — open <code>chrome://settings/content/microphone</code>, find this page under "Not allowed", and remove it so Chrome asks again.<br><br>
+      After fixing either, reload the page and try again — or use List View below, which always works.
+    </div>
+    <div class="voice-controls" style="margin-top:16px;">
+      <button class="primary" id="micRetryBtn">Try again</button>
+      <button id="micBackBtn">Back to intro</button>
+    </div>
+  `);
+  stage.querySelector('#micRetryBtn').onclick = ()=>{ voiceCtl.aborted = false; startVoiceRound(s, container); };
+  stage.querySelector('#micBackBtn').onclick = ()=>{ voiceIntro(s, container); };
+}
+
+function questionSpeechText(s, idx){
+  const item = s.data[idx];
+  if(s.type==='fill') return speakable(item[0]);
+  if(s.type==='tf') return item[0];
+  return item[0];
+}
+function questionDisplayHTML(s, idx){
+  const item = s.data[idx];
+  if(s.type==='fill') return fillTemplate(item[0]);
+  return item[0];
+}
+function correctAnswerFor(s, idx){
+  const item = s.data[idx];
+  if(s.type==='fill') return item[1];
+  if(s.type==='tf') return item[1] ? 'True' : 'False';
+  return item[1];
+}
+
+async function runVoiceStep(s, container){
+  if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key) return;
+  const idx = voiceCtl.idx;
+  if(idx >= s.data.length){ renderVoiceSummary(s, container); return; }
+
+  const stage = renderVoiceStage(s, container, `
+    <div class="voice-progress">Question ${idx+1} of ${s.data.length} · ${s.label}</div>
+    <div class="voice-q">${questionDisplayHTML(s, idx)}</div>
+    <div class="mic-wrap">
+      <div class="mic-btn" id="micBtn">${micIcon}</div>
+      <div class="mic-status" id="micStatus">Reading question…</div>
+    </div>
+    <div class="transcript" id="transcriptEl"></div>
+    <div class="voice-feedback" id="feedbackEl"></div>
+    <div class="voice-controls">
+      <button id="skipBtn">Skip</button>
+      <button id="retryBtn" style="display:none;">🎙 Try again</button>
+      <button id="stopBtn">End round</button>
+    </div>
+  `);
+  const micBtn = stage.querySelector('#micBtn');
+  const micStatus = stage.querySelector('#micStatus');
+  const transcriptEl = stage.querySelector('#transcriptEl');
+  const feedbackEl = stage.querySelector('#feedbackEl');
+  const skipBtn = stage.querySelector('#skipBtn');
+  const retryBtn = stage.querySelector('#retryBtn');
+  const stopBtn = stage.querySelector('#stopBtn');
+
+  stopBtn.onclick = ()=>{ stopVoiceRound(); voiceIntro(s, container); };
+  skipBtn.onclick = ()=>{
+    if(voiceCtl.aborted) return;
+    if(speechSupported){ try{ recognition.abort(); }catch(e){} }
+    safeSpeechCancel();
+    advanceVoice(s, container);
+  };
+
+  retryBtn.style.display = 'none';
+  micStatus.textContent = 'Reading question…';
+
+  let heard = '';
+  let finished = false;
+  let listenTimer = null;
+
+  const clearListenTimer = ()=>{ if(listenTimer){ clearTimeout(listenTimer); listenTimer = null; } };
+
+  const finish = (result, fatalErr)=>{
+    if(finished) return;
+    finished = true;
+    clearListenTimer();
+    micBtn.classList.remove('listening');
+    if(speechSupported){
+      try{ recognition.onresult=null; recognition.onerror=null; recognition.onend=null; }catch(e){}
+    }
+    if(fatalErr){
+      showMicError(s, container, fatalErr);
+      return;
+    }
+    revealAndAdvance(s, idx, result, feedbackEl, micStatus, container);
+  };
+
+  const onSessionEnd = (fatalErr)=>{
+    if(finished) return;
+    finish(heard || null, fatalErr);
+  };
+
+  function attachRecognition(){
+    recognition.onresult = (e)=>{
+      let interim = '';
+      let final = '';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const t = e.results[i][0].transcript;
+        if(e.results[i].isFinal) final += t; else interim += t;
+      }
+      transcriptEl.textContent = (final || interim);
+      if(final){ heard = final; }
+    };
+    recognition.onerror = (e)=>{
+      const errType = e && e.error;
+      const fatal = errType==='not-allowed' || errType==='service-not-allowed' || errType==='audio-capture';
+      onSessionEnd(fatal ? (errType==='audio-capture' ? 'audio-capture (no microphone found)' : errType) : null);
+    };
+    recognition.onend = ()=>{ onSessionEnd(null); };
+  }
+
+  attachRecognition();
+  micBtn.onclick = ()=>{ if(speechSupported){ try{ recognition.stop(); }catch(e){} } };
+
+  // Read the question first (mic stays off during this, to avoid the mic
+  // picking up the device's own speaker output and mistaking it for an
+  // answer), then start listening the instant reading ends.
+  await speak(questionSpeechText(s, idx));
+  if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key) return;
+  if(finished) return;
+
+  micStatus.textContent = 'Listening… (5s)';
+  micBtn.classList.add('listening');
+
+  try{ recognition.start(); }catch(e){
+    const fatal = e && (e.name==='NotAllowedError' || e.name==='SecurityError') ? e.name : null;
+    finish(null, fatal);
+    return;
+  }
+
+  // Fixed 5-second answer window, counted from the moment listening starts —
+  // never shortened by how long the question itself took to read.
+  listenTimer = setTimeout(()=>{
+    if(finished) return;
+    micStatus.textContent = 'Time is up — checking your answer…';
+    if(speechSupported){ try{ recognition.stop(); }catch(e){} }
+    // fall back in case stop() doesn't fire onend promptly
+    setTimeout(()=>{ finish(heard || null); }, 300);
+  }, 5000);
+}
+
+async function revealAndAdvance(s, idx, spoken, feedbackEl, micStatus, container){
+  if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key || voiceCtl.idx!==idx) return;
+  let isCorrect = false;
+  if(s.type==='fill'){
+    isCorrect = spoken ? fillIsCorrect(spoken, s.data[idx][1]) : false;
+  } else if(s.type==='tf'){
+    const heardBool = spoken ? tfFromSpeech(spoken) : null;
+    isCorrect = heardBool !== null && heardBool === s.data[idx][1];
+  }
+  state[s.key][idx].done = true;
+  state[s.key][idx].correct = isCorrect;
+  updateScore();
+
+  micStatus.textContent = spoken ? ('You said: "'+spoken+'"') : 'No answer heard';
+  feedbackEl.className = 'voice-feedback show ' + (isCorrect ? 'ok':'no');
+  const correctAns = correctAnswerFor(s, idx);
+  feedbackEl.innerHTML = (isCorrect ? '✓ Correct!' : ('✗ Answer: <b>'+correctAns+'</b>'));
+
+  await speak(isCorrect ? 'Correct!' : ('The answer is ' + correctAns));
+  if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key || voiceCtl.idx!==idx) return;
+  advanceVoice(s, container);
+}
+
+function advanceVoice(s, container){
+  if(voiceCtl.aborted || voiceCtl.sectionKey!==s.key) return;
+  voiceCtl.idx += 1;
+  runVoiceStep(s, container);
+}
+
+function renderVoiceSummary(s, container){
+  const results = state[s.key];
+  const correct = results.filter(r=>r.correct).length;
+  const total = results.length;
+  const stage = renderVoiceStage(s, container, `
+    <div class="voice-summary">
+      <div>Round complete — ${s.label}</div>
+      <div class="big">${correct} / ${total}</div>
+      <div class="mic-status">correct out of ${total} questions</div>
+      <div class="voice-controls">
+        <button class="primary" id="againBtn">Do it again</button>
+        <button id="toListBtn">Back to List View</button>
+      </div>
+    </div>
+  `);
+  stage.querySelector('#againBtn').onclick = ()=> startVoiceRound(s, container);
+  stage.querySelector('#toListBtn').onclick = ()=>{ s.mode='list'; renderTabs(); renderPanels(); };
+}
+
+/* ================= PANEL / TAB CHROME ================= */
+
+const tabsEl = document.getElementById('tabs');
+const panelsEl = document.getElementById('panels');
+let activeKey = sections[0].key;
+
+function totalQuestions(){ return sections.reduce((a,s)=>a+s.data.length,0); }
+
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  sections.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'tab' + (s.key===activeKey ? ' active':'');
+    el.innerHTML = s.label + '<span class="count">'+s.data.length+' questions</span>';
+    el.onclick = ()=>{
+      if(activeKey!==s.key){ stopVoiceRound(); }
+      activeKey = s.key; renderTabs(); renderPanels();
+    };
+    tabsEl.appendChild(el);
+  });
+}
+
+function setMode(s, mode){
+  if(s.mode!==mode){ stopVoiceRound(); }
+  s.mode = mode;
+  renderPanels();
+}
+
+function renderPanelHead(s){
+  const head = document.createElement('div');
+  head.className = 'panel-head';
+  head.innerHTML = `<h2>${s.label}</h2><span class="desc">${s.data.length} questions</span>`;
+  return head;
+}
+
+function renderModeToggle(s){
+  const toggle = document.createElement('div');
+  toggle.className = 'mode-toggle';
+  toggle.innerHTML = `
+    <div class="mode-btn ${s.mode==='list'?'active':''}" id="modeListBtn">📝 List View</div>
+    <div class="mode-btn ${s.mode==='voice'?'active':''}" id="modeVoiceBtn">${micIcon} Voice Round</div>
+  `;
+  toggle.querySelector('#modeListBtn').onclick = ()=> setMode(s,'list');
+  toggle.querySelector('#modeVoiceBtn').onclick = ()=> setMode(s,'voice');
+  return toggle;
+}
+
+function renderPanels(){
+  panelsEl.innerHTML = '';
+  sections.forEach(s=>{
+    const panel = document.createElement('section');
+    panel.className = 'panel' + (s.key===activeKey ? ' active':'');
+    panelsEl.appendChild(panel);
+    panel.appendChild(renderPanelHead(s));
+
+    if(s.voice){
+      panel.appendChild(renderModeToggle(s));
+    }
+
+    if(s.voice && s.mode==='voice'){
+      voiceIntro(s, panel);
+    } else {
+      renderListView(s, panel);
+    }
+  });
+}
+
+function updateScore(){
+  let correct=0, attempted=0, total=0;
+  sections.forEach(s=>{
+    total += s.data.length;
+    state[s.key].forEach(st=>{ if(st.done){ attempted++; if(st.correct) correct++; } });
+  });
+  document.getElementById('scoreVal').textContent = correct;
+  document.getElementById('scoreMax').textContent = attempted;
+  document.getElementById('answeredVal').textContent = attempted;
+  document.getElementById('totalVal').textContent = total;
+  const pct = total ? Math.round((attempted/total)*100) : 0;
+  document.getElementById('wheelPct').textContent = pct+'%';
+}
+
+function resetAll(){
+  stopVoiceRound();
+  initState();
+  renderPanels();
+  updateScore();
+}
+
+document.getElementById('totalVal').textContent = totalQuestions();
+renderTabs();
+renderPanels();
+updateScore();
+</script>
+</body>
+</html>
