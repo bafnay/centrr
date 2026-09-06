@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 4 — Pollination Field Guide Quiz</title>
+<style>
+  :root{
+    --cream:#F6F1E6;
+    --paper:#FCFAF4;
+    --ink:#2B2620;
+    --ink-soft:#5A5245;
+    --moss:#2F4A3E;
+    --moss-deep:#1E3229;
+    --sage:#8FA88B;
+    --sage-pale:#DCE7D8;
+    --clay:#C0533F;
+    --clay-pale:#F3DCD5;
+    --gold:#C99A2E;
+    --gold-pale:#F3E6BF;
+    --rose:#D7758A;
+    --line: rgba(43,38,32,0.14);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #EFEADA 0%, transparent 55%),
+      var(--cream);
+    color:var(--ink);
+    font-family: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+    line-height:1.5;
+    padding-bottom:60px;
+  }
+  .sans{ font-family: 'Segoe UI', Avenir, system-ui, -apple-system, sans-serif; }
+
+  header.top{
+    background: linear-gradient(180deg, var(--moss) 0%, var(--moss-deep) 100%);
+    color:#F3EEDD;
+    padding:28px 20px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute; right:-40px; top:-40px; width:180px; height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(201,154,46,0.35), transparent 70%);
+  }
+  .kicker{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    color:var(--gold-pale);
+    margin:0 0 6px;
+  }
+  h1.title{
+    margin:0;
+    font-size:28px;
+    font-weight:400;
+    font-style:italic;
+    letter-spacing:0.2px;
+  }
+  .subtitle{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:13.5px;
+    color:#CFE0D2;
+    margin-top:8px;
+    max-width:520px;
+  }
+  .header-actions{
+    margin-top:14px;
+  }
+  .btn-reset-all{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:12px;
+    font-weight:600;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid rgba(243,238,221,0.4);
+    background:transparent;
+    color:#F3EEDD;
+    cursor:pointer;
+  }
+  .btn-reset-all:hover{ background:rgba(243,238,221,0.12); }
+
+  nav.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:6px;
+    padding:12px 12px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    z-index:5;
+    -webkit-overflow-scrolling:touch;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    flex:0 0 auto;
+    padding:8px 13px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--cream);
+    color:var(--ink-soft);
+    font-size:12.5px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .tab-btn .count{
+    font-size:10.5px;
+    opacity:0.7;
+    margin-left:4px;
+  }
+  .tab-btn.active{
+    background:var(--moss);
+    color:#fff;
+    border-color:var(--moss);
+  }
+
+  main{
+    max-width:760px;
+    margin:0 auto;
+    padding:20px 16px 40px;
+  }
+
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:4px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-size:21px;
+    font-weight:400;
+    font-style:italic;
+    color:var(--moss-deep);
+    margin:0;
+  }
+  .section-desc{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:2px 0 16px;
+  }
+
+  .toolbar{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  button.action{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:13px;
+    padding:9px 16px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+    transition: transform .08s, background .15s;
+  }
+  button.action:active{ transform: scale(0.97); }
+  .btn-check{ background:var(--moss); color:#fff; }
+  .btn-check:hover{ background:var(--moss-deep); }
+  .btn-reset{ background:transparent; color:var(--clay); border:1px solid var(--clay); }
+  .btn-reset:hover{ background:var(--clay-pale); }
+  .score-pill{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:12.5px;
+    font-weight:600;
+    padding:7px 13px;
+    border-radius:20px;
+    background:var(--gold-pale);
+    color:#7A5C10;
+    margin-left:auto;
+  }
+
+  .qcard{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:14px 16px;
+    margin-bottom:12px;
+  }
+  .qnum{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:11px;
+    color:var(--sage);
+    font-weight:700;
+    letter-spacing:0.03em;
+    margin-bottom:4px;
+  }
+  .qtext{
+    font-size:15.5px;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .qtext em{ color:var(--moss-deep); font-style:italic; }
+
+  input[type=text]{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    width:100%;
+    padding:9px 11px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:14px;
+    color:var(--ink);
+  }
+  input[type=text]:focus{ outline:2px solid var(--sage); outline-offset:1px; }
+
+  textarea{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    width:100%;
+    min-height:64px;
+    padding:9px 11px;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:14px;
+    color:var(--ink);
+    resize:vertical;
+  }
+
+  .options{ display:flex; flex-direction:column; gap:7px; }
+  .opt{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    padding:9px 11px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    background:#fff;
+    transition: border-color .15s, background .15s;
+  }
+  .opt:hover{ border-color:var(--sage); }
+  .opt input{ accent-color:var(--moss); }
+  .opt.selected{ border-color:var(--moss); background:var(--sage-pale); }
+
+  .tf-row{ display:flex; gap:8px; }
+  .tf-btn{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    flex:1;
+    padding:9px;
+    text-align:center;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#fff;
+    cursor:pointer;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+  }
+  .tf-btn.selected{ background:var(--moss); color:#fff; border-color:var(--moss); }
+
+  .feedback{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:12.5px;
+    margin-top:9px;
+    padding:8px 10px;
+    border-radius:7px;
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.correct{ background:var(--sage-pale); color:#2A4A2E; }
+  .feedback.wrong{ background:var(--clay-pale); color:#7A2E20; }
+  .feedback .model{ display:block; margin-top:4px; color:var(--ink-soft); font-style:italic; }
+
+  .qcard.correct{ border-color:#9DBE97; }
+  .qcard.wrong{ border-color:var(--clay); }
+
+  .distinguish-table{ width:100%; border-collapse:collapse; font-family:'Segoe UI', system-ui, sans-serif; font-size:13.5px; }
+  .distinguish-table th{
+    background:var(--moss); color:#fff; padding:8px; text-align:left; font-size:12px;
+  }
+  .distinguish-table td{ padding:8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .distinguish-table tr:nth-child(even){ background:rgba(143,168,139,0.08); }
+  .distinguish-table td input{ margin-bottom:0; }
+
+  .diagram-wrap{ display:flex; flex-direction:column; gap:14px; align-items:center; margin-bottom:10px; }
+  svg.diagram{ width:100%; max-width:340px; height:auto; }
+  .label-list{ width:100%; display:flex; flex-direction:column; gap:8px; }
+  .label-row{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    display:flex; align-items:center; gap:10px; font-size:13.5px;
+  }
+  .label-row .marker{
+    flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:var(--gold);
+    color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+  select{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    flex:1; padding:8px 9px; border-radius:7px; border:1px solid var(--line); background:#fff; font-size:13.5px; color:var(--ink);
+  }
+
+  .empty-note{
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:12.5px; color:var(--ink-soft); text-align:center; padding:30px 10px;
+  }
+
+  /* ---- Voice Round ---- */
+  .mode-toggle-row{ width:100%; margin-bottom:14px; }
+  .mode-toggle{
+    display:flex; width:100%; border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  }
+  .mode-btn{
+    flex:1; padding:11px 12px; text-align:center; background:var(--paper); border:none; cursor:pointer;
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:13px; font-weight:600; color:var(--ink-soft); border-right:1px solid var(--line);
+  }
+  .mode-btn:last-child{ border-right:none; }
+  .mode-btn.active{ background:var(--moss); color:#fff; }
+
+  .voice-intro{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:24px 18px; text-align:center;
+  }
+  .voice-intro p{ font-family:'Segoe UI', system-ui, sans-serif; font-size:13px; color:var(--ink-soft); margin:0 0 16px; line-height:1.5; }
+
+  .voice-stage{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:18px 16px;
+  }
+  .voice-progress{ font-family:'Segoe UI', system-ui, sans-serif; font-size:11px; color:var(--sage); font-weight:700; letter-spacing:.03em; margin-bottom:8px; }
+  .voice-qtext{ font-size:16.5px; color:var(--ink); margin-bottom:12px; }
+  .voice-status{ font-family:'Segoe UI', system-ui, sans-serif; font-size:13px; color:var(--moss-deep); font-weight:600; margin-bottom:6px; min-height:18px; }
+  .voice-transcript{ font-family:'Segoe UI', system-ui, sans-serif; font-size:12.5px; color:var(--ink-soft); font-style:italic; margin-bottom:8px; min-height:16px; }
+  .voice-feedback{ font-family:'Segoe UI', system-ui, sans-serif; font-size:13px; margin-bottom:10px; padding:8px 10px; border-radius:7px; display:none; }
+  .voice-feedback.show{ display:block; }
+  .voice-feedback.correct{ background:var(--sage-pale); color:#2A4A2E; }
+  .voice-feedback.wrong{ background:var(--clay-pale); color:#7A2E20; }
+  .voice-feedback .model{ font-style:italic; }
+  .voice-controls{ display:flex; gap:8px; margin:10px 0; }
+  .voice-score{ font-family:'Segoe UI', system-ui, sans-serif; font-size:12px; color:var(--ink-soft); text-align:right; }
+
+  .voice-summary{ text-align:center; }
+  .voice-score-big{ font-family:'Segoe UI', system-ui, sans-serif; font-size:28px; font-weight:700; color:var(--moss-deep); margin:12px 0 18px; }
+
+  .voice-error-title{ font-family:'Segoe UI', system-ui, sans-serif; font-weight:700; font-size:15px; color:var(--clay); margin:0 0 8px; }
+  .voice-error-body{ font-family:'Segoe UI', system-ui, sans-serif; font-size:13px; color:var(--ink-soft); margin:0 0 16px; line-height:1.55; }
+
+  footer.note{
+    max-width:760px; margin:26px auto 0; padding:0 16px;
+    font-family:'Segoe UI', system-ui, sans-serif;
+    font-size:11.5px; color:var(--ink-soft); text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker sans">CHAPTER 4 · NEW TRENDS IN SCIENCE – 5</p>
+  <h1 class="title">Pollination</h1>
+  <p class="subtitle">A field guide quiz — every sentence of the chapter, nine ways to be tested on it.</p>
+  <div class="header-actions">
+    <button type="button" class="btn-reset-all sans" id="btnResetAll">Reset all answers</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main id="main"></main>
+
+<footer class="note">Answers save automatically in this browser. Use each section's "Reset this section" to clear just that category, or "Reset all answers" above to clear everything.</footer>
+
+<script>
+/* ============================= DATA ============================= */
+
+const CATEGORIES = [
+  {key:'fillblank', label:'Fill in the Blanks', icon:'✎'},
+  {key:'mcq', label:'MCQ', icon:'☰'},
+  {key:'oneword', label:'One Word', icon:'●'},
+  {key:'definitions', label:'Definitions', icon:'§'},
+  {key:'shortqa', label:'Short Answer', icon:'✍'},
+  {key:'reasoning', label:'Reasoning', icon:'⟡'},
+  {key:'tf', label:'True / False', icon:'✓'},
+  {key:'distinguish', label:'Distinguish', icon:'⇄'},
+  {key:'labeling', label:'Label the Diagram', icon:'◎'},
+];
+
+const fillblank = [
+["Flower is the most attractive and _____ part of the plant.", ["colourful","colorful"]],
+["Flower may be defined as a modified _____ in which nodes and internodes are highly condensed.", ["shoot"]],
+["The flower is borne on a stalk called _____.", ["pedicel"]],
+["The swollen end of pedicel which holds the four whorls of the flower is known as _____.", ["thalamus"]],
+["The outermost whorl of a flower, consisting of leaf-like structures, is called _____.", ["calyx","sepal","sepals"]],
+["Sepals are generally _____ in colour.", ["green"]],
+["Sepals protect the inner floral whorls during _____ formation.", ["bud"]],
+["Besides protection, sepals also take part in _____.", ["photosynthesis"]],
+["Corolla is the _____ whorl of a flower.", ["second"]],
+["An individual segment of the corolla is known as a _____.", ["petal"]],
+["Petals are brightly coloured, with sweet smell and _____ which attract insects.", ["nectar"]],
+["Androecium or stamens form the _____ whorl of a flower.", ["third"]],
+["Androecium is the _____ part of a flower.", ["male"]],
+["A stamen consists of a thin stalk called _____ and an anther on top.", ["filament"]],
+["Each anther lobe contains _____.", ["pollen grains","pollen"]],
+["Gynoecium or carpel is the _____ whorl of the flower.", ["fourth"]],
+["Gynoecium is also known as the _____.", ["pistil"]],
+["The carpel is differentiated into three parts: stigma, style and _____.", ["ovary"]],
+["The upper portion of the carpel which receives the pollen grain is known as the _____.", ["stigma"]],
+["The long tubular part of the carpel is known as the _____.", ["style"]],
+["The ovary is the part that produces _____.", ["ovules"]],
+["Ovules are also known as _____ gametes.", ["female"]],
+["Pollen grains are also known as _____ gametes.", ["male"]],
+["A flower consisting of all four whorls — calyx, corolla, androecium and gynoecium — is called a _____ flower.", ["complete"]],
+["A flower in which one or more whorls is missing is called an _____ flower.", ["incomplete"]],
+["Flowers of Date palm and _____ are examples of incomplete flowers.", ["mulberry tree","mulberry"]],
+["A flower which contains both stamens and carpels is called a _____ flower.", ["bisexual"]],
+["A bisexual flower can also be called a _____ flower.", ["perfect"]],
+["_____ is the example of a bisexual flower given in the chapter.", ["china rose"]],
+["A flower which contains only one of stamen or carpel is called a _____ flower.", ["monosexual"]],
+["_____ is the example of a monosexual flower given in the chapter.", ["papaya"]],
+["The male part of a flower is known as the _____.", ["stamen"]],
+["The female part of a flower is known as the _____.", ["carpel"]],
+["The process of transference of pollen grains from the anther to the stigma is known as _____.", ["pollination"]],
+["Pollination must occur between plants of the _____ species.", ["same"]],
+["Only pollen grains of the same type are _____; the rest fail to germinate and perish.", ["useful"]],
+["Transfer of pollen grains from anther to the stigma of the same flower, or a different flower of the same plant, is known as _____ pollination.", ["self"]],
+["_____ is the example of self pollination given in the chapter.", ["pansy"]],
+["Transfer of pollen grains from the anther of a flower of one plant to the stigma of a flower of another plant of the same species is known as _____ pollination.", ["cross"]],
+["The two commonest agents of cross-pollination are insects and _____.", ["wind"]],
+["Besides insects and wind, flowers are also pollinated by certain animals such as squirrels and _____.", ["bats"]],
+["Flowers which are large, brightly coloured and produce nectar are pollinated by _____.", ["insects"]],
+["Dahlia and _____ are examples of insect-pollinated flowers.", ["sunflower"]],
+["Flowers pollinated by wind are very small and hang out of their _____ plant.", ["parent"]],
+["Wind-pollinated flowers produce pollen grains in _____ number.", ["large"]],
+["Maize and _____ are examples of wind-pollinated plants.", ["wheat"]],
+["Aquatic plants produce flowers with very light and _____ number of pollen grains.", ["large"]],
+["These light pollen grains remain floating till they meet the stigma of another flower — this is pollination by _____.", ["water"]],
+["_____ is the example of a water-pollinated plant given in the chapter.", ["vallisneria"]],
+["Some flowers are even pollinated by _____.", ["birds"]],
+["Bignonia and _____ are examples of bird-pollinated flowers.", ["canna"]],
+];
+
+const mcq = [
+["Flower may be defined as a modified:", ["Root","Shoot","Leaf","Stem cutting"], 1],
+["Which is the outermost whorl of a flower?", ["Corolla","Calyx","Androecium","Gynoecium"], 1],
+["Corolla is made up of individual segments called:", ["Sepals","Petals","Stamens","Carpels"], 1],
+["The male part of a flower is the:", ["Carpel","Stamen","Sepal","Petal"], 1],
+["Which part of the stamen contains the pollen grains?", ["Filament","Anther","Stigma","Ovary"], 1],
+["Gynoecium is also known as the:", ["Androecium","Calyx","Pistil","Corolla"], 2],
+["Which of these is NOT a part of the carpel?", ["Stigma","Style","Ovary","Filament"], 3],
+["Which of these is an example of a complete flower?", ["Papaya","Date palm","Mulberry tree","China rose"], 3],
+["Which of these is an example of a monosexual flower?", ["China rose","Pea","Mustard","Papaya"], 3],
+["The two commonest agents of cross pollination are:", ["Insects and birds","Insects and wind","Water and birds","Bats and squirrels"], 1],
+["Which of these is a wind-pollinated plant?", ["Sunflower","Dahlia","Maize","Bignonia"], 2],
+["Vallisneria is an example of pollination by:", ["Insects","Wind","Water","Birds"], 2],
+["The example of self pollination given in the chapter is:", ["Pansy","Papaya","Maize","Canna"], 0],
+];
+
+const oneword = [
+["The stalk on which a flower is borne", ["pedicel"]],
+["Another name for pollen grains", ["male gametes"]],
+["Another name for ovules", ["female gametes"]],
+["Another name for gynoecium", ["pistil","carpel"]],
+["The part of the stamen that bears pollen sacs", ["anther"]],
+["The part of the carpel that receives the pollen grain", ["stigma"]],
+["The swollen end of the pedicel that holds the four whorls", ["thalamus"]],
+["The agent of pollination for Vallisneria", ["water"]],
+["The agent of pollination for maize", ["wind"]],
+["One bird that pollinates flowers, as named in the chapter", ["bignonia","canna"]],
+["One insect-pollinated flower named in the chapter", ["sunflower","dahlia"]],
+];
+
+const definitions = [
+["Define a flower.", "The reproductive part of a flowering plant; a modified shoot in which nodes and internodes are highly condensed."],
+["Define pedicel.", "The stalk on which a flower is borne."],
+["Define thalamus.", "The swollen end of the pedicel which holds the four whorls of the flower."],
+["Define calyx (sepal), and give its function.", "The outermost whorl of a flower made of leaf-like sepals, usually green; it protects the inner whorls during bud formation and also helps in photosynthesis."],
+["Define corolla (petal), and give its function.", "The second whorl of a flower, made of petals; brightly coloured with sweet smell and nectar to attract insects for pollination."],
+["Define androecium.", "The third, male whorl of a flower, made of stamens, which produce pollen grains (male gametes)."],
+["Define gynoecium.", "The fourth, female whorl of a flower, also called the pistil or carpel, which produces ovules (female gametes)."],
+["Define pollination.", "The process of transference of pollen grains from the anther to the stigma."],
+["Define self pollination.", "Transfer of pollen grains from the anther to the stigma of the same flower, or to a different flower of the same plant."],
+["Define cross pollination.", "Transfer of pollen grains from the anther of a flower of one plant to the stigma of a flower of another plant of the same species."],
+];
+
+const shortqa = [
+["What is the function of sepals?", "Sepals protect the inner floral whorls during bud formation and also take part in photosynthesis."],
+["What is the function of petals?", "Petals are brightly coloured, with sweet smell and nectar, which attract insects for pollination."],
+["What is the function of the androecium?", "It acts as the male part of a flower and produces pollen grains."],
+["What is the function of the gynoecium?", "It acts as the female part of a flower and produces ovules which help in reproduction."],
+["Name the three parts of a carpel.", "Stigma, style and ovary."],
+["Name the two parts of a stamen.", "Filament (the stalk) and anther (which bears the pollen)."],
+["Why must pollination occur only between plants of the same species?", "Nature has designed it so that only pollen of the same species helps in reproduction; pollen of other species fails to germinate and perishes, even though a stigma may receive many kinds of pollen."],
+["Name the two types of pollination.", "Self pollination and cross pollination."],
+["Name the agents of cross pollination mentioned in the chapter.", "Insects, wind, water and birds — also animals such as squirrels and bats."],
+["Give two examples each of a complete flower and an incomplete flower.", "Complete: China rose, Pea, Mustard. Incomplete: Date palm, Mulberry tree."],
+["Give two characteristics of insect-pollinated flowers, with an example.", "Large, brightly coloured, and produce nectar. Example: Dahlia or sunflower."],
+["Give two characteristics of wind-pollinated flowers, with an example.", "Very small, hang out of the parent plant, not brightly coloured, produce no nectar but produce pollen grains in large number. Example: Maize or wheat."],
+];
+
+const reasoning = [
+["A complete flower is defined as one with all four whorls, which means it must include both androecium and gynoecium. Using this, explain why every monosexual flower must also be an incomplete flower.", "A complete flower needs all four whorls present, including both stamens (androecium) and carpel (gynoecium). A monosexual flower, by definition, has only one of these two parts — so it is missing at least one whorl. Since an incomplete flower is any flower missing one or more whorls, every monosexual flower is therefore automatically an incomplete flower too, even though the chapter lists these as two separate categories."],
+["The chapter says only pollen grains of the same species help in reproduction, and separately that insects like bees and butterflies collect nectar from many different kinds of flowers, carrying many kinds of pollen on their bodies. Using both facts, explain why an insect visiting many flower species doesn't cause mixed-species reproduction.", "Even though an insect may deposit several different kinds of pollen onto one stigma, the chapter states that only pollen of the same species will actually germinate there — pollen of other species fails to germinate and perishes. So although the delivery is mixed, only the matching, same-species pollen leads to reproduction."],
+["Insect-pollinated flowers are described as large, brightly coloured and nectar-producing, while wind-pollinated flowers are small, dull and produce no nectar. Using this contrast, explain why wind-pollinated flowers don't need to be attractive.", "Insect pollination depends on drawing a visiting pollinator in, so those flowers invest in colour, scent and nectar. Wind pollination instead relies on air currents to carry pollen away by chance, with no pollinator to attract — so instead of investing in attractiveness, wind-pollinated flowers put their effort into producing pollen grains in large numbers to improve the odds that some reach another stigma."],
+["Water-pollinated plants are described as producing very light, numerous pollen grains that float until they meet a stigma, and wind-pollinated plants are also described as producing pollen in large numbers. What strategy do these two pollination methods share, and how do they differ?", "Both rely on releasing pollen passively into a medium — air for wind, water for water pollination — rather than a pollinator carrying it directly, and both compensate for this chancy delivery by producing pollen in large numbers. The only real difference the chapter draws out is the medium: one uses air currents, the other uses water currents to carry the light pollen grains to a stigma."],
+["Petals are described as brightly coloured with sweet smell and nectar, specifically to attract insects. What does this tell you about the relationship between the corolla and insect-pollinated flowers such as Dahlia and sunflower?", "The corolla's petals supply exactly the features — colour, scent and nectar — that the chapter says draw insects to a flower. So the corolla is effectively what makes insect pollination possible in flowers like Dahlia and sunflower: without a colourful, nectar-producing corolla, there would be nothing to attract the insect in the first place."],
+["Self pollination is defined as anther-to-stigma transfer within the same flower or between two flowers of the same plant, while cross pollination requires anther and stigma from two different plants of the same species. Could self pollination ever involve two different plants? Explain using the definitions.", "No. Self pollination is defined strictly as staying within one plant — either the same flower or a different flower on that same plant. The moment the anther and stigma belong to flowers on two separate plants, the process no longer fits the definition of self pollination and becomes cross pollination instead, regardless of how similar the two plants are."],
+["The chapter states that stamens produce pollen grains (male gametes) and the ovary produces ovules (female gametes), and that androecium is the male part while gynoecium is the female part. Based on this, explain why androecium and gynoecium are essential to reproduction in a way that calyx and corolla are not.", "Only the androecium and gynoecium are described as producing gametes — pollen grains and ovules respectively — which are the reproductive cells needed for reproduction. Calyx and corolla, by contrast, are described as playing supporting roles: sepals protect the bud and help in photosynthesis, and petals attract insects for pollination. Useful as these roles are, neither whorl is credited with producing a gamete."],
+["China rose, Pea, and Mustard are given as examples of complete flowers, while Date palm and Mulberry tree are given as examples of incomplete flowers. The chapter doesn't say exactly which whorl Date palm or Mulberry tree lack. What can you still conclude about their flowers?", "Since an incomplete flower is defined simply as one missing one or more of the four whorls, we can conclude that Date palm and Mulberry tree flowers must be missing at least one of calyx, corolla, androecium, or gynoecium — even without the chapter specifying exactly which whorl is absent in each case."],
+["Both Vallisneria (water-pollinated) and Maize (wind-pollinated) are described as producing pollen in large numbers. Why might both these pollination methods need to overproduce pollen compared to an insect-pollinated flower like sunflower?", "Neither wind nor water delivers pollen directly and precisely to a stigma the way a visiting insect does — the pollen is simply released and only reaches a stigma by chance. To improve the odds that at least some grains land successfully, these plants must produce pollen in far greater numbers than an insect-pollinated flower, where the insect purposefully carries pollen from one flower to another."],
+["Sepals are described as green and involved in photosynthesis, while petals are described as brightly coloured, scented, and nectar-producing to attract insects. What does this contrast suggest about the different jobs of the calyx and corolla?", "It suggests a division of labour between the two outer whorls: the calyx (sepals) stays plain and leaf-like because its job is protection of the bud and support functions like photosynthesis, while the corolla (petals) gives up that plain look in favour of colour, scent and nectar because its job is specifically to attract insects for pollination."],
+["The stigma is described as the part of the carpel that receives the pollen grain, and pollination is defined as the transfer of pollen from anther to stigma. Based on this, would pollen landing on a petal instead of the stigma count as pollination?", "No — by the chapter's own definition, pollination specifically means pollen reaching the stigma, since the stigma is identified as the structure built to receive it. Pollen landing anywhere else, such as on a petal or sepal, would not fulfil this definition, since only the stigma is named as the receiving part in the process of pollination."],
+["Pollination must occur between plants of the same species, and self pollination guarantees the pollen source is the very same plant. Compare self and cross pollination in terms of how reliably each ensures the pollen involved is a 'useful,' same-species kind.", "Self pollination automatically ensures the pollen is of a useful, same-species kind, since the source and destination are on the very same plant. Cross pollination, on the other hand, depends on an agent such as an insect, wind, water, or bird correctly carrying pollen from a flower of the same species — leaving more room for a stigma to receive pollen of other kinds, which the chapter says will simply fail to germinate and perish."],
+["A stamen is made up of a filament and an anther, and a carpel is made up of stigma, style, and ovary. The anther is described as bearing pollen grains, and the ovary as producing ovules. Based on their described positions — filament as a thin stalk, style as a long tubular part — what role do the filament and style seem to serve?", "Although the chapter doesn't state a separate function for the filament or style directly, their described positions point to a structural, connecting role: the filament is the stalk that holds up and positions the pollen-bearing anther, while the style is the tubular link connecting the pollen-receiving stigma down to the ovule-producing ovary — joining the two gamete-related ends of the carpel."],
+["The chapter names insects and wind as the two commonest agents of cross pollination, but also mentions water and birds, with water pollination limited to aquatic plants specifically. Why might insects and wind be more common agents overall than water?", "Since water pollination is described as limited to aquatic plants, it can only apply to that narrower group, whereas insects and wind are not restricted to any particular habitat and can act on ordinary land flowers generally. This wider applicability is a reasonable explanation for why insects and wind are singled out as the two commonest agents of cross pollination."],
+["The pedicel is defined as the stalk on which the flower is borne, and the thalamus as the swollen end of the pedicel that holds the four whorls. Using this, describe the order in which pedicel, thalamus, and the four whorls are arranged, from the stem outward.", "Following the chapter's descriptions, the pedicel is the stalk connecting the flower to the plant, leading up to the thalamus at its swollen tip; the four whorls — calyx, corolla, androecium and gynoecium — are then borne on top of the thalamus. So the order, from the stem outward, is: pedicel, then thalamus, then the four whorls."],
+["The chapter lists calyx as the first whorl, corolla as the second, androecium as the third, and gynoecium as the fourth, with androecium being male and gynoecium female. What does this ordering tell you about where the male part sits relative to the female part in a bisexual flower like China rose?", "Since androecium is the third whorl and gynoecium the fourth (innermost) whorl, the male part (stamens) is positioned just outside the female part in a bisexual flower, with the carpel — the female part — sitting at the very centre of the flower."],
+["The chapter states that only same-species pollen is useful, and separately that cross pollination moves pollen between two different plants of the same species. Explain why cross pollination can still lead to useful reproduction despite involving two separate plants.", "The 'same species' requirement is about species, not about being the exact same individual plant. So as long as the two plants involved in cross pollination belong to the same species, the pollen is still of a useful kind, exactly as with self pollination — it is only pollen from a different species that the chapter says fails to germinate and perishes."],
+];
+
+const tf = [
+["Flower is the reproductive part of a flowering plant.", true],
+["Sepals are usually brightly coloured.", false],
+["Petals attract insects for pollination.", true],
+["Androecium is the female part of the flower.", false],
+["The anther lobe contains ovules.", false],
+["Gynoecium is the fourth whorl of the flower.", true],
+["The stigma is the part of the carpel that receives pollen.", true],
+["A complete flower has all four whorls.", true],
+["The papaya flower is an example of a bisexual flower.", false],
+["China rose is an example of a bisexual flower.", true],
+["Pollination is the transfer of pollen grains from the anther to the stigma.", true],
+["Self pollination is the transfer of pollen to the stigma of a flower on a different plant.", false],
+["Wind-pollinated flowers are usually brightly coloured and produce nectar.", false],
+["Maize and wheat are examples of wind-pollinated plants.", true],
+["Vallisneria is pollinated by water.", true],
+["Bignonia and Canna are examples of bird-pollinated flowers.", true],
+];
+
+const distinguish = [
+{title:"Self Pollination vs Cross Pollination", left:"Self Pollination", right:"Cross Pollination",
+ rows:[
+  ["Where pollen travels","Anther to stigma of the same flower, or a different flower of the same plant","Anther of one plant's flower to stigma of a flower on another plant of the same species"],
+  ["Example given in chapter","Pansy","—"],
+ ]},
+{title:"Complete Flower vs Incomplete Flower", left:"Complete Flower", right:"Incomplete Flower",
+ rows:[
+  ["Whorls present","All four whorls: calyx, corolla, androecium, gynoecium","One or more whorls missing"],
+  ["Example given in chapter","China rose, Pea, Mustard","Date palm, Mulberry tree"],
+ ]},
+{title:"Bisexual Flower vs Monosexual Flower", left:"Bisexual Flower", right:"Monosexual Flower",
+ rows:[
+  ["Parts present","Contains both stamens and carpels (also called a perfect flower)","Contains only one of stamen or carpel"],
+  ["Example given in chapter","China rose","Papaya"],
+ ]},
+{title:"Androecium (Stamen) vs Gynoecium (Carpel)", left:"Androecium", right:"Gynoecium",
+ rows:[
+  ["Whorl number","Third whorl","Fourth whorl"],
+  ["Sex / role","Male part; produces pollen grains (male gametes)","Female part; produces ovules (female gametes)"],
+  ["Parts","Filament and anther","Stigma, style and ovary"],
+ ]},
+];
+
+/* Labeling diagrams: pts have x,y for a marker circle + a leader line target, plus correct label text and options pool */
+const labeling = [
+  {
+    title:"Label the parts of a complete flower",
+    optionPool:["Stigma","Style","Ovary","Anther","Filament","Petal","Sepal","Pedicel"],
+    points:[
+      {n:1,label:"Stigma", cx:170,cy:40},
+      {n:2,label:"Anther", cx:90,cy:70},
+      {n:3,label:"Filament", cx:70,cy:130},
+      {n:4,label:"Petal", cx:230,cy:90},
+      {n:5,label:"Style", cx:190,cy:150},
+      {n:6,label:"Ovary", cx:170,cy:210},
+      {n:7,label:"Sepal", cx:70,cy:230},
+      {n:8,label:"Pedicel", cx:170,cy:300},
+    ],
+    svg: `<svg class="diagram" viewBox="0 0 320 330" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="170" cy="90" rx="90" ry="55" fill="#E7B6C4" opacity="0.55"/>
+      <path d="M170 60 L170 260" stroke="#4E7A5B" stroke-width="10" stroke-linecap="round"/>
+      <ellipse cx="170" cy="150" rx="20" ry="55" fill="#F0DDA6" stroke="#C99A2E" stroke-width="2"/>
+      <ellipse cx="170" cy="210" rx="26" ry="24" fill="#7FA76B" stroke="#3E6A46" stroke-width="2"/>
+      <circle cx="170" cy="45" r="7" fill="#D08A99"/>
+      <line x1="90" y1="70" x2="110" y2="95" stroke="#C99A2E" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="88" cy="68" r="6" fill="#C99A2E"/>
+      <path d="M170 260 L170 300" stroke="#3E6A46" stroke-width="8" stroke-linecap="round"/>
+      <path d="M120 230 Q100 250 70 235" stroke="#3E6A46" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <g font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#fff">
+        <circle cx="170" cy="40" r="11" fill="#C0533F"/><text x="170" y="44" text-anchor="middle">1</text>
+        <circle cx="90" cy="70" r="11" fill="#C0533F"/><text x="90" y="74" text-anchor="middle">2</text>
+        <circle cx="70" cy="130" r="11" fill="#C0533F"/><text x="70" y="134" text-anchor="middle">3</text>
+        <circle cx="230" cy="90" r="11" fill="#C0533F"/><text x="230" y="94" text-anchor="middle">4</text>
+        <circle cx="190" cy="150" r="11" fill="#C0533F"/><text x="190" y="154" text-anchor="middle">5</text>
+        <circle cx="170" cy="210" r="11" fill="#C0533F"/><text x="170" y="214" text-anchor="middle">6</text>
+        <circle cx="70" cy="230" r="11" fill="#C0533F"/><text x="70" y="234" text-anchor="middle">7</text>
+        <circle cx="170" cy="300" r="11" fill="#C0533F"/><text x="170" y="304" text-anchor="middle">8</text>
+      </g>
+    </svg>`
+  },
+  {
+    title:"Label the parts of a stamen (male part)",
+    optionPool:["Anther","Filament (Stalk)"],
+    points:[
+      {n:1,label:"Anther"},
+      {n:2,label:"Filament (Stalk)"},
+    ],
+    svg: `<svg class="diagram" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="45" rx="22" ry="34" fill="#F0DDA6" stroke="#C99A2E" stroke-width="2"/>
+      <line x1="100" y1="45" x2="100" y2="230" stroke="#3E6A46" stroke-width="0" />
+      <path d="M100 78 C 60 130, 130 170, 100 230" stroke="#4E7A5B" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <g font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#fff">
+        <circle cx="130" cy="40" r="11" fill="#C0533F"/><text x="130" y="44" text-anchor="middle">1</text>
+        <circle cx="70" cy="150" r="11" fill="#C0533F"/><text x="70" y="154" text-anchor="middle">2</text>
+      </g>
+    </svg>`
+  },
+  {
+    title:"Label the parts of a carpel (female part)",
+    optionPool:["Stigma","Style","Ovary","Ovules"],
+    points:[
+      {n:1,label:"Stigma"},
+      {n:2,label:"Style"},
+      {n:3,label:"Ovary"},
+      {n:4,label:"Ovules"},
+    ],
+    svg: `<svg class="diagram" viewBox="0 0 220 300" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="110" cy="40" rx="18" ry="14" fill="#7FA76B" stroke="#3E6A46" stroke-width="2"/>
+      <path d="M110 54 C 90 90, 130 150, 110 190" stroke="#4E7A5B" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <ellipse cx="110" cy="230" rx="46" ry="55" fill="#DCE7D8" stroke="#3E6A46" stroke-width="2"/>
+      <circle cx="95" cy="215" r="6" fill="#5B7FBF"/>
+      <circle cx="125" cy="215" r="6" fill="#5B7FBF"/>
+      <circle cx="95" cy="245" r="6" fill="#5B7FBF"/>
+      <circle cx="125" cy="245" r="6" fill="#5B7FBF"/>
+      <g font-family="Segoe UI, sans-serif" font-size="13" font-weight="700" fill="#fff">
+        <circle cx="145" cy="35" r="11" fill="#C0533F"/><text x="145" y="39" text-anchor="middle">1</text>
+        <circle cx="150" cy="120" r="11" fill="#C0533F"/><text x="150" y="124" text-anchor="middle">2</text>
+        <circle cx="170" cy="230" r="11" fill="#C0533F"/><text x="170" y="234" text-anchor="middle">3</text>
+        <circle cx="60" cy="270" r="11" fill="#C0533F"/><text x="60" y="274" text-anchor="middle">4</text>
+      </g>
+    </svg>`
+  }
+];
+
+/* ============================= STORAGE =============================
+   Progress is kept in localStorage under a single chapter-specific key,
+   since this file is opened as a plain webpage (e.g. GitHub Pages), not
+   inside a Claude.ai artifact — plain localStorage is what's available.
+   stateCache mirrors that key's parsed contents in memory; every read/
+   write goes through it, and every write is flushed straight to
+   localStorage (writes are synchronous, so there's no race to worry
+   about, unlike the artifact storage API used previously). */
+const CHAPTER_SLUG = "pollination-ch4";
+const STORAGE_KEY = "quiz-progress-" + CHAPTER_SLUG;
+
+function loadAllProgress(){
+  try{
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if(!raw) return {};
+    const parsed = JSON.parse(raw);
+    return (parsed && typeof parsed === 'object') ? parsed : {};
+  }catch(e){
+    // Missing or corrupted entry — start fresh rather than breaking the page.
+    return {};
+  }
+}
+
+function persistAllProgress(all){
+  try{ window.localStorage.setItem(STORAGE_KEY, JSON.stringify(all)); }
+  catch(e){ /* storage disabled or full — fail silently, in-memory state still works this session */ }
+}
+
+function loadState(cat){
+  if(!stateCache[cat]) stateCache[cat] = {};
+  return stateCache[cat];
+}
+
+function saveState(cat, state){
+  stateCache[cat] = state;
+  persistAllProgress(stateCache);
+  return state;
+}
+
+function clearState(cat){
+  stateCache[cat] = {};
+  persistAllProgress(stateCache);
+}
+
+function resetAllProgress(){
+  Object.keys(stateCache).forEach(k=>{ stateCache[k] = {}; });
+  try{ window.localStorage.removeItem(STORAGE_KEY); }catch(e){ /* ignore */ }
+}
+
+function norm(s){ return (s||"").toString().trim().toLowerCase().replace(/\s+/g," "); }
+function matchesAny(input, accepted){
+  const n = norm(input);
+  return accepted.some(a => norm(a) === n);
+}
+
+/* ============================= VOICE ROUND =============================
+   A hands-free, single-question-at-a-time flow for Fill in the Blanks,
+   One Word, and True/False. Only one "stage" element ever lives in the
+   mount point: every transition clears it before appending the next.   */
+
+// Fuzzy, normalized substring match — used for fill-in-blank / one-word voice answers.
+function voiceFuzzyMatch(transcript, accepted){
+  const n = norm(transcript);
+  if(!n) return false;
+  return accepted.some(a=>{
+    const an = norm(a);
+    return an.length>0 && (n === an || n.includes(an) || an.includes(n));
+  });
+}
+
+// Keyword-based true/false detection from a spoken transcript.
+function voiceTFCheck(transcript, expected){
+  const n = norm(transcript);
+  const hasTrue = /\btrue\b/.test(n);
+  const hasFalse = /\bfalse\b/.test(n);
+  if(hasTrue && !hasFalse) return expected === true;
+  if(hasFalse && !hasTrue) return expected === false;
+  return false; // neither/both keywords heard — treat as an incorrect (not "no answer") response
+}
+
+// One teardown hook for whatever Voice Round is currently active, if any.
+// Called before switching tabs, switching back to List View, or re-rendering
+// a tab, so speech never keeps talking/listening in the background.
+let activeVoiceTeardown = null;
+function teardownVoiceRound(){
+  if(activeVoiceTeardown){
+    try{ activeVoiceTeardown(); }catch(e){}
+    activeVoiceTeardown = null;
+  }
+}
+
+function createVoiceRoundController({ mountEl, items, onExit, onAnswer }){
+  let idx = 0;
+  let score = 0;
+  let answered = 0;
+  let sessionId = 0;          // bumped on every transition; stale async callbacks check against it
+  let currentRecognition = null;
+  let listenTimeoutId = null;
+
+  function cleanup(){
+    if(listenTimeoutId){ clearTimeout(listenTimeoutId); listenTimeoutId = null; }
+    if(currentRecognition){
+      try{
+        currentRecognition.onresult = null;
+        currentRecognition.onerror = null;
+        currentRecognition.onend = null;
+        currentRecognition.abort();
+      }catch(e){ /* ignore */ }
+      currentRecognition = null;
+    }
+    if(window.speechSynthesis){
+      try{ window.speechSynthesis.cancel(); }catch(e){ /* ignore */ }
+    }
+  }
+
+  function renderStage(builder){
+    mountEl.innerHTML = ''; // remove the previous stage entirely — never stack stages
+    const stage = document.createElement('div');
+    stage.className = 'voice-stage';
+    builder(stage);
+    mountEl.appendChild(stage);
+    return stage;
+  }
+
+  async function requestMicAccess(){
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      return { ok:false, reason:"This browser doesn't support microphone access at all (getUserMedia is unavailable here). Try a recent version of Chrome, Edge, or Safari." };
+    }
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({ audio:true });
+      stream.getTracks().forEach(t=>{ try{ t.stop(); }catch(e){} });
+      return { ok:true };
+    }catch(err){
+      return { ok:false, reason:"The microphone couldn't be reached. This is usually because the app itself doesn't have microphone permission at the operating-system level, or this page has already been blocked in the browser's own site settings. Check both, then try again." };
+    }
+  }
+
+  function showMicError(reason){
+    const mySession = ++sessionId;
+    renderStage(stage=>{
+      stage.innerHTML = `
+        <div class="voice-error">
+          <p class="voice-error-title">Microphone unavailable</p>
+          <p class="voice-error-body">${escapeHtml(reason)}</p>
+          <div class="voice-controls">
+            <button type="button" class="action btn-check sans" data-role="retry">Try again</button>
+            <button type="button" class="action btn-reset sans" data-role="exit">Back to List View</button>
+          </div>
+        </div>`;
+      stage.querySelector('[data-role="retry"]').addEventListener('click', ()=>{ if(sessionId!==mySession) return; begin(); });
+      stage.querySelector('[data-role="exit"]').addEventListener('click', ()=>{ if(sessionId!==mySession) return; onExit(); });
+    });
+  }
+
+  async function begin(){
+    idx = 0; score = 0; answered = 0;
+    const mic = await requestMicAccess();
+    if(!mic.ok){ showMicError(mic.reason); return; }
+    runQuestion();
+  }
+
+  // Speaks a short line (feedback) and calls onDone once speech has finished.
+  function speakText(text, onDone){
+    if(!window.speechSynthesis){ onDone(); return; }
+    const utter = new SpeechSynthesisUtterance(text);
+    let done = false;
+    const finish = ()=>{ if(done) return; done = true; onDone(); };
+    utter.onend = finish;
+    utter.onerror = finish;
+    try{ window.speechSynthesis.cancel(); }catch(e){ /* ignore */ }
+    try{ window.speechSynthesis.speak(utter); }catch(e){ finish(); }
+  }
+
+  // Speaks the question, and starts listening a fraction of a second before
+  // the question finishes — right as its last word begins, where the browser
+  // supports word-level boundary events — never earlier. Where boundary
+  // events aren't supported, falls back to starting the moment speech ends.
+  function speakQuestionThenListen(text, onListenStart){
+    if(!window.speechSynthesis){ onListenStart(); return; }
+    const utter = new SpeechSynthesisUtterance(text);
+    let started = false;
+    const words = text.trim().split(/\s+/).filter(Boolean);
+    const lastWord = words[words.length-1] || '';
+    const lastWordStart = lastWord ? text.lastIndexOf(lastWord) : -1;
+    const trigger = ()=>{ if(started) return; started = true; onListenStart(); };
+    utter.onboundary = (e)=>{
+      if(started) return;
+      if(typeof e.charIndex === 'number' && lastWordStart >= 0 && e.charIndex >= lastWordStart){ trigger(); }
+    };
+    utter.onend = trigger;   // fallback for voices/platforms with no boundary events
+    utter.onerror = trigger;
+    try{ window.speechSynthesis.cancel(); }catch(e){ /* ignore */ }
+    try{ window.speechSynthesis.speak(utter); }catch(e){ trigger(); }
+  }
+
+  function runQuestion(){
+    if(idx >= items.length){ showSummary(); return; }
+    const mySession = ++sessionId;
+    const item = items[idx];
+    const stage = renderStage(stage=>{
+      stage.innerHTML = `
+        <div class="voice-progress sans">QUESTION ${idx+1} OF ${items.length}</div>
+        <div class="voice-qtext">${item.display}</div>
+        <div class="voice-status sans" data-role="status">Reading question…</div>
+        <div class="voice-transcript sans" data-role="transcript"></div>
+        <div class="voice-feedback sans" data-role="feedback"></div>
+        <div class="voice-controls">
+          <button type="button" class="action btn-reset sans" data-role="skip">Skip</button>
+          <button type="button" class="action btn-reset sans" data-role="end">End round</button>
+        </div>
+        <div class="voice-score sans">Score so far: ${score} / ${answered}</div>
+      `;
+    });
+    const statusEl = stage.querySelector('[data-role="status"]');
+    const transcriptEl = stage.querySelector('[data-role="transcript"]');
+    const feedbackEl = stage.querySelector('[data-role="feedback"]');
+
+    stage.querySelector('[data-role="skip"]').addEventListener('click', ()=>{
+      if(sessionId !== mySession) return;
+      cleanup();
+      idx++;
+      runQuestion();
+    });
+    stage.querySelector('[data-role="end"]').addEventListener('click', ()=>{
+      if(sessionId !== mySession) return;
+      cleanup();
+      showSummary();
+    });
+
+    speakQuestionThenListen(item.speak, ()=>{
+      if(sessionId !== mySession) return;
+      statusEl.textContent = 'Listening… speak your answer now';
+      startListening(mySession, item, statusEl, transcriptEl, feedbackEl);
+    });
+  }
+
+  function startListening(mySession, item, statusEl, transcriptEl, feedbackEl){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){
+      statusEl.textContent = 'Speech recognition is not supported in this browser.';
+      finalizeAnswer(mySession, null, item, statusEl, transcriptEl, feedbackEl);
+      return;
+    }
+    let settled = false;
+    const recognition = new SR();
+    currentRecognition = recognition;
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    const settle = (transcript)=>{
+      if(settled) return;
+      settled = true;
+      if(listenTimeoutId){ clearTimeout(listenTimeoutId); listenTimeoutId = null; }
+      currentRecognition = null;
+      finalizeAnswer(mySession, transcript, item, statusEl, transcriptEl, feedbackEl);
+    };
+
+    // Fixed 5-second window, timed from the moment listening begins.
+    listenTimeoutId = setTimeout(()=>{
+      if(settled) return;
+      try{ recognition.stop(); }catch(e){ /* ignore */ }
+      settle(null);
+    }, 5000);
+
+    recognition.onresult = (e)=>{
+      const transcript = (e && e.results && e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+      settle(transcript);
+    };
+    recognition.onerror = ()=>{ settle(null); };
+    recognition.onend = ()=>{ settle(null); }; // covers natural early end-of-speech with no result
+
+    try{ recognition.start(); }
+    catch(e){ settle(null); }
+  }
+
+  function finalizeAnswer(mySession, transcript, item, statusEl, transcriptEl, feedbackEl){
+    if(sessionId !== mySession) return;
+    answered++;
+    const noAnswer = !transcript || !transcript.trim();
+    const correct = !noAnswer && item.check(transcript);
+    if(correct) score++;
+
+    transcriptEl.textContent = noAnswer ? 'No answer heard.' : `You said: "${transcript.trim()}"`;
+    statusEl.textContent = correct ? 'Correct!' : (noAnswer ? 'No answer — moving on' : 'Not quite');
+    feedbackEl.classList.add('show', correct ? 'correct' : 'wrong');
+    feedbackEl.innerHTML = correct ? 'Correct!' : `<span class="model">Answer: ${escapeHtml(item.correctDisplay)}</span>`;
+
+    if(typeof onAnswer === 'function'){
+      try{ onAnswer(idx, noAnswer ? '' : transcript.trim(), correct); }catch(e){ /* persistence hiccup shouldn't break the round */ }
+    }
+
+    const speakLine = correct ? 'Correct!' : `Answer: ${item.correctDisplay}`;
+    speakText(speakLine, ()=>{
+      setTimeout(()=>{
+        if(sessionId !== mySession) return;
+        idx++;
+        runQuestion();
+      }, 500);
+    });
+  }
+
+  function showSummary(){
+    const mySession = ++sessionId;
+    renderStage(stage=>{
+      stage.innerHTML = `
+        <div class="voice-summary">
+          <div class="voice-progress sans">ROUND COMPLETE</div>
+          <div class="voice-score-big sans">${score} / ${answered} correct</div>
+          <div class="voice-controls">
+            <button type="button" class="action btn-check sans" data-role="redo">Redo round</button>
+            <button type="button" class="action btn-reset sans" data-role="listview">Return to List View</button>
+          </div>
+        </div>`;
+      stage.querySelector('[data-role="redo"]').addEventListener('click', ()=>{ if(sessionId!==mySession) return; begin(); });
+      stage.querySelector('[data-role="listview"]').addEventListener('click', ()=>{ if(sessionId!==mySession) return; onExit(); });
+    });
+  }
+
+  return { begin, cleanup };
+}
+
+function voiceIntroHTML(){
+  return `<div class="voice-intro" id="voiceMount">
+    <p>Questions are read aloud, one at a time — just answer out loud after each one. You'll be asked to allow microphone access when you start.</p>
+    <button type="button" class="action btn-check sans" id="voiceStartBtn">Start Voice Round</button>
+  </div>`;
+}
+
+function modeToggleHTML(mode){
+  return `<div class="mode-toggle-row">
+    <div class="mode-toggle">
+      <button type="button" class="mode-btn ${mode==='list' ? 'active':''}" data-mode="list">List View</button>
+      <button type="button" class="mode-btn ${mode==='voice' ? 'active':''}" data-mode="voice">Voice Round</button>
+    </div>
+  </div>`;
+}
+
+function wireModeToggle(cat, state, mode){
+  document.querySelectorAll('.mode-toggle .mode-btn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const m = btn.dataset.mode;
+      if(mode === m) return;
+      teardownVoiceRound();
+      state.mode = m;
+      await saveState(cat, state);
+      renderTab();
+    });
+  });
+}
+
+function startVoiceRoundFor(cat, state, items){
+  const mountEl = document.getElementById('voiceMount');
+  if(!mountEl) return;
+  const controller = createVoiceRoundController({
+    mountEl,
+    items,
+    onAnswer: (idx, transcript, correct)=>{
+      state.answers = state.answers || {};
+      state.results = state.results || {};
+      state.answers[idx] = transcript;
+      state.results[idx] = correct;
+      saveState(cat, state);
+    },
+    onExit: async ()=>{
+      teardownVoiceRound();
+      state.mode = 'list';
+      await saveState(cat, state);
+      renderTab();
+    }
+  });
+  activeVoiceTeardown = controller.cleanup;
+  controller.begin();
+}
+
+// Any run of 3 or more underscores marks a blank, regardless of exact count,
+// so questions using ____, _____, ______, etc. all normalize consistently.
+const BLANK_RE = /_{3,}/g;
+
+function fillblankVoiceItems(){
+  return fillblank.map(q=>({
+    display: q[0].replace(BLANK_RE, '<em>_____</em>'),
+    speak: q[0].replace(BLANK_RE, 'blank'),
+    correctDisplay: q[1][0],
+    check: (transcript)=> voiceFuzzyMatch(transcript, q[1]),
+  }));
+}
+function onewordVoiceItems(){
+  return oneword.map(q=>({
+    display: q[0],
+    speak: q[0],
+    correctDisplay: q[1][0],
+    check: (transcript)=> voiceFuzzyMatch(transcript, q[1]),
+  }));
+}
+function tfVoiceItems(){
+  return tf.map(q=>({
+    display: q[0],
+    speak: q[0], // statement only — no "True, or false?" appended
+    correctDisplay: q[1] ? 'True' : 'False',
+    check: (transcript)=> voiceTFCheck(transcript, q[1]),
+  }));
+}
+
+/* ============================= RENDER ============================= */
+let currentTab = CATEGORIES[0].key;
+const tabsEl = document.getElementById('tabs');
+const mainEl = document.getElementById('main');
+const stateCache = loadAllProgress();
+
+function buildTabs(){
+  tabsEl.innerHTML = '';
+  CATEGORIES.forEach(c=>{
+    const b = document.createElement('button');
+    b.className = 'tab-btn sans' + (c.key===currentTab ? ' active':'');
+    b.textContent = c.icon + ' ' + c.label;
+    b.onclick = async ()=>{ teardownVoiceRound(); currentTab = c.key; buildTabs(); renderTab(); };
+    tabsEl.appendChild(b);
+  });
+}
+
+async function renderTab(){
+  teardownVoiceRound();
+  mainEl.innerHTML = '<p class="empty-note">Loading…</p>';
+  const cat = currentTab;
+  const state = await loadState(cat);
+  stateCache[cat] = state;
+
+  const map = {
+    fillblank: renderFillBlank,
+    mcq: renderMCQ,
+    oneword: renderOneWord,
+    definitions: renderDefinitions,
+    shortqa: renderShortQA,
+    reasoning: renderReasoning,
+    tf: renderTF,
+    distinguish: renderDistinguish,
+    labeling: renderLabeling,
+  };
+  map[cat](state);
+}
+
+function sectionHeader(title, desc){
+  return `<div class="section-head"><h2>${title}</h2></div><p class="section-desc">${desc}</p>`;
+}
+
+function toolbarHTML(scoreText){
+  return `<div class="toolbar">
+    <button class="action btn-check sans" id="btnCheck">Check answers</button>
+    <button class="action btn-reset sans" id="btnReset">Reset this section</button>
+    ${scoreText ? `<span class="score-pill sans">${scoreText}</span>` : ''}
+  </div>`;
+}
+
+function wireToolbar(onCheck, onReset){
+  document.getElementById('btnCheck').onclick = onCheck;
+  document.getElementById('btnReset').onclick = async ()=>{
+    await clearState(currentTab);
+    renderTab();
+  };
+}
+
+/* ---------- Fill in the Blanks ---------- */
+function renderFillBlank(state){
+  const answers = state.answers || {};
+  const results = state.results || {};
+  const mode = state.mode || 'list';
+  let html = sectionHeader('Fill in the Blanks', `${fillblank.length} sentences, lifted from every part of the chapter.`);
+  html += modeToggleHTML(mode);
+  if(mode === 'voice'){
+    html += voiceIntroHTML();
+    mainEl.innerHTML = html;
+    wireModeToggle('fillblank', state, mode);
+    document.getElementById('voiceStartBtn').addEventListener('click', ()=>{
+      startVoiceRoundFor('fillblank', state, fillblankVoiceItems());
+    });
+    return;
+  }
+
+  html += toolbarHTML(scoreText(results, fillblank.length));
+  fillblank.forEach((q,i)=>{
+    const r = results[i];
+    const cls = r===true ? ' correct' : (r===false ? ' wrong' : '');
+    html += `<div class="qcard${cls}" id="q-${i}">
+      <div class="qnum sans">SENTENCE ${i+1}</div>
+      <div class="qtext">${q[0].replace(BLANK_RE, '<em>_____</em>')}</div>
+      <input type="text" id="in-${i}" value="${answers[i] ? escapeHtml(answers[i]) : ''}" placeholder="Type the missing word…" />
+      <div class="feedback sans ${r!==undefined ? 'show '+(r?'correct':'wrong') : ''}" id="fb-${i}">${feedbackHtml(r, q[1][0])}</div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+  wireModeToggle('fillblank', state, mode);
+
+  fillblank.forEach((q,i)=>{
+    document.getElementById(`in-${i}`).addEventListener('input', (e)=>{
+      answers[i] = e.target.value;
+      state.answers = answers;
+      saveState('fillblank', state);
+    });
+  });
+
+  wireToolbar(()=>{
+    fillblank.forEach((q,i)=>{
+      const val = document.getElementById(`in-${i}`).value;
+      const ok = matchesAny(val, q[1]);
+      results[i] = ok;
+      applyCardFeedback(i, ok, q[1][0]);
+    });
+    state.answers = answers;
+    state.results = results;
+    saveState('fillblank', state);
+    renderScoreOnly(scoreText(results, fillblank.length));
+  });
+}
+
+// Shared helpers for auto-graded, persistently-checked question sections.
+function scoreText(results, total){
+  const correct = Object.values(results||{}).filter(v=>v===true).length;
+  return `${correct} / ${total}`;
+}
+function feedbackHtml(result, correctAnswerDisplay){
+  if(result === undefined) return '';
+  return result ? 'Correct.' : `Not quite. <span class="model">Answer: ${escapeHtml(correctAnswerDisplay)}</span>`;
+}
+function applyCardFeedback(i, ok, correctAnswerDisplay){
+  const card = document.getElementById(`q-${i}`);
+  const fb = document.getElementById(`fb-${i}`);
+  if(!card || !fb) return;
+  card.classList.remove('correct','wrong');
+  card.classList.add(ok ? 'correct' : 'wrong');
+  fb.classList.add('show', ok ? 'correct' : 'wrong');
+  fb.innerHTML = ok ? 'Correct.' : `Not quite. <span class="model">Answer: ${escapeHtml(correctAnswerDisplay)}</span>`;
+}
+
+function renderScoreOnly(text){
+  const pill = document.querySelector('.score-pill');
+  if(pill) pill.textContent = text;
+  else {
+    const tb = document.querySelector('.toolbar');
+    if(tb){ const s=document.createElement('span'); s.className='score-pill sans'; s.textContent=text; tb.appendChild(s); }
+  }
+}
+
+/* ---------- MCQ ---------- */
+function renderMCQ(state){
+  const answers = state.answers || {};
+  let html = sectionHeader('Multiple Choice', 'One correct option each.');
+  html += toolbarHTML(state.checked ? `${state.score} / ${mcq.length}` : '');
+  mcq.forEach((q,i)=>{
+    html += `<div class="qcard" id="q-${i}">
+      <div class="qnum sans">QUESTION ${i+1}</div>
+      <div class="qtext">${q[0]}</div>
+      <div class="options sans" id="opts-${i}">
+        ${q[1].map((opt,oi)=>`
+          <label class="opt ${answers[i]===oi ? 'selected':''}" data-oi="${oi}">
+            <input type="radio" name="mcq-${i}" value="${oi}" ${answers[i]===oi?'checked':''}/>
+            ${opt}
+          </label>`).join('')}
+      </div>
+      <div class="feedback sans" id="fb-${i}"></div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+
+  mcq.forEach((q,i)=>{
+    document.querySelectorAll(`#opts-${i} .opt`).forEach(optEl=>{
+      optEl.addEventListener('click', ()=>{
+        const oi = parseInt(optEl.dataset.oi);
+        answers[i] = oi;
+        state.answers = answers;
+        state.checked = false;
+        saveState('mcq', state);
+        document.querySelectorAll(`#opts-${i} .opt`).forEach(o=>o.classList.remove('selected'));
+        optEl.classList.add('selected');
+        optEl.querySelector('input').checked = true;
+      });
+    });
+  });
+
+  function gradeMCQ(){
+    let score = 0;
+    mcq.forEach((q,i)=>{
+      const ok = answers[i] === q[2];
+      if(ok) score++;
+      applyCardFeedback(i, ok, q[1][q[2]]);
+    });
+    state.checked = true;
+    state.score = score;
+    saveState('mcq', state);
+    renderScoreOnly(`${score} / ${mcq.length}`);
+  }
+
+  wireToolbar(gradeMCQ);
+
+  // Restore a previously-checked state immediately on load, no click needed.
+  if(state.checked){ gradeMCQ(); }
+}
+
+/* ---------- One Word ---------- */
+function renderOneWord(state){
+  const answers = state.answers || {};
+  const results = state.results || {};
+  const mode = state.mode || 'list';
+  let html = sectionHeader('One Word Answers', 'Answer each in a single word or short term.');
+  html += modeToggleHTML(mode);
+  if(mode === 'voice'){
+    html += voiceIntroHTML();
+    mainEl.innerHTML = html;
+    wireModeToggle('oneword', state, mode);
+    document.getElementById('voiceStartBtn').addEventListener('click', ()=>{
+      startVoiceRoundFor('oneword', state, onewordVoiceItems());
+    });
+    return;
+  }
+
+  html += toolbarHTML(scoreText(results, oneword.length));
+  oneword.forEach((q,i)=>{
+    const r = results[i];
+    const cls = r===true ? ' correct' : (r===false ? ' wrong' : '');
+    html += `<div class="qcard${cls}" id="q-${i}">
+      <div class="qnum sans">QUESTION ${i+1}</div>
+      <div class="qtext">${q[0]}</div>
+      <input type="text" id="in-${i}" value="${answers[i] ? escapeHtml(answers[i]) : ''}" placeholder="One word…" />
+      <div class="feedback sans ${r!==undefined ? 'show '+(r?'correct':'wrong') : ''}" id="fb-${i}">${feedbackHtml(r, q[1][0])}</div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+  wireModeToggle('oneword', state, mode);
+
+  oneword.forEach((q,i)=>{
+    document.getElementById(`in-${i}`).addEventListener('input', (e)=>{
+      answers[i] = e.target.value;
+      state.answers = answers;
+      saveState('oneword', state);
+    });
+  });
+
+  wireToolbar(()=>{
+    oneword.forEach((q,i)=>{
+      const val = document.getElementById(`in-${i}`).value;
+      const ok = matchesAny(val, q[1]);
+      results[i] = ok;
+      applyCardFeedback(i, ok, q[1][0]);
+    });
+    state.answers = answers;
+    state.results = results;
+    saveState('oneword', state);
+    renderScoreOnly(scoreText(results, oneword.length));
+  });
+}
+
+/* ---------- Definitions / Short Answer / Reasoning (shared self-check pattern) ---------- */
+function renderSelfCheckSection(cat, title, desc, list, state, labelFn){
+  const answers = state.answers || {};
+  const revealed = state.revealed || {};
+  let html = sectionHeader(title, desc);
+  html += toolbarHTML();
+  list.forEach((q,i)=>{
+    html += `<div class="qcard" id="q-${i}">
+      <div class="qnum sans">${labelFn(i)}</div>
+      <div class="qtext">${q[0]}</div>
+      <textarea id="in-${i}" placeholder="Your answer…">${answers[i] ? escapeHtml(answers[i]) : ''}</textarea>
+      <div class="toolbar" style="margin-top:8px;margin-bottom:0;">
+        <button class="action btn-check sans" style="padding:6px 12px;font-size:12px;" id="rev-${i}">Reveal model answer</button>
+      </div>
+      <div class="feedback sans ${revealed[i] ? 'show correct':''}" id="fb-${i}">${revealed[i] ? `<span class="model">${q[1]}</span>` : ''}</div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+  document.getElementById('btnCheck').style.display='none';
+
+  list.forEach((q,i)=>{
+    document.getElementById(`in-${i}`).addEventListener('input', (e)=>{
+      answers[i] = e.target.value;
+      state.answers = answers;
+      saveState(cat, state);
+    });
+    document.getElementById(`rev-${i}`).addEventListener('click', ()=>{
+      revealed[i] = true;
+      state.revealed = revealed;
+      saveState(cat, state);
+      const fb = document.getElementById(`fb-${i}`);
+      fb.classList.add('show','correct');
+      fb.innerHTML = `<span class="model">${q[1]}</span>`;
+    });
+  });
+
+  document.getElementById('btnReset').onclick = ()=>{
+    clearState(cat);
+    renderTab();
+  };
+}
+
+function renderDefinitions(state){
+  renderSelfCheckSection('definitions', 'Definitions', 'Write the definition in your own words, then reveal the model answer to compare.', definitions, state, ()=>'DEFINE');
+}
+
+function renderShortQA(state){
+  renderSelfCheckSection('shortqa', 'Short Answer Questions', 'Write a short answer, then reveal the model answer to compare.', shortqa, state, (i)=>`QUESTION ${i+1}`);
+}
+
+function renderReasoning(state){
+  renderSelfCheckSection('reasoning', 'Reasoning', `${reasoning.length} questions that connect facts from different parts of the chapter — write your reasoning, then compare with the model answer.`, reasoning, state, (i)=>`REASONING ${i+1}`);
+}
+
+/* ---------- True/False ---------- */
+function renderTF(state){
+  const answers = state.answers || {};
+  const results = state.results || {};
+  const mode = state.mode || 'list';
+  let html = sectionHeader('True or False', 'Decide whether each statement is true or false.');
+  html += modeToggleHTML(mode);
+  if(mode === 'voice'){
+    html += voiceIntroHTML();
+    mainEl.innerHTML = html;
+    wireModeToggle('tf', state, mode);
+    document.getElementById('voiceStartBtn').addEventListener('click', ()=>{
+      startVoiceRoundFor('tf', state, tfVoiceItems());
+    });
+    return;
+  }
+
+  html += toolbarHTML(scoreText(results, tf.length));
+  tf.forEach((q,i)=>{
+    const r = results[i];
+    const cls = r===true ? ' correct' : (r===false ? ' wrong' : '');
+    html += `<div class="qcard${cls}" id="q-${i}">
+      <div class="qnum sans">STATEMENT ${i+1}</div>
+      <div class="qtext">${q[0]}</div>
+      <div class="tf-row sans">
+        <div class="tf-btn ${answers[i]===true?'selected':''}" data-v="true" id="t-${i}">True</div>
+        <div class="tf-btn ${answers[i]===false?'selected':''}" data-v="false" id="f-${i}">False</div>
+      </div>
+      <div class="feedback sans ${r!==undefined ? 'show '+(r?'correct':'wrong') : ''}" id="fb-${i}">${feedbackHtml(r, q[1] ? 'True' : 'False')}</div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+  wireModeToggle('tf', state, mode);
+
+  tf.forEach((q,i)=>{
+    document.getElementById(`t-${i}`).addEventListener('click', ()=>{
+      answers[i] = true; state.answers = answers;
+      saveState('tf', state);
+      document.getElementById(`t-${i}`).classList.add('selected');
+      document.getElementById(`f-${i}`).classList.remove('selected');
+    });
+    document.getElementById(`f-${i}`).addEventListener('click', ()=>{
+      answers[i] = false; state.answers = answers;
+      saveState('tf', state);
+      document.getElementById(`f-${i}`).classList.add('selected');
+      document.getElementById(`t-${i}`).classList.remove('selected');
+    });
+  });
+
+  wireToolbar(()=>{
+    tf.forEach((q,i)=>{
+      const ok = answers[i] === q[1];
+      results[i] = ok;
+      applyCardFeedback(i, ok, q[1] ? 'True' : 'False');
+    });
+    state.answers = answers;
+    state.results = results;
+    saveState('tf', state);
+    renderScoreOnly(scoreText(results, tf.length));
+  });
+}
+
+/* ---------- Distinguish ---------- */
+function renderDistinguish(state){
+  const answers = state.answers || {};
+  let html = sectionHeader('Distinguish Between', 'Fill in the right-hand differences — the left side is given as a guide.');
+  html += toolbarHTML();
+  distinguish.forEach((d,di)=>{
+    html += `<div class="qcard">
+      <div class="qnum sans">${d.title.toUpperCase()}</div>
+      <table class="distinguish-table">
+        <tr><th>Basis</th><th>${d.left}</th><th>${d.right}</th></tr>
+        ${d.rows.map((r,ri)=>{
+          const key = `${di}-${ri}`;
+          const val = answers[key] || '';
+          return `<tr>
+            <td>${r[0]}</td>
+            <td>${r[1]}</td>
+            <td><input type="text" id="d-${key}" value="${escapeHtml(val)}" placeholder="Your answer…"/></td>
+          </tr>`;
+        }).join('')}
+      </table>
+      <div class="feedback sans" id="rev-${di}" style="margin-top:10px;"></div>
+      <div class="toolbar" style="margin-top:8px;margin-bottom:0;">
+        <button class="action btn-check sans" style="padding:6px 12px;font-size:12px;" id="btn-rev-${di}">Reveal model answers</button>
+      </div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+  document.getElementById('btnCheck').style.display='none';
+
+  distinguish.forEach((d,di)=>{
+    d.rows.forEach((r,ri)=>{
+      const key = `${di}-${ri}`;
+      document.getElementById(`d-${key}`).addEventListener('input', (e)=>{
+        answers[key] = e.target.value;
+        state.answers = answers;
+        saveState('distinguish', state);
+      });
+    });
+    document.getElementById(`btn-rev-${di}`).addEventListener('click', ()=>{
+      const fb = document.getElementById(`rev-${di}`);
+      fb.classList.add('show','correct');
+      fb.innerHTML = d.rows.map(r=>`<span class="model">${r[0]}: ${r[2]}</span>`).join('');
+    });
+  });
+
+  document.getElementById('btnReset').onclick = ()=>{
+    clearState('distinguish');
+    renderTab();
+  };
+}
+
+/* ---------- Labeling ---------- */
+function renderLabeling(state){
+  const answers = state.answers || {};
+  let html = sectionHeader('Label the Diagram', 'Match each numbered marker to the correct part.');
+  html += toolbarHTML(state.checked ? `${state.score} / ${labeling.reduce((a,d)=>a+d.points.length,0)}` : '');
+
+  labeling.forEach((d,di)=>{
+    html += `<div class="qcard" id="diag-${di}">
+      <div class="qnum sans">${d.title.toUpperCase()}</div>
+      <div class="diagram-wrap">
+        ${d.svg}
+        <div class="label-list">
+          ${d.points.map((p,pi)=>{
+            const key = `${di}-${pi}`;
+            const val = answers[key] || '';
+            return `<div class="label-row">
+              <div class="marker">${p.n}</div>
+              <select id="sel-${key}" data-key="${key}">
+                <option value="">Choose…</option>
+                ${d.optionPool.map(opt=>`<option value="${escapeHtml(opt)}" ${val===opt?'selected':''}>${opt}</option>`).join('')}
+              </select>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="feedback sans" id="fb-${di}"></div>
+    </div>`;
+  });
+  mainEl.innerHTML = html;
+
+  labeling.forEach((d,di)=>{
+    d.points.forEach((p,pi)=>{
+      const key = `${di}-${pi}`;
+      document.getElementById(`sel-${key}`).addEventListener('change', (e)=>{
+        answers[key] = e.target.value;
+        state.answers = answers;
+        state.checked = false;
+        saveState('labeling', state);
+      });
+    });
+  });
+
+  function gradeLabeling(){
+    let score = 0, total = 0;
+    labeling.forEach((d,di)=>{
+      let diagOk = true;
+      d.points.forEach((p,pi)=>{
+        total++;
+        const key = `${di}-${pi}`;
+        const val = answers[key] || '';
+        const ok = norm(val) === norm(p.label);
+        if(ok) score++; else diagOk = false;
+      });
+      const card = document.getElementById(`diag-${di}`);
+      const fb = document.getElementById(`fb-${di}`);
+      card.classList.remove('correct','wrong');
+      card.classList.add(diagOk?'correct':'wrong');
+      fb.classList.add('show', diagOk?'correct':'wrong');
+      fb.innerHTML = diagOk ? 'All correct.' : `<span class="model">Correct labels: ${d.points.map(p=>p.n+'. '+p.label).join(' · ')}</span>`;
+    });
+    state.checked = true;
+    state.score = score;
+    saveState('labeling', state);
+    renderScoreOnly(`${score} / ${total}`);
+  }
+
+  wireToolbar(gradeLabeling);
+
+  if(state.checked){ gradeLabeling(); }
+}
+
+/* ---------- utils ---------- */
+function escapeHtml(str){
+  return (str||'').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+/* ============================= INIT ============================= */
+const btnResetAllEl = document.getElementById('btnResetAll');
+if(btnResetAllEl){
+  btnResetAllEl.addEventListener('click', ()=>{
+    const ok = window.confirm('Reset ALL saved progress across every section? This cannot be undone.');
+    if(!ok) return;
+    teardownVoiceRound();
+    resetAllProgress();
+    renderTab();
+  });
+}
+
+buildTabs();
+renderTab();
+</script>
+</body>
+</html>

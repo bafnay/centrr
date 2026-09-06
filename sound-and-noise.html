@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Sound &amp; Noise — Quiz Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f2027;
+    --bg2:#15323b;
+    --panel:#173a44;
+    --panel2:#1c4550;
+    --line:#2b5b66;
+    --cream:#f6efdf;
+    --muted:#a9c4cb;
+    --amber:#f2a93b;
+    --amber-dim:#8a6a2c;
+    --coral:#ff6b4a;
+    --good:#6fcf97;
+    --bad:#ef6f6c;
+    --wave: 0 0 0 3px rgba(242,169,59,.18);
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, #1d4b56 0%, transparent 45%),
+      radial-gradient(circle at 100% 20%, #123039 0%, transparent 40%),
+      linear-gradient(180deg,var(--bg) 0%, var(--bg2) 100%);
+    color:var(--cream);
+    font-family:'Nunito Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom:56px;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2', sans-serif;}
+  ::selection{background:var(--amber);color:#1a1a1a;}
+
+  /* ---- Header ---- */
+  header.top{
+    padding:20px 16px 14px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(242,169,59,.08), transparent 70%);
+  }
+  .wave-deco{
+    position:absolute; inset:auto 0 -6px 0; height:34px; opacity:.35; pointer-events:none;
+  }
+  header.top h1{
+    font-size:1.5rem; margin:0 0 2px; font-weight:800; letter-spacing:.2px;
+    display:flex; align-items:center; gap:10px;
+  }
+  header.top h1 .sw{
+    display:inline-block; width:26px; height:26px; flex:none;
+  }
+  header.top p{margin:0; color:var(--muted); font-size:.87rem; line-height:1.4; max-width:46ch;}
+
+  /* ---- Tabs ---- */
+  nav.tabs{
+    display:flex; gap:8px; overflow-x:auto; padding:12px 12px 4px;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:none; display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:var(--panel); border:1px solid var(--line); color:var(--muted);
+    padding:9px 12px; border-radius:12px; font-size:.72rem; font-weight:700;
+    cursor:pointer; min-width:74px; transition:transform .15s ease, background .2s, color .2s, border-color .2s;
+  }
+  .tab-btn .ic{font-size:1.2rem; line-height:1;}
+  .tab-btn.active{
+    background:linear-gradient(160deg, var(--amber), #d98a26);
+    color:#20140a; border-color:transparent; transform:translateY(-1px);
+    box-shadow:0 4px 14px rgba(242,169,59,.28);
+  }
+  .tab-btn .count{font-weight:600; opacity:.85; font-size:.65rem;}
+
+  main{padding:14px 14px 40px; max-width:640px; margin:0 auto;}
+
+  /* ---- Category header / progress ---- */
+  .cat-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin:6px 2px 14px;
+  }
+  .cat-head h2{margin:0; font-size:1.15rem; font-weight:700;}
+  .cat-head .sub{color:var(--muted); font-size:.78rem; margin-top:2px;}
+  .progress-pill{
+    background:var(--panel); border:1px solid var(--line); border-radius:999px;
+    padding:6px 12px; font-size:.72rem; font-weight:700; color:var(--amber); white-space:nowrap;
+  }
+
+  .toolbar{
+    display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;
+  }
+  button.action{
+    font-family:'Nunito Sans', sans-serif; font-weight:800; font-size:.82rem;
+    border:none; border-radius:11px; padding:11px 16px; cursor:pointer;
+    transition:transform .12s ease, filter .15s ease;
+  }
+  button.action:active{transform:scale(.97);}
+  .btn-primary{background:linear-gradient(160deg, var(--amber), #d98a26); color:#20140a;}
+  .btn-ghost{background:transparent; color:var(--coral); border:1.5px solid rgba(255,107,74,.55);}
+  .btn-ghost:hover{background:rgba(255,107,74,.08);}
+  .btn-mini{background:var(--panel2); color:var(--cream); border:1px solid var(--line); font-size:.72rem; padding:8px 12px;}
+
+  /* ---- Question cards ---- */
+  .qcard{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 14px 15px; margin-bottom:12px; position:relative;
+  }
+  .qnum{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:7px; background:var(--panel2);
+    color:var(--amber); font-weight:800; font-size:.72rem; margin-right:8px; flex:none;
+  }
+  .qtext{font-size:.94rem; line-height:1.45; font-weight:600; color:var(--cream);}
+  .qtext .blank-txt{color:var(--amber); font-weight:800;}
+  .qrow{display:flex; align-items:flex-start; margin-bottom:9px;}
+
+  input[type=text], textarea{
+    width:100%; background:var(--bg); border:1.5px solid var(--line); color:var(--cream);
+    border-radius:9px; padding:9px 11px; font-size:.9rem; font-family:inherit;
+    margin-top:6px; outline:none;
+  }
+  textarea{min-height:56px; resize:vertical;}
+  input[type=text]:focus, textarea:focus{border-color:var(--amber); box-shadow:var(--wave);}
+  input[type=text].correct, textarea.correct{border-color:var(--good); background:rgba(111,207,151,.08);}
+  input[type=text].wrong, textarea.wrong{border-color:var(--bad); background:rgba(239,111,108,.08);}
+
+  .opts{display:flex; flex-direction:column; gap:7px; margin-top:8px;}
+  .opt{
+    display:flex; align-items:center; gap:9px; background:var(--bg);
+    border:1.5px solid var(--line); border-radius:9px; padding:9px 11px;
+    font-size:.87rem; cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .opt:active{transform:scale(.99);}
+  .opt input{accent-color:var(--amber);}
+  .opt.chosen{border-color:var(--amber); background:rgba(242,169,59,.09);}
+  .opt.reveal-correct{border-color:var(--good); background:rgba(111,207,151,.12);}
+  .opt.reveal-wrong{border-color:var(--bad); background:rgba(239,111,108,.12);}
+
+  .tf-row{display:flex; gap:8px; margin-top:8px;}
+  .tf-btn{
+    flex:1; text-align:center; padding:10px; border-radius:9px; font-weight:800; font-size:.85rem;
+    background:var(--bg); border:1.5px solid var(--line); cursor:pointer; color:var(--muted);
+  }
+  .tf-btn.chosen{border-color:var(--amber); color:var(--amber); background:rgba(242,169,59,.09);}
+  .tf-btn.reveal-correct{border-color:var(--good); color:var(--good); background:rgba(111,207,151,.12);}
+  .tf-btn.reveal-wrong{border-color:var(--bad); color:var(--bad); background:rgba(239,111,108,.12);}
+
+  .feedback{
+    margin-top:8px; font-size:.78rem; font-weight:700; display:none; padding:8px 10px;
+    border-radius:8px; line-height:1.4;
+  }
+  .feedback.show{display:block;}
+  .feedback.good{color:var(--good); background:rgba(111,207,151,.1);}
+  .feedback.bad{color:var(--bad); background:rgba(239,111,108,.1);}
+  .feedback b{font-weight:800;}
+
+  /* definitions / short-answer flip style */
+  .reveal-box{
+    margin-top:9px; background:var(--bg); border:1px dashed var(--line); border-radius:9px;
+    padding:10px 11px; font-size:.85rem; color:var(--muted); display:none; line-height:1.45;
+  }
+  .reveal-box.show{display:block; color:var(--cream);}
+  .selfmark{display:flex; gap:8px; margin-top:9px;}
+  .sm-btn{
+    flex:1; padding:8px; border-radius:8px; font-size:.76rem; font-weight:800; cursor:pointer;
+    border:1.5px solid var(--line); background:var(--bg); color:var(--muted);
+  }
+  .sm-btn.got.active{border-color:var(--good); color:var(--good); background:rgba(111,207,151,.1);}
+  .sm-btn.retry.active{border-color:var(--coral); color:var(--coral); background:rgba(255,107,74,.1);}
+
+  /* distinguish table */
+  .dist-title{font-weight:800; font-size:.98rem; color:var(--amber); margin-bottom:2px;}
+  .dist-cols{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px;}
+  .dist-cols label{font-size:.68rem; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); font-weight:800;}
+  .dist-answer{
+    margin-top:9px; background:var(--bg); border-radius:9px; padding:8px 10px; display:none;
+    border:1px dashed var(--line);
+  }
+  .dist-answer.show{display:block;}
+  .dist-answer table{width:100%; border-collapse:collapse; font-size:.8rem;}
+  .dist-answer td{padding:5px 4px; vertical-align:top; border-bottom:1px solid var(--line);}
+  .dist-answer td:first-child{color:var(--amber); font-weight:700; width:50%;}
+
+  /* labeling diagrams */
+  .diagram-wrap{background:var(--bg); border-radius:12px; padding:10px; border:1px solid var(--line);}
+  .diagram-wrap svg{width:100%; height:auto; display:block;}
+  .label-list{margin-top:12px; display:flex; flex-direction:column; gap:8px;}
+  .label-row{display:flex; align-items:center; gap:8px; background:var(--bg); border:1.5px solid var(--line); border-radius:9px; padding:8px 10px;}
+  .label-row .marker{
+    width:24px; height:24px; border-radius:50%; background:var(--amber); color:#20140a;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.75rem; flex:none;
+  }
+  select{
+    flex:1; background:var(--panel2); color:var(--cream); border:1px solid var(--line);
+    border-radius:8px; padding:8px 9px; font-size:.83rem; font-family:inherit; outline:none;
+  }
+  select.correct{border-color:var(--good);}
+  select.wrong{border-color:var(--bad);}
+
+  .empty-hint{color:var(--muted); font-size:.8rem; text-align:center; padding:30px 10px;}
+
+  .footer-note{
+    text-align:center; color:var(--muted); font-size:.7rem; padding:18px 24px 4px; line-height:1.5;
+  }
+  .footer-note b{color:var(--amber);}
+
+  /* ---- global actions row ---- */
+  .global-actions{
+    display:flex; justify-content:flex-end; padding:2px 14px 0; max-width:640px; margin:0 auto;
+  }
+  .global-actions button{font-size:.7rem; padding:7px 12px;}
+
+  /* ---- List View / Voice Round mode toggle ---- */
+  .mode-toggle{
+    display:flex; width:100%; gap:8px; margin-bottom:14px;
+  }
+  .mode-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    background:var(--panel2); border:1.5px solid var(--line); color:var(--muted);
+    padding:11px 10px; border-radius:11px; font-weight:800; font-size:.82rem; cursor:pointer;
+    font-family:'Nunito Sans', sans-serif; transition:border-color .15s, color .15s, background .15s;
+  }
+  .mode-btn.active{
+    border-color:var(--amber); color:var(--amber); background:rgba(242,169,59,.1);
+  }
+
+  /* ---- Voice Round stage ---- */
+  .voice-card{ text-align:center; padding:22px 16px 20px; }
+  .voice-phase-label{
+    font-size:.68rem; letter-spacing:.6px; text-transform:uppercase; font-weight:800;
+    color:var(--amber); margin-bottom:10px;
+  }
+  .voice-qtext{font-size:1.05rem; font-weight:700; line-height:1.5; margin-bottom:14px;}
+  .voice-orb{
+    width:64px; height:64px; border-radius:50%; margin:6px auto 14px; position:relative;
+    background:radial-gradient(circle, rgba(242,169,59,.25), transparent 70%);
+    display:flex; align-items:center; justify-content:center; font-size:1.7rem;
+  }
+  .voice-orb.listening{ animation:pulseOrb 1.1s ease-in-out infinite; }
+  @keyframes pulseOrb{
+    0%,100%{ box-shadow:0 0 0 0 rgba(242,169,59,.35); }
+    50%{ box-shadow:0 0 0 14px rgba(242,169,59,0); }
+  }
+  .voice-transcript{
+    font-size:.82rem; color:var(--muted); min-height:18px; margin-bottom:6px; font-style:italic;
+  }
+  .voice-result{
+    font-size:.9rem; font-weight:800; margin:10px 0 4px;
+  }
+  .voice-result.good{color:var(--good);}
+  .voice-result.bad{color:var(--bad);}
+  .voice-progress{
+    font-size:.72rem; color:var(--muted); margin-bottom:14px;
+  }
+  .voice-controls{ display:flex; gap:8px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+  .mic-explain-list{ text-align:left; color:var(--muted); font-size:.82rem; line-height:1.55; margin:10px 0 4px; }
+  .mic-explain-list li{ margin-bottom:6px; }
+  .voice-summary-score{ font-size:2rem; font-weight:800; color:var(--amber); margin:6px 0 2px; }
+
+  @media (min-width:520px){
+    header.top h1{font-size:1.7rem;}
+    .dist-cols{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1><svg class="sw" viewBox="0 0 24 24" fill="none"><path d="M3 10v4h3l4 4V6l-4 4H3z" fill="#f2a93b"/><path d="M14.5 8.5a5 5 0 0 1 0 7" stroke="#f2a93b" stroke-width="1.6" stroke-linecap="round"/><path d="M17.2 6a8.5 8.5 0 0 1 0 12" stroke="#ff6b4a" stroke-width="1.6" stroke-linecap="round"/></svg>Sound &amp; Noise Quiz Lab</h1>
+  <p>Every activity, fact and diagram from Chapter 8 — turned into practice questions. Pick a category below and start testing yourself.</p>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<div class="global-actions">
+  <button class="action btn-ghost" id="resetAllBtn">Reset all answers</button>
+</div>
+
+<main id="main">
+  <div class="cat-head">
+    <div>
+      <h2 id="catTitle">—</h2>
+      <div class="sub" id="catSub">—</div>
+    </div>
+    <div class="progress-pill" id="catProgress">0/0</div>
+  </div>
+  <div id="modeToggleRow"></div>
+  <div class="toolbar" id="toolbarRow">
+    <button class="action btn-primary" id="checkBtn">Check answers</button>
+    <button class="action btn-ghost" id="resetBtn">Reset this category</button>
+  </div>
+  <div id="qList"></div>
+</main>
+
+<div class="footer-note">Your answers &amp; scores are saved automatically on this device. Tap <b>Reset this category</b> to clear just that section.</div>
+
+<script>
+/* =========================================================
+   DATA — every category built from the chapter's sentences
+   ========================================================= */
+
+const FIB = [
+ {t:"Sound is the sensation of ___.", a:["hearing"]},
+ {t:"Sound is produced when something ___.", a:["vibrates"]},
+ {t:"A vibrating string produces ___.", a:["sound"]},
+ {t:"When we speak, our ___ vibrates and sound is produced.", a:["tongue"]},
+ {t:"A clock produces ___ (tick tick).", a:["sound"]},
+ {t:"The chirping of birds, rattling of leaves and thunder are ___ sounds.", a:["natural"]},
+ {t:"The ringing of a door bell, blowing of horns and sounds produced by machines are all ___ sounds.", a:["artificial"]},
+ {t:"Sound is produced by the ___ in a body.", a:["vibrations"]},
+ {t:"Vibrations are fast '___' movements of a body.", a:["to and fro","to-and-fro"]},
+ {t:"These ___ in a body produce sound.", a:["vibrations"]},
+ {t:"When you strike a spoon on a metal utensil and touch its edges, you can feel the ___.", a:["vibration","vibrations"]},
+ {t:"Different materials produce different kind of ___ (steel, glass and aluminium tumbler activity).", a:["sounds","sound"]},
+ {t:"The distance between two adjacent crests or troughs is called ___.", a:["wavelength"]},
+ {t:"The height of the crest or depth of the trough is known as ___.", a:["amplitude"]},
+ {t:"The number of oscillations produced per second is called the ___.", a:["frequency"]},
+ {t:"The highest point on a wave is called the ___.", a:["crest"]},
+ {t:"The lowest point on a wave is called the ___.", a:["trough"]},
+ {t:"Sound travels in a ___.", a:["wave"]},
+ {t:"Plants produce sound by ___ of their leaves when air blows.", a:["rattling"]},
+ {t:"Plants also produce sound when twigs, branches and ___ fall down from the leaves.", a:["fruits"]},
+ {t:"Most animals have ___ cords and produce sound by means of them.", a:["vocal"]},
+ {t:"Bees produce the sound '___'.", a:["buzz"]},
+ {t:"Birds produce the sound '___'.", a:["chirp"]},
+ {t:"Snakes produce the sound '___'.", a:["hiss"]},
+ {t:"Cows produce the sound '___'.", a:["moo"]},
+ {t:"Birds chirp with the help of the ___, a ring of cartilage in their wind pipe.", a:["syrinx"]},
+ {t:"Most insects produce sound by ___ their wings.", a:["flapping"]},
+ {t:"In human beings, the voice box has a pair of membranes called ___.", a:["vocal cords"]},
+ {t:"Vocal cords vibrate and produce sound with air passing through the ___.", a:["larynx"]},
+ {t:"The muscles around the vocal cords may stretch or ___ the membranes, producing different types of sound.", a:["loosen"]},
+ {t:"Sounds which are pleasant to our ears are known as ___ sounds.", a:["pleasant"]},
+ {t:"Pleasant sounds are more ___.", a:["rhythmic"]},
+ {t:"Sounds which are not pleasant to our ears are known as ___ sounds.", a:["unpleasant"]},
+ {t:"Unpleasant sounds are not ___.", a:["rhythmic"]},
+ {t:"Musical sounds are pleasant to hear and ___ our mind and body.", a:["refresh"]},
+ {t:"Machines produce unpleasant sound, which can cause headache and ___.", a:["nausea"]},
+ {t:"___ is an example of soft sound.", a:["whispering"]},
+ {t:"Rockets produce ___ sound.", a:["loud"]},
+ {t:"DJs produce ___ sound.", a:["loud"]},
+ {t:"Very loud sounds can ___ our ears.", a:["damage"]},
+ {t:"Certain particular sounds used as a signal to inform about an event, disaster or a warning sign are known as ___ sounds.", a:["warning"]},
+ {t:"The fire alarm is made by ___.", a:["fire brigades","fire brigade"]},
+ {t:"The ambulance siren is made by an ambulance in case of ___.", a:["emergency"]},
+ {t:"The tornado warning siren warns people about an incoming ___.", a:["tornado"]},
+ {t:"Sound which is loud and unpleasant is called ___.", a:["noise"]},
+ {t:"Noise produces strong vibrations which can cause damage to our ___.", a:["ear drums","eardrums"]},
+ {t:"Very loud sounds sometimes cause permanent ___.", a:["deafness"]},
+ {t:"Sources of noise pollution include automobiles and their ___.", a:["horns"]},
+ {t:"We should not play the television, radio or music player at ___ volumes.", a:["loud"]},
+ {t:"We should try to blow horns only when ___.", a:["necessary"]},
+ {t:"DJ should be used only for a ___ period of time.", a:["limited"]},
+ {t:"Noise from machines can be reduced by the use of ___.", a:["silencers"]},
+ {t:"Growing more ___ along the road side also reduces noise pollution.", a:["trees"]},
+ {t:"Sound from thicker guitar wires is of ___ pitch.", a:["low"]},
+ {t:"Sound from thinner guitar wires is of ___ pitch.", a:["high"]},
+ {t:"Frequency is more when wires are thin and ___ fixed.", a:["tightly"]},
+ {t:"Frequency is less when wires are thick and ___ fixed.", a:["loosely"]},
+ {t:"Living things and non-living things both produce ___.", a:["sound"]},
+];
+
+const MCQ = [
+ {t:"What is sound?", o:["A sensation of hearing","A sensation of seeing","A type of light","A form of heat"], c:0},
+ {t:"Sound is produced when something:", o:["melts","vibrates","evaporates","freezes"], c:1},
+ {t:"Which of these is a natural sound?", o:["Door bell","Horn","Thunder","Machine sound"], c:2},
+ {t:"Which of these is an artificial sound?", o:["Chirping of birds","Rattling of leaves","Thunder","Ringing of a door bell"], c:3},
+ {t:"A fast 'to and fro' movement of a body is called:", o:["Rotation","Vibration","Reflection","Refraction"], c:1},
+ {t:"The distance between two adjacent crests is called:", o:["Amplitude","Frequency","Wavelength","Pitch"], c:2},
+ {t:"The height of the crest is called:", o:["Wavelength","Amplitude","Frequency","Trough"], c:1},
+ {t:"The number of oscillations produced per second is called:", o:["Amplitude","Wavelength","Frequency","Crest"], c:2},
+ {t:"Which part helps birds to chirp?", o:["Larynx","Syrinx","Vocal cords","Trachea"], c:1},
+ {t:"Most insects produce sound by:", o:["Using vocal cords","Flapping their wings","Rattling their legs","Hissing"], c:1},
+ {t:"In human beings, sound is produced mainly by the vibration of:", o:["The tongue only","Vocal cords","Lungs","Eardrum"], c:1},
+ {t:"Vocal cords are located inside the:", o:["Larynx","Heart","Stomach","Lungs"], c:0},
+ {t:"Musical sounds are generally:", o:["Unpleasant","Pleasant","Noise","Silent"], c:1},
+ {t:"Sound which is loud and unpleasant is called:", o:["Music","Noise","Echo","Pitch"], c:1},
+ {t:"Which of these is a warning sound?", o:["Fire alarm","Music","Chirping","Buzzing"], c:0},
+ {t:"Which of the following causes noise pollution?", o:["A singing bird","A vacuum cleaner","A whisper","A ticking clock"], c:1},
+ {t:"Very loud sound can permanently cause:", o:["Blindness","Deafness","Baldness","Fever"], c:1},
+ {t:"Which of these helps reduce noise pollution?", o:["Bursting crackers","Growing more trees","Using loud speakers","Blowing horns unnecessarily"], c:1},
+ {t:"A guitar wire that is thin and tightly fixed produces a sound of:", o:["Low pitch","High pitch","No pitch","No sound"], c:1},
+ {t:"Which animal makes a hissing sound?", o:["Cow","Snake","Bee","Bird"], c:1},
+ {t:"Which of these is an example of soft sound?", o:["Rocket launch","Whispering","DJ music","Thunder"], c:1},
+ {t:"Sound cannot be produced without:", o:["Light","Vibration","Heat","Colour"], c:1},
+ {t:"The lowest point on a sound wave is called the:", o:["Crest","Trough","Amplitude","Wavelength"], c:1},
+ {t:"Silencers are used to reduce noise from:", o:["Trees","Machines","Whispering","Birds"], c:1},
+ {t:"An ambulance siren is used to:", o:["Entertain people","Warn during an emergency","Play music","Test speakers"], c:1},
+ {t:"Cows produce sound known as:", o:["Buzz","Hiss","Moo","Chirp"], c:2},
+ {t:"Human vocal cords vibrate with the help of air passing through the:", o:["Larynx","Stomach","Nose","Ear"], c:0},
+];
+
+const ONEWORD = [
+ {t:"The sensation of hearing.", a:["sound"]},
+ {t:"A fast to-and-fro movement of a body.", a:["vibration","vibrations"]},
+ {t:"The ring of cartilage in a bird's windpipe that helps it chirp.", a:["syrinx"]},
+ {t:"The pair of membranes present in the human voice box.", a:["vocal cords"]},
+ {t:"The tube through which air passes to vibrate the vocal cords.", a:["larynx"]},
+ {t:"A loud, unpleasant sound.", a:["noise"]},
+ {t:"The sound made by bees.", a:["buzz"]},
+ {t:"The sound made by snakes.", a:["hiss"]},
+ {t:"The sound made by cows.", a:["moo"]},
+ {t:"The sound made by birds.", a:["chirp"]},
+ {t:"The highest point of a sound wave.", a:["crest"]},
+ {t:"The lowest point of a sound wave.", a:["trough"]},
+ {t:"A device fitted on machines to reduce their noise.", a:["silencer","silencers"]},
+ {t:"A musical instrument whose wires of different thickness give different pitch.", a:["guitar"]},
+ {t:"The device that warns about an incoming tornado.", a:["siren","tornado warning siren"]},
+];
+
+const DEFS = [
+ {t:"Sound", d:"Sound is the sensation of hearing. It is produced when something vibrates."},
+ {t:"Vibration", d:"Vibrations are fast 'to and fro' movements of a body. These vibrations in a body produce sound."},
+ {t:"Wavelength", d:"The distance between two adjacent crests or troughs is called wavelength."},
+ {t:"Amplitude", d:"The height of the crest or depth of the trough is known as amplitude."},
+ {t:"Frequency", d:"The number of oscillations produced per second is called the frequency."},
+ {t:"Noise", d:"Sound which is loud and unpleasant is called noise. It produces strong vibrations that can damage our ear drums."},
+ {t:"Pleasant sound", d:"Sounds which are pleasant to our ears and are more rhythmic are known as pleasant sounds, e.g. musical sounds."},
+ {t:"Unpleasant sound", d:"Sounds which are not pleasant to our ears and are not rhythmic are known as unpleasant sounds, e.g. sound from machines."},
+ {t:"Warning sound", d:"Certain particular sounds used as a signal to inform about an event, disaster or a warning sign are known as warning sounds, e.g. fire alarm, ambulance siren."},
+ {t:"Crest and Trough", d:"Crest is the highest point on a sound wave; trough is the lowest point on a sound wave."},
+];
+
+const SHORT = [
+ {q:"Why do the muscles around the vocal cords help produce different types of sound?", a:"The muscles around the vocal cords can stretch or loosen the membranes, and this produces different types of sound as air passes through the larynx."},
+ {q:"How do birds produce their chirping sound?", a:"Birds chirp with the help of the syrinx, a ring of cartilage present in their wind pipe."},
+ {q:"How do most insects produce sound?", a:"Most insects, such as mosquitoes, produce sound by flapping their wings."},
+ {q:"Name any four things that produce sound.", a:"Any four of: a vibrating guitar string, a clock, a human voice, a drum, a bee's wings, a bell, a spoon striking a metal utensil, etc."},
+ {q:"Why should we avoid very loud sounds?", a:"Very loud sounds produce strong vibrations that can damage our ear drums and sometimes cause permanent deafness."},
+ {q:"Give two examples of natural sounds.", a:"Chirping of birds and thunder (rattling of leaves is also acceptable)."},
+ {q:"Give two examples of artificial sounds.", a:"Ringing of a door bell and blowing of horns (or sounds produced by machines)."},
+ {q:"What is the difference in sound between a thick guitar wire and a thin guitar wire?", a:"A thicker wire produces sound of low pitch, while a thinner wire produces sound of high pitch. Pitch is also higher when the wire is tightly fixed."},
+ {q:"Name any three sources of noise pollution.", a:"Any three of: automobile horns, loud speakers, radios/TVs, electric generators, vacuum cleaners, hooters, trains, bursting of crackers."},
+ {q:"State any three harmful effects of loud noise.", a:"Any three of: affects hearing, working, reading, writing and thinking; causes headache; causes high blood pressure; causes short memory; causes nervous disorder."},
+ {q:"Name any three warning sounds and state what each one is used for.", a:"Fire alarm — made by fire brigades; Ambulance siren — used in case of emergency; Tornado warning siren — warns people about an incoming tornado (evacuate-building sound also acceptable)."},
+ {q:"State any three steps to reduce noise pollution.", a:"Any three of: avoid playing TV/radio/music at loud volumes; blow horns only when necessary; avoid loud speakers; use DJ only for a limited time; use silencers on machines; lubricate machines properly; grow more trees along roads."},
+];
+
+const TRUEFALSE = [
+ {t:"Sound is the sensation of hearing.", a:true},
+ {t:"Sound can be produced without any vibration.", a:false},
+ {t:"A vibrating string produces sound.", a:true},
+ {t:"Thunder is an example of an artificial sound.", a:false},
+ {t:"The ringing of a door bell is a natural sound.", a:false},
+ {t:"Different materials produce different kinds of sound.", a:true},
+ {t:"The distance between two adjacent crests is called amplitude.", a:false},
+ {t:"The height of the crest is called amplitude.", a:true},
+ {t:"Frequency is the number of oscillations produced per second.", a:true},
+ {t:"Plants cannot produce any sound at all.", a:false},
+ {t:"Most animals produce sound by means of vocal cords.", a:true},
+ {t:"Birds chirp with the help of their syrinx.", a:true},
+ {t:"Most insects produce sound mainly by flapping their wings.", a:true},
+ {t:"In humans, the vocal cords are located in the larynx.", a:true},
+ {t:"Musical sounds are usually unpleasant to hear.", a:false},
+ {t:"Noise is a loud and unpleasant sound.", a:true},
+ {t:"Whispering is an example of a loud sound.", a:false},
+ {t:"Rockets produce loud sound.", a:true},
+ {t:"Very loud sounds can cause permanent deafness.", a:true},
+ {t:"Growing trees along roads increases noise pollution.", a:false},
+ {t:"Fire alarms are an example of a warning sound.", a:true},
+ {t:"Using silencers increases the noise produced by machines.", a:false},
+];
+
+const DISTINGUISH = [
+ {title:"Pleasant sound vs Unpleasant sound",
+  colA:"Pleasant sound", colB:"Unpleasant sound",
+  ansA:"Sounds that are pleasant to our ears and are more rhythmic, e.g. musical sounds. They refresh our mind and body.",
+  ansB:"Sounds that are not pleasant to our ears and are not rhythmic, e.g. sound from machines. They can cause headache and nausea."},
+ {title:"Natural sound vs Artificial sound",
+  colA:"Natural sound", colB:"Artificial sound",
+  ansA:"Sounds produced by nature, e.g. chirping of birds, rattling of leaves, thunder.",
+  ansB:"Sounds produced by man-made things, e.g. ringing of a door bell, blowing of horns, sounds from machines."},
+ {title:"Crest vs Trough",
+  colA:"Crest", colB:"Trough",
+  ansA:"The highest point on a sound wave.",
+  ansB:"The lowest point on a sound wave."},
+ {title:"Wavelength vs Amplitude",
+  colA:"Wavelength", colB:"Amplitude",
+  ansA:"The distance between two adjacent crests or troughs.",
+  ansB:"The height of the crest or depth of the trough."},
+ {title:"Sound vs Noise",
+  colA:"Sound (musical/pleasant)", colB:"Noise",
+  ansA:"A pleasant, rhythmic sensation of hearing that refreshes the mind and body.",
+  ansB:"A loud and unpleasant sound that produces strong vibrations and can damage our ear drums."},
+ {title:"Thick guitar wire vs Thin guitar wire",
+  colA:"Thick / loosely fixed wire", colB:"Thin / tightly fixed wire",
+  ansA:"Produces sound of low pitch; frequency is less.",
+  ansB:"Produces sound of high pitch; frequency is more."},
+];
+
+const REASONING = [
+ {q:"The chapter says a vibrating string produces sound, and also that sound is produced when something vibrates. Using both facts, explain why plucking a guitar string makes a sound at all.",
+  a:"Sound is only produced when something vibrates. Plucking sets the string into a fast to-and-fro motion — a vibration — and since a vibrating string produces sound, that vibration is exactly what generates the sound we hear."},
+ {q:"Chirping of birds is classed as a natural sound and the ringing of a door bell as an artificial sound. Using the vibration idea, what do these two very different sounds still have in common?",
+  a:"Even though one is natural and one is artificial, the chapter states all sound is produced by vibration. So both the bird's sound-producing part and the door bell must be vibrating — the source differs, but the underlying cause (vibration) is the same."},
+ {q:"The tumbler activity shows steel, glass and aluminium tumblers giving different sounds when struck, and the chapter concludes 'different materials produce different kind of sounds.' What does the activity's result tell you about how sound depends on the material that vibrates?",
+  a:"Each tumbler is a different material and each gives a different sound, so the difference in sound must come from the difference in material — this is exactly the conclusion the chapter draws from the activity."},
+ {q:"The chapter defines wavelength as the distance between two adjacent crests, and separately defines crest as the highest point on a wave. Combine these to explain how you would actually measure a wavelength on a wave diagram.",
+  a:"Since a crest is the highest point on a wave, and wavelength is the distance between two such neighbouring highest points, you would measure wavelength by finding two adjacent crests on the wave and measuring the distance between them."},
+ {q:"Amplitude is defined as the height of the crest (or depth of the trough), and trough is separately defined as the lowest point on a wave. How does the trough definition explain the 'depth' part of the amplitude definition?",
+  a:"Because trough is the lowest point on the wave, the 'depth of the trough' in the amplitude definition simply means how far that lowest point dips below the middle line — so amplitude can be measured either as the crest's height above the middle or the trough's depth below it."},
+ {q:"The chapter states most animals have vocal cords and produce sound by means of them, yet it also gives bees ('buzz'), birds (chirping via a syrinx), and insects (flapping wings) as separate sound sources. Why don't all these examples use vocal cords?",
+  a:"The vocal-cords statement applies to 'most animals,' not all. The chapter separately explains birds use a syrinx instead, and insects like bees and mosquitoes produce sound by flapping their wings — showing different living things use different sound-producing structures even though most animals rely on vocal cords."},
+ {q:"The chapter explains that in humans, the muscles around the vocal cords can stretch or loosen the membranes. Combining this with the definition of frequency (oscillations per second), what is the connection between stretching the vocal cords and the type of sound produced?",
+  a:"Stretching or loosening the vocal cords changes how they vibrate. Since frequency is the number of oscillations per second, changing the tightness of the cords changes their vibration rate, which is why the chapter says this produces different types of sound."},
+ {q:"The Skill-Fill activity states that thinner, tightly fixed guitar wires give higher pitch, while thicker, loosely fixed wires give lower pitch. Using the chapter's definition of frequency, what must be different about the vibration of a thin, tightly-fixed wire compared to a thick, loose one?",
+  a:"Frequency is the number of oscillations per second, and thinner/tighter wires give higher pitch. So the thin, tightly-fixed wire must be oscillating more times per second — a higher frequency — than the thick, loosely fixed wire."},
+ {q:"Pleasant sounds are described as rhythmic and refreshing, unpleasant sounds (like those from machines) cause headache and nausea, and noise is separately defined as sound that is loud AND unpleasant. Is every unpleasant sound automatically 'noise' according to the chapter?",
+  a:"Not just from being unpleasant — the chapter's definition of noise requires the sound to be both loud and unpleasant. An unpleasant sound that isn't loud would not strictly count as noise, even though all noise is a kind of unpleasant sound."},
+ {q:"Whispering is listed as an example of soft sound, rockets and DJs as examples of loud sound, and noise is defined as sound that is loud and unpleasant. Based on this, would whispering ever be classified as noise? Why or why not?",
+  a:"No — whispering is soft, not loud, and the chapter's definition of noise requires the sound to be loud (and unpleasant). A soft sound like whispering cannot be classified as noise even if someone found it mildly annoying."},
+ {q:"The chapter states very loud sounds can damage our ears and cause permanent deafness, and separately lists rockets and DJs as sources of loud sound. What does combining these two facts suggest about being near rockets or DJ speakers?",
+  a:"Since loud sounds like those from rockets and DJs can damage ear drums and even cause permanent deafness, combining the two facts suggests people should protect their ears or limit how long they stay close to such loud sound sources."},
+ {q:"Fire alarms, ambulance sirens, evacuate-building sounds, and tornado warning sirens are all given as 'warning sounds,' each tied to a different emergency. What single purpose connects all four, even though the emergencies themselves are different?",
+  a:"Although the emergencies differ (fire, medical emergency, evacuation, tornado), all four sounds share the same purpose in the chapter's warning-sounds definition — to signal people about an event, disaster or warning sign so they can respond appropriately."},
+ {q:"The chapter lists generators and vacuum cleaners as sources of noise pollution, and separately gives 'using silencers on machines' as a step to reduce noise pollution. Why does the silencer remedy specifically fit machines like these rather than, say, bursting crackers?",
+  a:"Silencers are a mechanical fix for machines that run continuously and vibrate loudly, such as generators and vacuum cleaners. Fitting a silencer directly reduces that ongoing vibration-based noise, whereas bursting crackers are a one-time loud event that a silencer cannot affect."},
+ {q:"Growing trees along roadsides is given as a way to reduce noise pollution, and automobiles with their horns are separately listed as a source of noise pollution. Why does this remedy make particular sense for that particular source?",
+  a:"Automobile noise happens along roads, and the chapter recommends planting trees specifically along the roadside — placing the remedy exactly where the noise source (traffic and horns) is concentrated, so the trees can block or absorb that sound."},
+ {q:"The chapter says noise can cause headache among its harmful effects, and separately says unpleasant sound from machines causes headache and nausea. What do these two statements together suggest about machine sounds that are both loud and unpleasant?",
+  a:"Headache is mentioned in both places — once under unpleasant machine sound and once under harmful effects of noise. So a machine sound that is both loud and unpleasant (i.e. true noise) could cause headache through two overlapping effects the chapter describes separately."},
+ {q:"Plants are said to produce sound by the rattling of leaves when air blows, and also when twigs, branches and fruits fall from the leaves. If you heard rustling from a tree on a calm, windless day, what would be a more likely explanation than wind, based on the chapter?",
+  a:"The chapter gives two separate causes of plant sound — air blowing on leaves, and twigs, branches or fruits falling. On a windless day, the more likely explanation would be something falling, or an animal or bird moving through the leaves and branches, rather than wind-driven rattling."},
+ {q:"Under 'sounds produced by living things,' the chapter says animals and birds make sound as they move through leaves and branches, and separately explains birds chirp using a syrinx. If you heard both rustling and chirping from the same tree, what two different causes from the chapter would be at work?",
+  a:"The rustling is explained by the plant-sound section, where movement through leaves and branches causes the leaves to rustle, while the chirp is explained separately by the bird's syrinx vibrating in its windpipe — one mechanical cause (leaves moving) and one biological cause (the syrinx vibrating), acting together."},
+ {q:"The 'Let's Recall' section states both that 'living things and non-living things both produce sound' and that 'different substances produce different types of sounds.' Using the guitar-wire and tumbler examples from the chapter, show how both recall statements apply together.",
+  a:"The tumbler activity (non-living objects made of different substances — steel, glass, aluminium) shows different materials give different sounds, while animal sounds like buzzing or hissing (living things) show sound also comes from living bodies. Together they confirm both recall points: sound comes from many different things, living and non-living, and the exact material or body producing it changes how the sound sounds."},
+];
+
+/* Labeling diagrams */
+const LABEL_DIAGRAMS = [
+ {
+  key:"wave",
+  title:"Label the sound-wave diagram",
+  sub:"Use what you learned about how sound travels from a source to the ear.",
+  options:["Source of sound","Crest","Trough","Wavelength","Amplitude"],
+  points:[
+    {n:1, correct:"Source of sound"},
+    {n:2, correct:"Crest"},
+    {n:3, correct:"Trough"},
+    {n:4, correct:"Wavelength"},
+    {n:5, correct:"Amplitude"}
+  ],
+  svg:`<svg viewBox="0 0 360 170" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="34" cy="85" r="16" fill="#1c4550" stroke="#f2a93b" stroke-width="2"/>
+    <path d="M34 85 m-6 -6 l0 12 M34 85 m2 -10 l0 20 M34 85 m10 -14 l0 28" stroke="#f2a93b" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="34" cy="85" r="27" fill="none" stroke="#f2a93b22"/>
+    <path d="M60 85 C 90 25, 120 25, 150 85 S 210 145, 240 85 S 300 25, 330 85"
+      stroke="#f6efdf" stroke-width="2.5" fill="none"/>
+    <line x1="105" y1="85" x2="105" y2="45" stroke="#ff6b4a" stroke-width="1.4" stroke-dasharray="3,3"/>
+    <line x1="150" y1="85" x2="255" y2="85" stroke="#6fcf97" stroke-width="1.4" stroke-dasharray="3,3"/>
+    <circle cx="34" cy="85" r="4" fill="#f2a93b"/>
+    <circle cx="105" cy="45" r="4" fill="#ff6b4a"/>
+    <circle cx="255" cy="122" r="4" fill="#6fcf97"/>
+    <circle cx="180" cy="85" r="4" fill="#f6efdf"/>
+    <circle cx="105" cy="85" r="4" fill="#f6efdf"/>
+    <text x="20" y="128" fill="#a9c4cb" font-size="10" font-family="sans-serif">①</text>
+    <text x="98" y="35" fill="#a9c4cb" font-size="10" font-family="sans-serif">②</text>
+    <text x="248" y="140" fill="#a9c4cb" font-size="10" font-family="sans-serif">③</text>
+    <text x="172" y="75" fill="#a9c4cb" font-size="10" font-family="sans-serif">④</text>
+    <text x="100" y="65" fill="#a9c4cb" font-size="10" font-family="sans-serif">⑤</text>
+  </svg>`
+ },
+ {
+  key:"voicebox",
+  title:"Label the human voice box diagram",
+  sub:"Based on where sound is produced in humans.",
+  options:["Larynx","Vocal cords","Front view","Top view"],
+  points:[
+    {n:1, correct:"Larynx"},
+    {n:2, correct:"Front view"},
+    {n:3, correct:"Vocal cords"},
+    {n:4, correct:"Top view"}
+  ],
+  svg:`<svg viewBox="0 0 360 190" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="70" cy="55" r="30" fill="#264f5a" stroke="#3a6b77"/>
+    <rect x="58" y="80" width="24" height="46" rx="10" fill="#3a6b77"/>
+    <line x1="82" y1="105" x2="150" y2="105" stroke="#f2a93b" stroke-width="1.5"/>
+    <text x="90" y="100" fill="#a9c4cb" font-size="10" font-family="sans-serif">①</text>
+    <path d="M170 40 C150 40 145 70 150 95 C155 120 185 120 190 95 C195 70 190 40 170 40Z" fill="#c98f8f" stroke="#8a5a5a"/>
+    <rect x="150" y="90" width="40" height="22" rx="6" fill="#8a5a5a"/>
+    <text x="150" y="150" fill="#a9c4cb" font-size="10" font-family="sans-serif">② Front view →</text>
+    <ellipse cx="280" cy="95" rx="55" ry="45" fill="#c98f8f" stroke="#8a5a5a"/>
+    <path d="M240 95 L265 85 L280 95 L295 85 L320 95" stroke="#f6efdf" stroke-width="2.5" fill="none"/>
+    <text x="255" y="70" fill="#a9c4cb" font-size="10" font-family="sans-serif">③</text>
+    <text x="248" y="155" fill="#a9c4cb" font-size="10" font-family="sans-serif">④ Top view →</text>
+  </svg>`
+ }
+];
+
+/* =========================================================
+   CATEGORY REGISTRY
+   ========================================================= */
+const CATS = [
+ {id:"fib", icon:"✏️", label:"Fill Blanks", title:"Fill in the Blanks", sub:"Complete every key sentence from the chapter.", data:FIB, type:"fib"},
+ {id:"mcq", icon:"🔘", label:"MCQ", title:"Multiple Choice", sub:"Choose the one correct option.", data:MCQ, type:"mcq"},
+ {id:"oneword", icon:"1️⃣", label:"One Word", title:"One Word Answer", sub:"Answer each clue with a single word or short term.", data:ONEWORD, type:"oneword"},
+ {id:"defs", icon:"📖", label:"Definitions", title:"Definitions", sub:"Write the definition, then reveal to self-check.", data:DEFS, type:"defs"},
+ {id:"short", icon:"📝", label:"Short Q&A", title:"Short Answer Questions", sub:"Write your answer, then compare with the sample answer.", data:SHORT, type:"short"},
+ {id:"tf", icon:"✅", label:"True/False", title:"True or False", sub:"Decide whether each statement is correct.", data:TRUEFALSE, type:"tf"},
+ {id:"dist", icon:"⚖️", label:"Distinguish", title:"Distinguish Between", sub:"Note down the differences, then check.", data:DISTINGUISH, type:"dist"},
+ {id:"label", icon:"🖼️", label:"Labeling", title:"Label the Diagram", sub:"Assign the correct term to each numbered part.", data:LABEL_DIAGRAMS, type:"label"},
+ {id:"reasoning", icon:"🧠", label:"Reasoning", title:"Reasoning Questions", sub:"Connect facts from different parts of the chapter, then reveal to self-check.", data:REASONING, type:"reasoning"},
+];
+
+/* Categories that support Voice Round (hands-free) mode alongside List View */
+const VOICE_CAPABLE = ["fib","oneword","tf"];
+
+/* =========================================================
+   PERSISTENCE
+   Uses localStorage so answers survive switching sections,
+   closing the tab/app, and reopening this file later.
+   Falls back to an in-memory object if storage is blocked
+   (e.g. private browsing), so the quiz still works within
+   the current session even then.
+   ========================================================= */
+const STORE_KEY = "quiz-progress-sound-and-noise";
+let STATE = {}; // { fib:{answers:{}, checked:false}, mcq:{...}, ... }
+let storageAvailable = true;
+let modeByCategory = {}; // { fib:"list"|"voice", oneword:..., tf:... } — not persisted, defaults to "list"
+
+function defaultCatState(){ return {answers:{}, checked:false}; }
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(raw) STATE = JSON.parse(raw);
+  }catch(e){
+    storageAvailable = false; // e.g. storage disabled/blocked — still works in-memory this session
+  }
+  CATS.forEach(c=>{ if(!STATE[c.id]) STATE[c.id] = defaultCatState(); });
+}
+
+function saveState(){
+  if(!storageAvailable) return;
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify(STATE));
+  }catch(e){
+    storageAvailable = false;
+  }
+}
+
+function resetCategory(catId){
+  cleanupVoice();
+  STATE[catId] = defaultCatState();
+  saveState();
+  render();
+}
+
+function resetAllCategories(){
+  cleanupVoice();
+  CATS.forEach(c=>{ STATE[c.id] = defaultCatState(); });
+  saveState();
+  render();
+}
+
+/* =========================================================
+   RENDERING
+   ========================================================= */
+let activeCat = "fib";
+
+function buildTabs(){
+  const nav = document.getElementById("tabs");
+  nav.innerHTML = "";
+  CATS.forEach(c=>{
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (c.id===activeCat ? " active":"");
+    btn.innerHTML = `<span class="ic">${c.icon}</span><span>${c.label}</span><span class="count">${c.data.length}</span>`;
+    btn.onclick = ()=>{ activeCat = c.id; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function norm(s){ return (s||"").trim().toLowerCase().replace(/\s+/g," "); }
+
+function render(){
+  buildTabs();
+  const cat = CATS.find(c=>c.id===activeCat);
+  document.getElementById("catTitle").textContent = cat.title;
+  document.getElementById("catSub").textContent = cat.sub;
+
+  const st = STATE[cat.id];
+  const list = document.getElementById("qList");
+  const toolbarRow = document.getElementById("toolbarRow");
+  const modeRow = document.getElementById("modeToggleRow");
+
+  const voiceCapable = VOICE_CAPABLE.includes(cat.id);
+  const mode = modeByCategory[cat.id] || "list";
+
+  /* mode toggle row (Fill Blanks / One Word / True-False only) */
+  modeRow.innerHTML = "";
+  if(voiceCapable){
+    renderModeToggle(cat, modeRow, mode);
+  }
+
+  if(voiceCapable && mode === "voice"){
+    toolbarRow.style.display = "none";
+    list.innerHTML = "";
+    startVoiceRound(cat, st, list);
+    updateProgress(cat, st);
+    document.getElementById("resetBtn").onclick = ()=>resetCategory(cat.id);
+    return;
+  }
+
+  cleanupVoice();
+  toolbarRow.style.display = "flex";
+  list.innerHTML = "";
+
+  if(cat.type==="fib") renderFIB(cat, st, list);
+  else if(cat.type==="mcq") renderMCQ(cat, st, list);
+  else if(cat.type==="oneword") renderOneWord(cat, st, list);
+  else if(cat.type==="defs") renderDefs(cat, st, list);
+  else if(cat.type==="short") renderShort(cat, st, list);
+  else if(cat.type==="tf") renderTF(cat, st, list);
+  else if(cat.type==="dist") renderDist(cat, st, list);
+  else if(cat.type==="label") renderLabel(cat, st, list);
+  else if(cat.type==="reasoning") renderReasoning(cat, st, list);
+
+  updateProgress(cat, st);
+
+  document.getElementById("resetBtn").onclick = ()=>resetCategory(cat.id);
+  const checkBtn = document.getElementById("checkBtn");
+  const selfCheckTypes = ["defs","short","dist","reasoning"];
+  checkBtn.style.display = selfCheckTypes.includes(cat.type) ? "none" : "inline-block";
+  checkBtn.onclick = ()=>{ st.checked = true; saveState(); render(); scrollToTop(); };
+}
+
+function renderModeToggle(cat, container, mode){
+  container.innerHTML = `
+    <div class="mode-toggle">
+      <button type="button" class="mode-btn ${mode==="list"?"active":""}" data-mode="list">📋 List View</button>
+      <button type="button" class="mode-btn ${mode==="voice"?"active":""}" data-mode="voice">🎙️ Voice Round</button>
+    </div>`;
+  container.querySelectorAll(".mode-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const m = btn.dataset.mode;
+      if((modeByCategory[cat.id]||"list") === m) return;
+      cleanupVoice();
+      modeByCategory[cat.id] = m;
+      render();
+    });
+  });
+}
+
+function scrollToTop(){
+  const el = document.getElementById("main");
+  if(el && typeof el.scrollIntoView === "function"){
+    el.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+}
+
+function updateProgress(cat, st){
+  const pill = document.getElementById("catProgress");
+  if(cat.type==="defs" || cat.type==="short" || cat.type==="dist" || cat.type==="reasoning"){
+    const total = cat.data.length;
+    const known = Object.values(st.answers).filter(v=>v && v.mark==="got").length;
+    pill.textContent = `${known}/${total} mastered`;
+    return;
+  }
+  const total = cat.type==="label" ? cat.data.reduce((n,d)=>n+d.points.length,0) : cat.data.length;
+  if(!st.checked){
+    let answered=0;
+    if(cat.type==="label"){
+      cat.data.forEach(d=>d.points.forEach(p=>{ if(st.answers[d.key+"-"+p.n]) answered++; }));
+    } else {
+      answered = Object.keys(st.answers).filter(k=>norm(st.answers[k])!=="").length;
+    }
+    pill.textContent = `${answered}/${total} answered`;
+  } else {
+    let score=0;
+    if(cat.type==="fib"){
+      cat.data.forEach((q,i)=>{ if(q.a.some(acc=>norm(acc)===norm(st.answers[i]))) score++; });
+    } else if(cat.type==="mcq"){
+      cat.data.forEach((q,i)=>{ if(st.answers[i]===q.c) score++; });
+    } else if(cat.type==="oneword"){
+      cat.data.forEach((q,i)=>{ if(q.a.some(acc=>norm(acc)===norm(st.answers[i]))) score++; });
+    } else if(cat.type==="tf"){
+      cat.data.forEach((q,i)=>{ if(st.answers[i]===q.a) score++; });
+    } else if(cat.type==="label"){
+      cat.data.forEach(d=>d.points.forEach(p=>{ if(st.answers[d.key+"-"+p.n]===p.correct) score++; }));
+    }
+    pill.textContent = `Score: ${score}/${total}`;
+  }
+}
+
+/* ---------- Fill in the Blanks ---------- */
+function renderFIB(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    const card = document.createElement("div"); card.className="qcard";
+    const parts = q.t.split("___");
+    card.innerHTML = `
+      <div class="qtext"><span class="qnum">${i+1}</span>${parts[0]}<span class="blank-txt">_____</span>${parts[1]||""}</div>
+      <input type="text" placeholder="Type the missing word(s)" data-i="${i}" value="${st.answers[i]||""}">
+      <div class="feedback" data-fb="${i}"></div>
+    `;
+    list.appendChild(card);
+  });
+  wireTextInputs(list, cat, st, (i,val)=>{
+    const q = cat.data[i];
+    return q.a.some(acc=>norm(acc)===norm(val));
+  }, (i)=>`Correct answer: <b>${cat.data[i].a[0]}</b>`);
+}
+
+/* ---------- One word answer (same mechanics as FIB) ---------- */
+function renderOneWord(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    const card = document.createElement("div"); card.className="qcard";
+    card.innerHTML = `
+      <div class="qtext"><span class="qnum">${i+1}</span>${q.t}</div>
+      <input type="text" placeholder="One word / short term" data-i="${i}" value="${st.answers[i]||""}">
+      <div class="feedback" data-fb="${i}"></div>
+    `;
+    list.appendChild(card);
+  });
+  wireTextInputs(list, cat, st, (i,val)=>{
+    const q = cat.data[i];
+    return q.a.some(acc=>norm(acc)===norm(val));
+  }, (i)=>`Correct answer: <b>${cat.data[i].a[0]}</b>`);
+}
+
+function wireTextInputs(list, cat, st, isCorrectFn, correctLabelFn){
+  list.querySelectorAll("input[type=text]").forEach(inp=>{
+    inp.addEventListener("input", ()=>{
+      const i = inp.dataset.i;
+      st.answers[i] = inp.value;
+      saveState();
+    });
+  });
+  if(st.checked){
+    list.querySelectorAll("input[type=text]").forEach(inp=>{
+      const i = inp.dataset.i;
+      const val = st.answers[i]||"";
+      const ok = isCorrectFn(i, val);
+      inp.classList.add(ok?"correct":"wrong");
+      inp.disabled = true;
+      const fb = list.querySelector(`[data-fb="${i}"]`);
+      if(fb){
+        fb.classList.add("show", ok?"good":"bad");
+        fb.innerHTML = ok ? "✓ Correct" : `✗ ${correctLabelFn(i)}`;
+      }
+    });
+  }
+}
+
+/* ---------- MCQ ---------- */
+function renderMCQ(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    const card = document.createElement("div"); card.className="qcard";
+    const chosen = st.answers[i];
+    let optsHtml = q.o.map((opt,oi)=>{
+      let cls = "opt";
+      if(!st.checked && chosen===oi) cls += " chosen";
+      if(st.checked){
+        if(oi===q.c) cls += " reveal-correct";
+        else if(oi===chosen) cls += " reveal-wrong";
+      }
+      return `<label class="${cls}" data-i="${i}" data-oi="${oi}">
+        <input type="radio" name="mcq${i}" ${chosen===oi?"checked":""} ${st.checked?"disabled":""}>
+        ${opt}
+      </label>`;
+    }).join("");
+    card.innerHTML = `<div class="qtext"><span class="qnum">${i+1}</span>${q.t}</div><div class="opts">${optsHtml}</div>`;
+    list.appendChild(card);
+  });
+  if(!st.checked){
+    list.querySelectorAll(".opt").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const i = el.dataset.i, oi = parseInt(el.dataset.oi);
+        st.answers[i] = oi;
+        saveState();
+        render();
+      });
+    });
+  }
+}
+
+/* ---------- True / False ---------- */
+function renderTF(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    const card = document.createElement("div"); card.className="qcard";
+    const chosen = st.answers[i];
+    const mk = (val,label)=>{
+      let cls = "tf-btn";
+      if(!st.checked && chosen===val) cls += " chosen";
+      if(st.checked){
+        if(val===q.a) cls += " reveal-correct";
+        else if(val===chosen) cls += " reveal-wrong";
+      }
+      return `<div class="${cls}" data-i="${i}" data-v="${val}">${label}</div>`;
+    };
+    card.innerHTML = `<div class="qtext"><span class="qnum">${i+1}</span>${q.t}</div>
+      <div class="tf-row">${mk(true,"True")}${mk(false,"False")}</div>`;
+    list.appendChild(card);
+  });
+  if(!st.checked){
+    list.querySelectorAll(".tf-btn").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const i = el.dataset.i, v = el.dataset.v==="true";
+        st.answers[i]=v; saveState(); render();
+      });
+    });
+  }
+}
+
+/* ---------- Definitions (flip / self-mark) ---------- */
+function renderDefs(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    if(!st.answers[i]) st.answers[i] = {text:"", revealed:false, mark:null};
+    const a = st.answers[i];
+    const card = document.createElement("div"); card.className="qcard";
+    card.innerHTML = `
+      <div class="qtext"><span class="qnum">${i+1}</span>Define: <b>${q.t}</b></div>
+      <textarea placeholder="Write the definition in your own words" data-i="${i}">${a.text}</textarea>
+      <div class="toolbar" style="margin:9px 0 0;">
+        <button class="action btn-mini" data-reveal="${i}">Reveal definition</button>
+      </div>
+      <div class="reveal-box ${a.revealed?"show":""}" data-box="${i}">${q.d}</div>
+      <div class="selfmark" style="${a.revealed?"":"display:none;"}" data-sm="${i}">
+        <div class="sm-btn got ${a.mark==="got"?"active":""}" data-mk="got" data-i="${i}">I knew this</div>
+        <div class="sm-btn retry ${a.mark==="retry"?"active":""}" data-mk="retry" data-i="${i}">Need to revise</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+  list.querySelectorAll("textarea").forEach(t=>{
+    t.addEventListener("input", ()=>{ st.answers[t.dataset.i].text = t.value; saveState(); });
+  });
+  list.querySelectorAll("[data-reveal]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.reveal;
+      st.answers[i].revealed = true; saveState(); render();
+    });
+  });
+  list.querySelectorAll("[data-mk]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.i;
+      st.answers[i].mark = b.dataset.mk; saveState(); render();
+    });
+  });
+}
+
+/* ---------- Short answer (same pattern as Definitions) ---------- */
+function renderShort(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    if(!st.answers[i]) st.answers[i] = {text:"", revealed:false, mark:null};
+    const a = st.answers[i];
+    const card = document.createElement("div"); card.className="qcard";
+    card.innerHTML = `
+      <div class="qtext"><span class="qnum">${i+1}</span>${q.q}</div>
+      <textarea placeholder="Write your answer" data-i="${i}">${a.text}</textarea>
+      <div class="toolbar" style="margin:9px 0 0;">
+        <button class="action btn-mini" data-reveal="${i}">Reveal sample answer</button>
+      </div>
+      <div class="reveal-box ${a.revealed?"show":""}" data-box="${i}">${q.a}</div>
+      <div class="selfmark" style="${a.revealed?"":"display:none;"}" data-sm="${i}">
+        <div class="sm-btn got ${a.mark==="got"?"active":""}" data-mk="got" data-i="${i}">Matches well</div>
+        <div class="sm-btn retry ${a.mark==="retry"?"active":""}" data-mk="retry" data-i="${i}">Need to revise</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+  list.querySelectorAll("textarea").forEach(t=>{
+    t.addEventListener("input", ()=>{ st.answers[t.dataset.i].text = t.value; saveState(); });
+  });
+  list.querySelectorAll("[data-reveal]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.reveal;
+      st.answers[i].revealed = true; saveState(); render();
+    });
+  });
+  list.querySelectorAll("[data-mk]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.i;
+      st.answers[i].mark = b.dataset.mk; saveState(); render();
+    });
+  });
+}
+
+/* ---------- Reasoning (same self-check pattern as Short Answer) ---------- */
+function renderReasoning(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    if(!st.answers[i]) st.answers[i] = {text:"", revealed:false, mark:null};
+    const a = st.answers[i];
+    const card = document.createElement("div"); card.className="qcard";
+    card.innerHTML = `
+      <div class="qtext"><span class="qnum">${i+1}</span>${q.q}</div>
+      <textarea placeholder="Connect the facts and write your reasoning" data-i="${i}">${a.text}</textarea>
+      <div class="toolbar" style="margin:9px 0 0;">
+        <button class="action btn-mini" data-reveal="${i}">Reveal model answer</button>
+      </div>
+      <div class="reveal-box ${a.revealed?"show":""}" data-box="${i}">${q.a}</div>
+      <div class="selfmark" style="${a.revealed?"":"display:none;"}" data-sm="${i}">
+        <div class="sm-btn got ${a.mark==="got"?"active":""}" data-mk="got" data-i="${i}">I reasoned this out</div>
+        <div class="sm-btn retry ${a.mark==="retry"?"active":""}" data-mk="retry" data-i="${i}">Need to revise</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+  list.querySelectorAll("textarea").forEach(t=>{
+    t.addEventListener("input", ()=>{ st.answers[t.dataset.i].text = t.value; saveState(); });
+  });
+  list.querySelectorAll("[data-reveal]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.reveal;
+      st.answers[i].revealed = true; saveState(); render();
+    });
+  });
+  list.querySelectorAll("[data-mk]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.i;
+      st.answers[i].mark = b.dataset.mk; saveState(); render();
+    });
+  });
+}
+
+/* ---------- Distinguish between ---------- */
+function renderDist(cat, st, list){
+  cat.data.forEach((q,i)=>{
+    if(!st.answers[i]) st.answers[i] = {a:"", b:"", revealed:false, mark:null};
+    const a = st.answers[i];
+    const card = document.createElement("div"); card.className="qcard";
+    card.innerHTML = `
+      <div class="qnum" style="margin-bottom:6px;">${i+1}</div>
+      <div class="dist-title">${q.title}</div>
+      <div class="dist-cols">
+        <div>
+          <label>${q.colA}</label>
+          <textarea data-i="${i}" data-side="a" placeholder="Your point(s)">${a.a}</textarea>
+        </div>
+        <div>
+          <label>${q.colB}</label>
+          <textarea data-i="${i}" data-side="b" placeholder="Your point(s)">${a.b}</textarea>
+        </div>
+      </div>
+      <div class="toolbar" style="margin:9px 0 0;">
+        <button class="action btn-mini" data-reveal="${i}">Reveal answer</button>
+      </div>
+      <div class="dist-answer ${a.revealed?"show":""}" data-box="${i}">
+        <table>
+          <tr><td>${q.colA}</td><td>${q.colB}</td></tr>
+          <tr><td>${q.ansA}</td><td>${q.ansB}</td></tr>
+        </table>
+      </div>
+      <div class="selfmark" style="${a.revealed?"":"display:none;"}" data-sm="${i}">
+        <div class="sm-btn got ${a.mark==="got"?"active":""}" data-mk="got" data-i="${i}">I got it</div>
+        <div class="sm-btn retry ${a.mark==="retry"?"active":""}" data-mk="retry" data-i="${i}">Need to revise</div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+  list.querySelectorAll("textarea").forEach(t=>{
+    t.addEventListener("input", ()=>{
+      st.answers[t.dataset.i][t.dataset.side] = t.value; saveState();
+    });
+  });
+  list.querySelectorAll("[data-reveal]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.reveal;
+      st.answers[i].revealed = true; saveState(); render();
+    });
+  });
+  list.querySelectorAll("[data-mk]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const i = b.dataset.i;
+      st.answers[i].mark = b.dataset.mk; saveState(); render();
+    });
+  });
+}
+
+/* ---------- Labeling diagrams ---------- */
+function renderLabel(cat, st, list){
+  cat.data.forEach(diagram=>{
+    const card = document.createElement("div"); card.className="qcard";
+    let rows = diagram.points.map(p=>{
+      const key = diagram.key+"-"+p.n;
+      const val = st.answers[key]||"";
+      let cls = "";
+      if(st.checked){ cls = (val===p.correct) ? "correct" : "wrong"; }
+      const opts = [`<option value="">— choose —</option>`]
+        .concat(diagram.options.map(o=>`<option value="${o}" ${val===o?"selected":""}>${o}</option>`)).join("");
+      return `<div class="label-row">
+        <div class="marker">${p.n}</div>
+        <select class="${cls}" data-key="${key}" ${st.checked?"disabled":""}>${opts}</select>
+      </div>`;
+    }).join("");
+    card.innerHTML = `
+      <div class="qtext" style="margin-bottom:8px;">${diagram.title}</div>
+      <div style="color:var(--muted); font-size:.78rem; margin-bottom:10px;">${diagram.sub}</div>
+      <div class="diagram-wrap">${diagram.svg}</div>
+      <div class="label-list">${rows}</div>
+    `;
+    list.appendChild(card);
+  });
+  list.querySelectorAll("select").forEach(sel=>{
+    sel.addEventListener("change", ()=>{
+      st.answers[sel.dataset.key] = sel.value;
+      saveState();
+    });
+  });
+}
+
+/* =========================================================
+   VOICE ROUND
+   A hands-free, single-question-at-a-time flow for Fill in
+   the Blanks, One Word, and True/False. Exactly one "stage"
+   element is ever in the DOM — every transition replaces the
+   whole stage container's contents rather than appending to it.
+   ========================================================= */
+
+function speakableText(raw){
+  // Turn any run of 3+ underscores (blank of any length) into a spoken cue.
+  return String(raw||"").replace(/_{3,}/g, " blank ").replace(/\s+/g," ").trim();
+}
+
+function speechMatches(transcript, acceptedList){
+  const t = norm(transcript);
+  if(!t) return false;
+  return (acceptedList||[]).some(acc=>{
+    const a = norm(acc);
+    if(!a) return false;
+    return t===a || t.includes(a) || a.includes(t);
+  });
+}
+
+function speechToBool(transcript){
+  const t = norm(transcript);
+  if(!t) return null;
+  const falseWords = ["false","incorrect","wrong","not true","no"];
+  const trueWords = ["true","correct","right","yes"];
+  if(falseWords.some(w=>t.includes(w))) return false;
+  if(trueWords.some(w=>t.includes(w))) return true;
+  return null;
+}
+
+/* speak() reads text aloud and fires `onNearEnd` either at the start of the
+   last word (when the browser's TTS reports word boundaries) or, failing
+   that, when speech actually finishes — so listening starts with no
+   perceptible gap, and never while the question is still being read. */
+function speak(text, onNearEnd, onDone){
+  if(!window.speechSynthesis || !window.SpeechSynthesisUtterance){
+    if(onNearEnd) onNearEnd();
+    if(onDone) onDone();
+    return;
+  }
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  const cleanText = String(text||"").trim();
+  if(!cleanText){
+    if(onNearEnd) onNearEnd();
+    if(onDone) onDone();
+    return;
+  }
+  const utter = new SpeechSynthesisUtterance(cleanText);
+  utter.rate = 0.95;
+  const words = cleanText.split(/\s+/);
+  const lastWord = words[words.length-1] || "";
+  const lastWordStart = lastWord ? cleanText.lastIndexOf(lastWord) : -1;
+  let fired = false;
+  const fireNearEnd = ()=>{ if(!fired){ fired = true; if(onNearEnd) onNearEnd(); } };
+  utter.onboundary = (e)=>{
+    if(fired) return;
+    if(typeof e.charIndex === "number" && lastWordStart >= 0 && e.charIndex >= lastWordStart){
+      fireNearEnd();
+    }
+  };
+  utter.onend = ()=>{ fireNearEnd(); if(onDone) onDone(); };
+  utter.onerror = ()=>{ fireNearEnd(); if(onDone) onDone(); };
+  try{ window.speechSynthesis.speak(utter); }
+  catch(e){ fireNearEnd(); if(onDone) onDone(); }
+}
+
+const VR = {
+  active:false,
+  catId:null,
+  st:null,
+  stageEl:null,
+  idx:0,
+  score:0,
+  answeredCount:0,
+  recognition:null,
+  listenTimer:null,
+  phase:"idle" // idle | miccheck | micerror | asking | listening | result | summary
+};
+window.VR = VR; // exposed for diagnostics/testing; not otherwise referenced externally
+
+function cleanupVoice(){
+  if(VR.listenTimer){ clearTimeout(VR.listenTimer); VR.listenTimer = null; }
+  if(VR.recognition){
+    try{ VR.recognition.onresult = null; VR.recognition.onend = null; VR.recognition.onerror = null; VR.recognition.abort(); }catch(e){}
+    VR.recognition = null;
+  }
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+  }
+  VR.active = false;
+  VR.phase = "idle";
+}
+
+function getSpeechRecognitionCtor(){
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
+
+function startVoiceRound(cat, st, stageEl){
+  // Re-entering the same active round shouldn't restart it from scratch.
+  if(VR.active && VR.catId === cat.id && VR.stageEl === stageEl){
+    renderVoiceStage();
+    return;
+  }
+  cleanupVoice();
+  VR.active = true;
+  VR.catId = cat.id;
+  VR.st = st;
+  VR.stageEl = stageEl;
+  VR.idx = 0;
+  VR.score = 0;
+  VR.answeredCount = 0;
+  VR.phase = "miccheck";
+  renderVoiceStage();
+
+  const SpeechRec = getSpeechRecognitionCtor();
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !SpeechRec){
+    VR.active = false; // no genuine round has started; let a future retry begin cleanly
+    VR.phase = "micerror";
+    renderVoiceStage();
+    return;
+  }
+
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    try{ stream.getTracks().forEach(tr=>tr.stop()); }catch(e){}
+    if(!VR.active || VR.catId !== cat.id) return; // user navigated away meanwhile
+    VR.phase = "asking";
+    renderVoiceStage();
+    askCurrentQuestion();
+  }).catch(()=>{
+    VR.active = false; // no genuine round has started; let a future retry begin cleanly
+    VR.phase = "micerror";
+    renderVoiceStage();
+  });
+}
+
+function currentVoiceQuestion(){
+  const cat = CATS.find(c=>c.id===VR.catId);
+  return cat.data[VR.idx];
+}
+
+function askCurrentQuestion(){
+  const cat = CATS.find(c=>c.id===VR.catId);
+  if(!cat || VR.idx >= cat.data.length){
+    finishVoiceRound();
+    return;
+  }
+  VR.phase = "asking";
+  VR.lastResult = null;
+  renderVoiceStage();
+
+  const q = cat.data[VR.idx];
+  const spokenText = speakableText(q.t);
+
+  speak(spokenText, ()=>{
+    if(!VR.active) return;
+    beginListening();
+  });
+}
+
+function beginListening(){
+  const cat = CATS.find(c=>c.id===VR.catId);
+  const SpeechRec = getSpeechRecognitionCtor();
+  if(!SpeechRec){
+    handleVoiceAnswer("");
+    return;
+  }
+  VR.phase = "listening";
+  renderVoiceStage();
+
+  let settled = false;
+  const rec = new SpeechRec();
+  VR.recognition = rec;
+  try{ rec.lang = "en-US"; }catch(e){}
+  rec.continuous = false;
+  rec.interimResults = false;
+  rec.maxAlternatives = 1;
+
+  const finish = (transcript)=>{
+    if(settled) return;
+    settled = true;
+    if(VR.listenTimer){ clearTimeout(VR.listenTimer); VR.listenTimer = null; }
+    VR.recognition = null;
+    if(!VR.active) return;
+    handleVoiceAnswer(transcript);
+  };
+
+  rec.onresult = (e)=>{
+    let transcript = "";
+    try{ transcript = e.results[0][0].transcript; }catch(err){ transcript = ""; }
+    finish(transcript);
+  };
+  rec.onerror = ()=>{ finish(""); };
+  rec.onend = ()=>{ finish(""); };
+
+  VR.listenTimer = setTimeout(()=>{
+    if(settled) return;
+    try{ rec.stop(); }catch(e){}
+    finish("");
+  }, 5000);
+
+  try{ rec.start(); }
+  catch(e){ finish(""); }
+}
+
+function handleVoiceAnswer(transcript){
+  const cat = CATS.find(c=>c.id===VR.catId);
+  const q = cat.data[VR.idx];
+  let correct = false;
+  let correctLabel = "";
+  let noAnswer = norm(transcript) === "";
+
+  if(cat.type === "fib" || cat.type === "oneword"){
+    correct = !noAnswer && speechMatches(transcript, q.a);
+    correctLabel = q.a[0];
+    VR.st.answers[VR.idx] = noAnswer ? (VR.st.answers[VR.idx]||"") : transcript;
+  } else if(cat.type === "tf"){
+    const spoken = noAnswer ? null : speechToBool(transcript);
+    correct = spoken !== null && spoken === q.a;
+    correctLabel = q.a ? "True" : "False";
+    if(spoken !== null) VR.st.answers[VR.idx] = spoken;
+  }
+
+  VR.answeredCount++;
+  if(correct) VR.score++;
+  VR.st.checked = true;
+  saveState();
+
+  VR.lastResult = {correct, noAnswer, transcript, correctLabel};
+  VR.phase = "result";
+  renderVoiceStage();
+
+  const feedbackText = correct ? "Correct!" : (noAnswer ? `No answer heard. The correct answer is ${correctLabel}.` : `Not quite. The correct answer is ${correctLabel}.`);
+  speak(feedbackText, ()=>{}, ()=>{
+    if(!VR.active) return;
+    VR.listenTimer = setTimeout(()=>{
+      if(!VR.active) return;
+      VR.idx++;
+      askCurrentQuestion();
+    }, 900);
+  });
+}
+
+function skipVoiceQuestion(){
+  if(!VR.active) return;
+  if(VR.listenTimer){ clearTimeout(VR.listenTimer); VR.listenTimer = null; }
+  if(VR.recognition){ try{ VR.recognition.abort(); }catch(e){} VR.recognition = null; }
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  VR.idx++;
+  askCurrentQuestion();
+}
+
+function endVoiceRoundNow(){
+  if(!VR.active) return;
+  if(VR.listenTimer){ clearTimeout(VR.listenTimer); VR.listenTimer = null; }
+  if(VR.recognition){ try{ VR.recognition.abort(); }catch(e){} VR.recognition = null; }
+  if(window.speechSynthesis){ try{ window.speechSynthesis.cancel(); }catch(e){} }
+  finishVoiceRound();
+}
+
+function finishVoiceRound(){
+  if(!VR.active) return;
+  VR.st.checked = true;
+  saveState();
+  VR.phase = "summary";
+  renderVoiceStage();
+}
+
+function redoVoiceRound(){
+  const cat = CATS.find(c=>c.id===VR.catId);
+  const st = VR.st;
+  const stageEl = VR.stageEl;
+  cleanupVoice();
+  startVoiceRound(cat, st, stageEl);
+}
+
+function exitVoiceToList(){
+  const catId = VR.catId;
+  cleanupVoice();
+  modeByCategory[catId] = "list";
+  render();
+}
+
+/* Renders the current VR.phase into VR.stageEl, always replacing the
+   entire contents so only one question-stage element exists at a time. */
+function renderVoiceStage(){
+  const stage = VR.stageEl;
+  if(!stage) return;
+  const cat = CATS.find(c=>c.id===VR.catId);
+  const total = cat ? cat.data.length : 0;
+
+  stage.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "qcard voice-card";
+
+  if(VR.phase === "miccheck"){
+    card.innerHTML = `
+      <div class="voice-orb">🎙️</div>
+      <div class="voice-phase-label">Requesting microphone…</div>
+      <div class="voice-qtext">Please allow microphone access to start the Voice Round.</div>
+    `;
+  } else if(VR.phase === "micerror"){
+    card.innerHTML = `
+      <div class="voice-orb">🚫</div>
+      <div class="voice-phase-label">Microphone unavailable</div>
+      <div class="voice-qtext">Voice Round couldn't access your microphone.</div>
+      <ul class="mic-explain-list">
+        <li>This browser app may not have microphone permission at the device/OS level — check your phone or computer's system settings.</li>
+        <li>Or this page may have already been blocked from using the microphone in the browser's own site settings — check the site permissions (often a lock or ⓘ icon in the address bar).</li>
+      </ul>
+      <div class="voice-controls">
+        <button class="action btn-primary" data-act="retry">Try again</button>
+        <button class="action btn-ghost" data-act="back">Back to List View</button>
+      </div>
+    `;
+    card.querySelector('[data-act="retry"]').addEventListener("click", ()=> startVoiceRound(cat, VR.st, stage));
+    card.querySelector('[data-act="back"]').addEventListener("click", exitVoiceToList);
+  } else if(VR.phase === "asking"){
+    const q = cat.data[VR.idx];
+    const displayText = cat.type === "fib" ? q.t.replace(/_{3,}/g, "▁▁▁▁") : q.t;
+    card.innerHTML = `
+      <div class="voice-progress">Question ${VR.idx+1} of ${total}</div>
+      <div class="voice-orb">🔊</div>
+      <div class="voice-phase-label">Reading question…</div>
+      <div class="voice-qtext">${displayText}</div>
+      <div class="voice-controls">
+        <button class="action btn-mini" data-act="skip">Skip</button>
+        <button class="action btn-ghost" data-act="end">End round</button>
+      </div>
+    `;
+    card.querySelector('[data-act="skip"]').addEventListener("click", skipVoiceQuestion);
+    card.querySelector('[data-act="end"]').addEventListener("click", endVoiceRoundNow);
+  } else if(VR.phase === "listening"){
+    const q = cat.data[VR.idx];
+    const displayText = cat.type === "fib" ? q.t.replace(/_{3,}/g, "▁▁▁▁") : q.t;
+    card.innerHTML = `
+      <div class="voice-progress">Question ${VR.idx+1} of ${total}</div>
+      <div class="voice-orb listening">🎤</div>
+      <div class="voice-phase-label">Listening… (5 seconds)</div>
+      <div class="voice-qtext">${displayText}</div>
+      <div class="voice-transcript">Speak your answer now</div>
+      <div class="voice-controls">
+        <button class="action btn-mini" data-act="skip">Skip</button>
+        <button class="action btn-ghost" data-act="end">End round</button>
+      </div>
+    `;
+    card.querySelector('[data-act="skip"]').addEventListener("click", skipVoiceQuestion);
+    card.querySelector('[data-act="end"]').addEventListener("click", endVoiceRoundNow);
+  } else if(VR.phase === "result"){
+    const r = VR.lastResult || {};
+    const q = cat.data[VR.idx];
+    const displayText = cat.type === "fib" ? q.t.replace(/_{3,}/g, "▁▁▁▁") : q.t;
+    card.innerHTML = `
+      <div class="voice-progress">Question ${VR.idx+1} of ${total}</div>
+      <div class="voice-orb">${r.correct ? "✅" : "❌"}</div>
+      <div class="voice-qtext">${displayText}</div>
+      <div class="voice-transcript">${r.noAnswer ? "No answer heard" : `You said: "${r.transcript}"`}</div>
+      <div class="voice-result ${r.correct ? "good" : "bad"}">${r.correct ? "Correct!" : `Correct answer: ${r.correctLabel}`}</div>
+      <div class="voice-controls">
+        <button class="action btn-ghost" data-act="end">End round</button>
+      </div>
+    `;
+    card.querySelector('[data-act="end"]').addEventListener("click", endVoiceRoundNow);
+  } else if(VR.phase === "summary"){
+    card.innerHTML = `
+      <div class="voice-phase-label">Voice Round complete</div>
+      <div class="voice-summary-score">${VR.score} / ${VR.answeredCount || 0}</div>
+      <div class="voice-qtext" style="font-size:.85rem; color:var(--muted); font-weight:600;">questions answered correctly out of ${VR.answeredCount || 0} attempted (${total} total in this section)</div>
+      <div class="voice-controls">
+        <button class="action btn-primary" data-act="redo">Redo round</button>
+        <button class="action btn-ghost" data-act="list">Return to List View</button>
+      </div>
+    `;
+    card.querySelector('[data-act="redo"]').addEventListener("click", redoVoiceRound);
+    card.querySelector('[data-act="list"]').addEventListener("click", exitVoiceToList);
+  }
+
+  stage.appendChild(card);
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+(function init(){
+  loadState();
+  render();
+  if(!storageAvailable){
+    const note = document.querySelector(".footer-note");
+    if(note) note.innerHTML = "⚠️ This browser is blocking local storage, so progress will only be kept for this session and won't survive closing the app.";
+  }
+  const resetAllBtn = document.getElementById("resetAllBtn");
+  if(resetAllBtn){
+    resetAllBtn.addEventListener("click", ()=>{
+      const ok = window.confirm("Reset ALL answers in every section? This can't be undone.");
+      if(ok) resetAllCategories();
+    });
+  }
+})();
+</script>
+</body>
+</html>

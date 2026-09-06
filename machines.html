@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machines — Chapter 11 Quiz</title>
+<style>
+  :root{
+    --navy:#152036;
+    --navy-panel:#1c2c4b;
+    --grid:rgba(220,232,255,0.055);
+    --gold:#d3a24d;
+    --gold-light:#f0c877;
+    --cream:#f7f2e4;
+    --cream-dim:#efe8d4;
+    --ink:#1c2338;
+    --ink-soft:#5b5a4d;
+    --success:#4f8a54;
+    --success-bg:#e5f0e1;
+    --error:#b1503f;
+    --error-bg:#f6e4df;
+    --white:#eef2fb;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:var(--white);
+    background-color:var(--navy);
+    background-image:
+      repeating-linear-gradient(0deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 28px),
+      repeating-linear-gradient(90deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 28px);
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  header.top{
+    padding:22px 16px 14px;
+    border-bottom:1px solid rgba(211,162,77,0.35);
+  }
+  .kicker{
+    font-family:'Courier New',monospace;
+    font-size:11px;
+    letter-spacing:0.12em;
+    color:var(--gold-light);
+    margin:0 0 6px;
+  }
+  h1.title{
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:28px;
+    margin:0 0 6px;
+    color:var(--white);
+    line-height:1.15;
+  }
+  .subtitle{
+    margin:0;
+    font-size:14px;
+    color:#b9c3dc;
+    max-width:60ch;
+    line-height:1.5;
+  }
+  .overall{
+    margin-top:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .overall .pill{
+    font-family:'Courier New',monospace;
+    font-size:12px;
+    background:rgba(211,162,77,0.14);
+    border:1px solid rgba(211,162,77,0.5);
+    color:var(--gold-light);
+    padding:5px 10px;
+    border-radius:3px;
+  }
+
+  nav.tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:14px 16px;
+    -webkit-overflow-scrolling:touch;
+    border-bottom:1px solid rgba(211,162,77,0.2);
+  }
+  nav.tabs::-webkit-scrollbar{height:0;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:var(--navy-panel);
+    border:1px solid rgba(211,162,77,0.25);
+    color:var(--white);
+    padding:9px 13px;
+    border-radius:4px;
+    font-size:13px;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:3px;
+    min-width:108px;
+  }
+  .tab-btn .code{
+    font-family:'Courier New',monospace;
+    font-size:10px;
+    color:var(--gold-light);
+    letter-spacing:0.08em;
+  }
+  .tab-btn .name{font-weight:600;font-size:13px;}
+  .tab-btn .score{font-size:11px;color:#93a1c2;}
+  .tab-btn.active{
+    background:var(--gold);
+    border-color:var(--gold);
+  }
+  .tab-btn.active .code, .tab-btn.active .name, .tab-btn.active .score{color:var(--ink);}
+
+  main{padding:18px 16px 60px; max-width:760px; margin:0 auto;}
+
+  .panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .panel-head h2{
+    font-family:Georgia,serif;
+    font-size:21px;
+    margin:0 0 4px;
+    color:var(--white);
+  }
+  .panel-head p.desc{margin:0;font-size:13px;color:#a9b4d0;max-width:52ch;}
+  .panel-score-block{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:6px;
+  }
+  .panel-score{
+    font-family:'Courier New',monospace;
+    font-size:13px;
+    color:var(--gold-light);
+    text-align:right;
+  }
+  button.action.small{
+    font-size:11px;
+    padding:5px 9px;
+  }
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+  button.action{
+    font-family:inherit;
+    font-size:12.5px;
+    padding:8px 12px;
+    border-radius:4px;
+    border:1px solid rgba(211,162,77,0.5);
+    background:transparent;
+    color:var(--gold-light);
+    cursor:pointer;
+  }
+  button.action:hover{background:rgba(211,162,77,0.12);}
+  button.reset{border-color:rgba(177,80,63,0.6); color:#e79c8c;}
+  button.reset:hover{background:rgba(177,80,63,0.14);}
+
+  .group-title{
+    font-family:Georgia,serif;
+    font-size:15px;
+    color:var(--gold-light);
+    margin:26px 0 10px;
+    padding-bottom:6px;
+    border-bottom:1px dashed rgba(211,162,77,0.4);
+  }
+  .group-title:first-of-type{margin-top:0;}
+
+  .svg-wrap{
+    background:var(--cream);
+    border-radius:6px;
+    padding:10px;
+    margin-bottom:12px;
+    border:1px dashed rgba(28,35,56,0.35);
+  }
+  .svg-wrap svg{display:block;width:100%;height:auto;}
+
+  .card{
+    background:var(--cream);
+    color:var(--ink);
+    border-radius:6px;
+    padding:16px;
+    margin-bottom:12px;
+    border:1px dashed rgba(28,35,56,0.3);
+  }
+  .card .prompt{
+    font-size:14.5px;
+    line-height:1.55;
+    margin:0 0 12px;
+  }
+  .card .prompt b{color:#8a5d20;}
+  .qnum{
+    display:inline-block;
+    font-family:'Courier New',monospace;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    background:rgba(28,35,56,0.06);
+    padding:2px 6px;
+    border-radius:3px;
+    margin-bottom:8px;
+  }
+  input[type=text], textarea{
+    width:100%;
+    font-family:inherit;
+    font-size:14px;
+    padding:9px 10px;
+    border-radius:4px;
+    border:1px solid #c9bfa0;
+    background:#fffdf8;
+    color:var(--ink);
+  }
+  textarea{min-height:64px;resize:vertical;}
+  input[type=text]:focus, textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
+
+  .row-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button.check{
+    font-family:inherit;
+    font-size:12.5px;
+    padding:7px 12px;
+    border-radius:4px;
+    border:none;
+    background:var(--ink);
+    color:var(--white);
+    cursor:pointer;
+  }
+  button.check:hover{background:#333f5c;}
+  button.mark-correct{background:var(--success);color:#fff;}
+  button.mark-incorrect{background:var(--error);color:#fff;}
+
+  .options{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+  .opt-btn{
+    text-align:left;
+    font-family:inherit;
+    font-size:13.5px;
+    padding:9px 11px;
+    border-radius:4px;
+    border:1px solid #c9bfa0;
+    background:#fffdf8;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .opt-btn.selected{border-color:var(--ink); background:#eee4c9;}
+  .opt-btn.correct{background:var(--success-bg); border-color:var(--success); color:#2b5c30;}
+  .opt-btn.incorrect{background:var(--error-bg); border-color:var(--error); color:#7c2e21;}
+
+  .tf-row{display:flex;gap:10px;}
+  .tf-btn{flex:1;padding:9px;border-radius:4px;border:1px solid #c9bfa0;background:#fffdf8;color:var(--ink);font-family:inherit;font-size:13.5px;cursor:pointer;}
+  .tf-btn.selected{border-color:var(--ink);background:#eee4c9;}
+  .tf-btn.correct{background:var(--success-bg);border-color:var(--success);color:#2b5c30;}
+  .tf-btn.incorrect{background:var(--error-bg);border-color:var(--error);color:#7c2e21;}
+
+  .feedback{
+    margin-top:9px;
+    font-size:13px;
+    padding:8px 10px;
+    border-radius:4px;
+  }
+  .feedback.correct{background:var(--success-bg); color:#2b5c30;}
+  .feedback.incorrect{background:var(--error-bg); color:#7c2e21;}
+  .feedback .ans{display:block;margin-top:2px;font-size:12.5px;color:#5c5142;}
+
+  .model-answer{
+    margin-top:10px;
+    padding:10px 11px;
+    background:#efe6cd;
+    border-left:3px solid var(--gold);
+    border-radius:3px;
+    font-size:13px;
+    line-height:1.5;
+    color:#4a3f27;
+  }
+  .model-answer .lbl{
+    font-family:'Courier New',monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    color:#8a6a2b;
+    display:block;
+    margin-bottom:4px;
+  }
+
+  .mode-toggle-row{
+    width:100%;
+    margin-bottom:18px;
+  }
+  .mode-toggle{
+    display:flex;
+    width:100%;
+    border:1px solid rgba(211,162,77,0.4);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .mode-btn{
+    flex:1;
+    font-family:inherit;
+    font-size:13.5px;
+    font-weight:600;
+    padding:11px 10px;
+    border:none;
+    background:var(--navy-panel);
+    color:#b9c3dc;
+    cursor:pointer;
+  }
+  .mode-btn.active{background:var(--gold); color:var(--ink);}
+  .mode-btn + .mode-btn{border-left:1px solid rgba(211,162,77,0.4);}
+
+  .voice-root{margin-bottom:20px;}
+  .voice-stage{
+    background:var(--cream);
+    color:var(--ink);
+    border-radius:6px;
+    padding:24px 18px;
+    border:1px dashed rgba(28,35,56,0.3);
+    text-align:center;
+  }
+  .voice-stage.voice-question{text-align:left;}
+  .voice-icon{font-size:34px; margin-bottom:10px;}
+  .voice-copy{font-size:14px; line-height:1.6; margin:0 0 14px; color:#3c4359;}
+  .voice-list{
+    text-align:left;
+    font-size:13.5px;
+    line-height:1.6;
+    color:#3c4359;
+    margin:0 0 16px;
+    padding-left:20px;
+  }
+  button.voice-primary{
+    background:var(--ink);
+    color:var(--white);
+    border-color:var(--ink);
+  }
+  button.voice-primary:hover{background:#333f5c;}
+  .voice-progress{
+    font-family:'Courier New',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .voice-question-text{
+    font-size:16px;
+    line-height:1.55;
+    margin:0 0 14px;
+    font-weight:600;
+  }
+  .voice-status{
+    font-size:14px;
+    padding:9px 11px;
+    border-radius:4px;
+    background:rgba(28,35,56,0.06);
+    margin:0 0 6px;
+  }
+  .voice-status.correct{background:var(--success-bg); color:#2b5c30;}
+  .voice-status.incorrect{background:var(--error-bg); color:#7c2e21;}
+  .voice-timer{font-size:12px; color:var(--ink-soft); min-height:16px; margin:0 0 10px;}
+  .voice-summary-title{font-family:Georgia,serif; font-size:20px; margin:0 0 8px;}
+  .voice-summary-score{font-size:17px; font-weight:600; margin:0 0 16px; color:#3c4359;}
+
+  .loading-note{padding:40px 16px;text-align:center;color:#9aa6c4;font-size:14px;}
+  .save-note{font-size:11px; color:#7f8bab; margin-top:14px; text-align:center;}
+  @media(max-width:420px){
+    h1.title{font-size:23px;}
+    .tab-btn{min-width:96px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <p class="kicker">NEW TRENDS IN SCIENCE · CH.11</p>
+  <h1 class="title">Machines</h1>
+  <p class="subtitle">Every fill-in-the-blank, definition, and diagram from the chapter, turned into a workbook you can revise from — right down to the ramp, the wedge, and the pulley in the well.</p>
+  <div class="overall" id="overallBox"></div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main id="main">
+  <div class="loading-note">Loading your saved progress…</div>
+</main>
+
+<script>
+/* ---------------------------------------------------------
+   DATA
+--------------------------------------------------------- */
+const CATEGORIES = [
+  {key:'fib', code:'FIB', name:'Fill in Blanks', desc:'Complete every key sentence from the chapter.'},
+  {key:'mcq', code:'MCQ', name:'Multiple Choice', desc:'Pick the correct option.'},
+  {key:'oneword', code:'1-WORD', name:'One Word', desc:'Answer in a single word or short term.'},
+  {key:'def', code:'DEFN', name:'Definitions', desc:'Write the definition, then check against the book.'},
+  {key:'shortqa', code:'Q&A', name:'Short Answer', desc:'Explain in your own words, then check.'},
+  {key:'reasoning', code:'WHY', name:'Reasoning', desc:'Connect facts from different parts of the chapter, then check your reasoning.'},
+  {key:'tf', code:'T/F', name:'True or False', desc:'Decide if each statement is true or false.'},
+  {key:'distinguish', code:'VS', name:'Distinguish Between', desc:'Tell the two machines apart, feature by feature.'},
+  {key:'labeling', code:'LABEL', name:'Label the Diagram', desc:'Name the parts of a lever and a pulley.'},
+];
+
+const DATA = {
+  fib: [
+    {id:'f1', prompt:'A machine is a device that makes our work ____ and ____.', answers:['faster and easier','faster, easier']},
+    {id:'f2', prompt:'We either change the ____ applied or the direction of applied force.', answers:['force']},
+    {id:'f3', prompt:'We either change the force applied or the ____ of applied force.', answers:['direction']},
+    {id:'f4', prompt:'The example of a machine given for "a device that makes our work faster and easier" is a pair of ____.', answers:['scissors']},
+    {id:'f5', prompt:'The nib of a pen has a ____ which rotates so that we use less effort and do more work.', answers:['ball bearing','ball-bearing']},
+    {id:'f6', prompt:'Even the pen which we use for writing is a ____.', answers:['machine']},
+    {id:'f7', prompt:'Equipments that are designed to make our work easier are known as ____ machines.', answers:['simple']},
+    {id:'f8', prompt:'A knife is designed so that its one side is made very ____ so that it can cut easily.', answers:['sharp']},
+    {id:'f9', prompt:'A ____ machine is a combination of two or more simple machines and has a number of parts.', answers:['complex']},
+    {id:'f10', prompt:'There are three types of simple machines: Lever, Inclined Plane, and ____.', answers:['pulley']},
+    {id:'f11', prompt:'Wheel and axle, and ____ are other simple machines besides lever, inclined plane and pulley.', answers:['screw']},
+    {id:'f12', prompt:'A lever is a rigid rod which is free to move about a ____ point.', answers:['fixed']},
+    {id:'f13', prompt:'The fixed point of a lever is called ____.', answers:['fulcrum']},
+    {id:'f14', prompt:'The force which is applied on a lever is called ____.', answers:['effort']},
+    {id:'f15', prompt:'The object to be lifted by a lever is called ____.', answers:['load']},
+    {id:'f16', prompt:'There are three types of levers: First class, Second class, and ____ class.', answers:['third']},
+    {id:'f17', prompt:'An inclined plane is a simple ____ surface which is used to push up objects instead of lifting them.', answers:['sloping']},
+    {id:'f18', prompt:'The ramp outside our houses is a perfect example of an ____.', answers:['inclined plane']},
+    {id:'f19', prompt:'The steeper the slope of an inclined plane, the more ____ it is to push up a load.', answers:['difficult']},
+    {id:'f20', prompt:'An inclined plane makes lifting of objects to greater heights ____.', answers:['easier']},
+    {id:'f21', prompt:'Hospitals are provided with a ____ to easily carry wheelchairs up or down.', answers:['ramp']},
+    {id:'f22', prompt:'People use a wooden ____ to load or de-load heavy weights from trucks.', answers:['plank']},
+    {id:'f23', prompt:'A wedge is a simple machine which works on the principle of an ____.', answers:['inclined plane']},
+    {id:'f24', prompt:'A wedge has ____ inclined surfaces put together to have a sharp cutting edge.', answers:['two','2']},
+    {id:'f25', prompt:'Knife, a needle, and an axe which we see around us in our daily life are all ____.', answers:['wedges']},
+    {id:'f26', prompt:'A screw has been derived from an ____.', answers:['inclined plane']},
+    {id:'f27', prompt:'A screw is like a nail with ____ cut in it.', answers:['grooves']},
+    {id:'f28', prompt:'The grooves provided on the screw hold things tightly together, that is why a screw is always better than a ____.', answers:['nail']},
+    {id:'f29', prompt:'From the pencil-and-paper activity, we conclude that a screw is an inclined plane wound on a ____.', answers:['cylinder']},
+    {id:'f30', prompt:'A pulley is a simple machine which is used to lift heavy loads very ____.', answers:['easily']},
+    {id:'f31', prompt:'A pulley changes the ____ of force and hence makes it easy to lift heavy loads.', answers:['direction']},
+    {id:'f32', prompt:'It is difficult to lift a load with a pulley because it is against the force of ____.', answers:['gravity']},
+    {id:'f33', prompt:'It is easy to drop a load with a pulley because it works in the direction of the force of ____.', answers:['gravity']},
+    {id:'f34', prompt:'Pulleys are of two types: Fixed pulley and ____ pulley.', answers:['movable']},
+    {id:'f35', prompt:'Pulleys are also used in ____ to lift loads.', answers:['cranes']},
+    {id:'f36', prompt:'The wheel and axle is a simple machine in which a wheel is attached to a cylindrical rod called ____.', answers:['axle']},
+    {id:'f37', prompt:'Since most of the parts of machines are made of ____, they must be painted against rusting.', answers:['iron']},
+    {id:'f38', prompt:'Machines should be ____ to avoid wear and tear due to frictional force.', answers:['lubricated']},
+    {id:'f39', prompt:'Machines should be kept ____ when not in use.', answers:['covered']},
+    {id:'f40', prompt:'Maintenance of machines is very ____.', answers:['important']},
+  ],
+  mcq: [
+    {id:'m1', prompt:'What is a machine?', options:['A device that makes work harder','A device that makes our work faster and easier','A living thing that grows','A type of raw material'], correct:1},
+    {id:'m2', prompt:'Which of the following is NOT a simple machine?', options:['Lever','Pulley','Car','Screw'], correct:2},
+    {id:'m3', prompt:'A car, a washing machine and a fridge are examples of:', options:['Simple machines','Complex machines','Levers','Wedges'], correct:1},
+    {id:'m4', prompt:'The fixed point about which a lever moves is called the:', options:['Load','Effort','Fulcrum','Axle'], correct:2},
+    {id:'m5', prompt:'On a see-saw, the triangular support in the middle represents the:', options:['Effort','Load','Fulcrum','Wheel'], correct:2},
+    {id:'m6', prompt:'How many types of levers are there?', options:['Two','Three','Four','Five'], correct:1},
+    {id:'m7', prompt:'Which simple machine has two inclined surfaces put together to form a sharp cutting edge?', options:['Lever','Wedge','Pulley','Wheel and axle'], correct:1},
+    {id:'m8', prompt:'A screw is derived from a/an:', options:['Lever','Pulley','Inclined plane','Wheel and axle'], correct:2},
+    {id:'m9', prompt:'When a bucket of water is lifted using a pulley over a well, what does the pulley mainly change?', options:['The weight of the water','The direction of the applied force','The colour of the rope','The size of the bucket'], correct:1},
+    {id:'m10', prompt:'Which is easier while using a pulley — lifting a load or dropping it?', options:['Lifting, because it works against gravity','Dropping, because it works in the direction of gravity','Both are equally easy','Neither is easy'], correct:1},
+    {id:'m11', prompt:'A wheel attached to a cylindrical rod is an example of:', options:['A lever','Wheel and axle','A wedge','A screw'], correct:1},
+    {id:'m12', prompt:'Why should machines be lubricated?', options:['To make them heavier','To avoid wear and tear due to friction','To make them colourful','To make them noisier'], correct:1},
+    {id:'m13', prompt:'Why should machine parts made of iron be painted?', options:['To avoid rusting','To make them lighter','To make them faster','To make them cheaper'], correct:0},
+    {id:'m14', prompt:'In the activity comparing bags, which is easier to move on the floor?', options:['A normal travel bag dragged by hand','A trolley bag with wheels','Both are equally easy','Neither can be moved'], correct:1},
+    {id:'m15', prompt:'Which of these is an example of a wedge?', options:['A pulley used at a well','An axe','A car','A wooden ramp'], correct:1},
+  ],
+  oneword: [
+    {id:'o1', prompt:'The fixed point of a lever.', answers:['fulcrum']},
+    {id:'o2', prompt:'The force applied in a lever or pulley system.', answers:['effort']},
+    {id:'o3', prompt:'The object being lifted by a machine such as a lever or pulley.', answers:['load']},
+    {id:'o4', prompt:'A rigid rod free to move about a fixed point.', answers:['lever']},
+    {id:'o5', prompt:'A simple sloping surface used to push objects up instead of lifting them.', answers:['inclined plane']},
+    {id:'o6', prompt:'A simple machine with two inclined surfaces joined to form a sharp cutting edge.', answers:['wedge']},
+    {id:'o7', prompt:'A simple machine that is like a nail with grooves cut into it.', answers:['screw']},
+    {id:'o8', prompt:'A simple machine that changes the direction of force to lift heavy loads easily.', answers:['pulley']},
+    {id:'o9', prompt:'The cylindrical rod to which a wheel is attached.', answers:['axle']},
+    {id:'o10', prompt:'A machine formed by combining two or more simple machines.', answers:['complex machine']},
+    {id:'o11', prompt:'The type of machine a knife, scissors or hand pump belongs to.', answers:['simple machine']},
+    {id:'o12', prompt:'The rotating part inside the nib of a pen that reduces effort while writing.', answers:['ball bearing']},
+  ],
+  def: [
+    {id:'d1', prompt:'Machine', model:'A device that makes our work faster and easier by changing the force applied or the direction of the applied force. Example: a pair of scissors.'},
+    {id:'d2', prompt:'Simple Machine', model:'Equipment that is designed to make our work easier, such as a knife, scissors, hand pump, or pulley.'},
+    {id:'d3', prompt:'Complex Machine', model:'A machine that is a combination of two or more simple machines and has a number of parts, such as a car, washing machine, or fridge.'},
+    {id:'d4', prompt:'Lever', model:'A rigid rod which is free to move about a fixed point called the fulcrum.'},
+    {id:'d5', prompt:'Fulcrum', model:'The fixed point about which a lever is free to move.'},
+    {id:'d6', prompt:'Inclined Plane', model:'A simple sloping surface which is used to push up objects instead of lifting them, such as a ramp.'},
+    {id:'d7', prompt:'Wedge', model:'A simple machine which works on the principle of an inclined plane; it has two inclined surfaces put together to form a sharp cutting edge, such as a knife, needle, or axe.'},
+    {id:'d8', prompt:'Screw', model:'A simple machine derived from an inclined plane; it is like a nail with grooves cut in it, and these grooves hold things tightly together — making it better than a nail.'},
+    {id:'d9', prompt:'Pulley', model:'A simple machine used to lift heavy loads easily by changing the direction of the applied force.'},
+    {id:'d10', prompt:'Wheel and Axle', model:'A simple machine in which a wheel is attached to a cylindrical rod called the axle, or the wheel rolls upon the axle.'},
+  ],
+  shortqa: [
+    {id:'s1', prompt:'Why do we call a pair of scissors a machine?', model:'Because scissors are a device that makes cutting faster and easier — they change the force we apply, which is exactly what the chapter defines a machine to be.'},
+    {id:'s2', prompt:'Give two reasons why we need machines.', model:'Machines make our work faster and easier — specifically, they reduce the effort we need to apply, and they can change the direction of the applied force to a more convenient one.'},
+    {id:'s3', prompt:'Why is a screw always better than a nail?', model:'A screw has grooves cut into it that hold things tightly together, giving it a greater fastening capacity than a plain nail.'},
+    {id:'s4', prompt:'Why is it easier to cut a plastic sheet with scissors than with bare hands?', model:'Scissors are a machine, so they reduce the effort needed and make the cut faster and easier compared to trying to tear the sheet with hands alone.'},
+    {id:'s5', prompt:'Why are hospitals provided with ramps?', model:'A ramp is an inclined plane, so it makes it easy to carry wheelchairs up or down — something that would be impossible to do using stairs.'},
+    {id:'s6', prompt:'A steeper inclined plane covers a shorter distance to the top, yet it is harder to climb. Why?', model:'The steeper the slope, the more force is needed to push the load up it, even though the distance to reach the top is shorter than on a gentler slope.'},
+    {id:'s7', prompt:'Explain, with the example of a well, how a pulley changes the direction of force.', model:'When lifting a bucket of water using a pulley, the load (the bucket) moves upward while the effort (the rope) is pulled downward. The pulley changes the direction of the applied force, which makes lifting the bucket easier.'},
+    {id:'s8', prompt:'Why is it easy to drop a load with a pulley but difficult to lift one?', model:'Lifting a load works against the force of gravity, which needs more effort, while dropping a load works in the same direction as gravity, so it happens easily.'},
+    {id:'s9', prompt:'What do we conclude from wrapping a paper cut in the shape of an inclined plane around a pencil?', model:'We conclude that a screw is an inclined plane wound on a cylinder, and this winding gives it a greater fastening capacity than a plain nail.'},
+    {id:'s10', prompt:'State two points to remember for the maintenance and care of machines.', model:'Machines should be lubricated to avoid wear and tear from friction, and since most parts are made of iron, they should be painted to prevent rusting. They should also be kept covered when not in use.'},
+  ],
+  reasoning: [
+    {id:'r1', prompt:'The chapter opens by saying a machine "either changes the force applied or the direction of applied force." Using the well example, which of these two things does a pulley actually change — and how do you know from the chapter\u2019s own wording?', model:'The chapter says a pulley "changes the direction of force and hence makes it easy to lift heavy loads," and separately explains that lifting is hard because it works against gravity while dropping is easy because it works with gravity. So the pulley isn\u2019t reducing how heavy the load feels — pulling the rope downward (with gravity) while the load moves upward is a change in direction, not a change in the force needed. That matches the "direction" half of the opening definition, not the "force" half.'},
+    {id:'r2', prompt:'The chapter never says a screw needs less force to use than a nail — it only talks about grooves. Combine the screw\u2019s definition with the pencil-and-paper activity to explain why the grooves alone make a screw hold things more tightly than a nail.', model:'The chapter defines a screw as being like a nail with grooves cut into it, and says these grooves hold things tightly together. The pencil-and-paper activity separately concludes that a screw is an inclined plane wound around a cylinder. Putting these together: the grooves are that wound inclined plane, and each turn bites further into the material as it winds around, which is what gives the screw its extra grip — the chapter\u2019s reasoning is about this winding shape, not about needing less force.'},
+    {id:'r3', prompt:'A ramp and a wedge (like a knife) are both said to work on the principle of an inclined plane, yet one helps push things up gradually and the other cuts by forcing things apart. Using only what the chapter says about each, explain how the same basic idea produces such different actions.', model:'The chapter describes an inclined plane as one sloping surface used to push objects up instead of lifting them straight up. A wedge, it says, is formed by putting two inclined surfaces together to make a sharp cutting edge. So a ramp uses a single slope to gradually raise a load, while a wedge joins two slopes at a point to concentrate force into a thin edge that forces material apart — the same inclined-plane idea, arranged differently (one slope versus two joined together), produces two different actions.'},
+    {id:'r4', prompt:'The "It\u2019s Time to Think" activity shows two ramps of the same height but different steepness, and the chapter separately states that steeper inclined planes are more difficult to climb. Combine these to explain the trade-off between the two ramps.', model:'The chapter states that the steeper the slope, the more difficult it is to push a load up. Since both ramps in the activity reach the same house height, the steeper one must cover a shorter distance to get there, while the gentler one spreads the climb over a longer slope. So the steeper ramp is quicker to climb but harder, while the gentler ramp is easier but takes a longer path — reaching the top costs either more effort over a short distance, or less effort over a longer one.'},
+    {id:'r5', prompt:'Hospitals use ramps instead of stairs for wheelchairs, and people use wooden planks instead of lifting goods by hand to load trucks. What single principle from the chapter explains why both solutions work?', model:'Both are applications of the inclined plane, which the chapter defines as a sloping surface used to push objects up instead of lifting them directly. A ramp lets a wheelchair roll up or down a slope instead of being carried up steps, and a wooden plank lets heavy goods be slid up or down into a truck instead of being lifted by hand — both replace direct lifting with pushing along a slope, which is exactly what the chapter says an inclined plane makes easier.'},
+    {id:'r6', prompt:'The chapter says pulleys are used in cranes to lift loads, and separately says lifting a load with a pulley is difficult because it works against gravity. Why would something the chapter calls "difficult" still be the machine used for this job?', model:'The chapter\u2019s reasoning is that a pulley\u2019s usefulness comes from changing the direction of the applied force, not from removing gravity\u2019s resistance — lifting is described as difficult specifically because it works against gravity, and that stays true whether or not a pulley is used. Cranes use pulleys anyway because being able to redirect the pulling force is what the chapter credits pulleys with, which is what makes lifting a heavy load possible at all, even though it still takes effort.'},
+    {id:'r7', prompt:'The "Diagrammatic Representation of a Pulley" section describes a simple fixed pulley as a wheel with a groove and a rope wound around it. Using that description together with the well example, explain why the well\u2019s pulley counts specifically as a "fixed" pulley rather than a movable one.', model:'In the well example, the wheel stays in one place at the top while the rope\u2019s two ends move — the effort end goes down and the load end (the bucket) goes up. This matches the fixed-pulley description of a wheel mounted in place with a rope wound around it, because the wheel itself never travels with the bucket. A movable pulley, by contrast, would have its wheel move along with the load, which is not what happens at the well.'},
+    {id:'r8', prompt:'The chapter calls a car a complex machine and separately explains what a wheel and axle is. How can a car be both a "complex machine" and something built from the "wheel and axle" simple machine?', model:'A complex machine is defined as a combination of two or more simple machines with a number of parts, and the chapter lists a car as an example. Separately, the wheel and axle is described as a simple machine where a wheel is attached to (or rolls upon) a cylindrical rod — exactly what a car\u2019s wheels and axles are. So the wheel and axle is one of the simple machines built into the car, and it\u2019s precisely this combining of simple machines that the chapter says makes something a complex machine.'},
+    {id:'r9', prompt:'The chapter says a machine "makes our work faster and easier," and separately explains that a pen\u2019s nib has a ball bearing that "rotates so that we use less effort and do more work." How does the ball-bearing example fit the chapter\u2019s opening definition of a machine?', model:'The opening definition says a machine reduces effort and makes work faster and easier. The ball bearing in a pen\u2019s nib rotates instead of dragging, which the chapter says lets us use less effort and do more work — the same idea in miniature. This is why the chapter can say "even the pen which we use for writing is a machine": it fits the same definition given at the very start of the chapter.'},
+    {id:'r10', prompt:'Scissors are used as the chapter\u2019s example machine in its opening definition, and appear again later in the list of simple machines. Using the scene of one child struggling to cut a plastic sheet by hand while another cuts it easily with scissors, explain how this demonstrates the "faster and easier" part of the definition.', model:'The chapter opens by defining a machine using scissors as the example of something that makes work "faster and easier." The plastic-sheet scene acts this out directly: cutting by hand is shown to be difficult, while cutting the same sheet with scissors is described as easier and quicker. Since scissors are also listed among the simple machines, this scene is a real demonstration of the chapter\u2019s very first definition in action.'},
+    {id:'r11', prompt:'A screw is described as "always better than the nail," and the maintenance section says most machine parts are made of iron and must be protected from rusting. If a screw and a nail are both usually made of iron, does the chapter\u2019s reason for a screw being "better" have anything to do with rusting?', model:'No. The chapter\u2019s reason for a screw being better than a nail is entirely about the grooves holding things tightly together — that comparison is made where the screw is described. The maintenance and care section\u2019s point about painting against rusting is presented separately, as general advice for machines made of iron, and is never linked in the chapter to the screw-versus-nail comparison. So based on the text, "better" refers only to fastening capacity, not to rust resistance.'},
+    {id:'r12', prompt:'The activity comparing a normal travel bag to a trolley bag with wheels connects to which simple machine described earlier in the chapter, and how?', model:'It connects to the wheel and axle. The chapter describes the wheel and axle as a simple machine where a wheel is attached to a cylindrical rod (the axle). A trolley bag has wheels attached this way, letting it roll instead of being dragged or carried, which is why the activity finds the trolley bag easier to move than the normal bag — it is putting the wheel and axle to work.'},
+    {id:'r13', prompt:'The chapter lists knife, scissors, hand pump, and pulley as examples of simple machines in general, and later introduces the knife again specifically as an example of a wedge. Why does the knife appear in both places?', model:'"Simple machine" is the broader category — a knife qualifies because it is designed to make cutting easier. "Wedge" describes the specific way it achieves that: the chapter explains a wedge is formed by two inclined surfaces joined into a sharp edge, and a knife\u2019s blade works exactly this way. So the knife is a simple machine in general, and a wedge is the particular working principle behind its design.'},
+    {id:'r14', prompt:'The maintenance section recommends both lubricating machines and painting them. Using what the chapter says causes wear versus what causes rust, explain why both treatments are needed rather than just one.', model:'The chapter gives two separate reasons for two separate treatments: lubrication is recommended to avoid wear and tear caused by frictional force, while painting is recommended to avoid rusting because most parts are made of iron. Friction damage and rust are two different problems, so the chapter recommends addressing each one with its own treatment rather than expecting one to fix both.'},
+    {id:'r15', prompt:'Compare the two children cutting a plastic sheet (used near the start of the chapter) with the pencil-and-paper activity (used near the end, about screws). Both are hands-on demonstrations — what different job does each one do in the chapter\u2019s argument?', model:'The plastic-sheet scene demonstrates the chapter\u2019s opening, general definition of a machine — it shows hands versus scissors to illustrate that machines make tasks faster and easier. The pencil-and-paper activity instead proves one specific, later claim: that a screw is an inclined plane wound around a cylinder. So one activity illustrates the chapter\u2019s big idea at the start, while the other proves a narrow, specific fact near the end.'},
+    {id:'r16', prompt:'The chapter names lever, inclined plane, and pulley as "three types of simple machines," then separately adds that wheel and axle and screw are simple machines too, and separately again explains that a screw is derived from an inclined plane. Does this create a contradiction in how simple machines are classified?', model:'Not really. The "three types" statement introduces the main named categories, and wheel and axle and screw are simply added on as further simple machines beyond those three — that is about how many named simple machines there are. Separately, explaining that a screw is derived from an inclined plane is about how the screw actually works, not about which list it belongs in. A screw can be its own named simple machine while still being built on the inclined-plane principle underneath — classification and mechanism are two different questions, so there is no real contradiction.'},
+  ],
+  tf: [
+    {id:'t1', prompt:'A machine always makes our work harder.', answer:false},
+    {id:'t2', prompt:'A pair of scissors is an example of a machine.', answer:true},
+    {id:'t3', prompt:'A car is a simple machine.', answer:false},
+    {id:'t4', prompt:'Wheel and axle, and screw are simple machines besides lever, inclined plane and pulley.', answer:true},
+    {id:'t5', prompt:'The fixed point of a lever is called the load.', answer:false},
+    {id:'t6', prompt:'There are three types of levers.', answer:true},
+    {id:'t7', prompt:'A steeper inclined plane is easier to climb than a gentler one.', answer:false},
+    {id:'t8', prompt:'A wedge works on the principle of an inclined plane.', answer:true},
+    {id:'t9', prompt:'A screw holds things together less tightly than a nail does.', answer:false},
+    {id:'t10', prompt:'A pulley changes the direction of the applied force.', answer:true},
+    {id:'t11', prompt:'It is easier to lift a load than to drop it using a pulley.', answer:false},
+    {id:'t12', prompt:'Machines should be kept covered when not in use.', answer:true},
+    {id:'t13', prompt:'A trolley bag with wheels is harder to move than a normal bag dragged by hand.', answer:false},
+  ],
+  distinguish: [
+    {id:'v1', group:'Simple Machine vs Complex Machine', prompt:'Simple Machine — roughly how many parts does it usually have?', answers:['few','few parts','no moving parts','very few','simple']},
+    {id:'v2', group:'Simple Machine vs Complex Machine', prompt:'Complex Machine — how is it formed, and how many parts does it have?', answers:['combination of two or more simple machines','many parts','number of parts','combination']},
+    {id:'v3', group:'Fixed Pulley vs Movable Pulley', prompt:'Fixed Pulley — does its wheel stay in place or move?', answers:['stays fixed','fixed','does not move','stays in one place']},
+    {id:'v4', group:'Fixed Pulley vs Movable Pulley', prompt:'Movable Pulley — does its wheel stay in place or move?', answers:['moves','wheel moves','moves with the load']},
+    {id:'v5', group:'Lever vs Pulley', prompt:'Lever — what does it move about?', answers:['fixed point','fulcrum']},
+    {id:'v6', group:'Lever vs Pulley', prompt:'Pulley — what does it change, to make lifting easier?', answers:['direction of force','direction','changes direction of applied force']},
+    {id:'v7', group:'Wedge vs Screw', prompt:'Wedge — how many inclined surfaces are joined together?', answers:['two','2','two inclined surfaces']},
+    {id:'v8', group:'Wedge vs Screw', prompt:'Screw — what shape is it, wound around a cylinder?', answers:['inclined plane','an inclined plane wound on a cylinder']},
+  ],
+  labeling: [
+    {id:'l1', group:'Lever Diagram', svg:'lever', prompt:'Part 1 — the force applied to lift the load.', answers:['effort']},
+    {id:'l2', group:'Lever Diagram', svg:'lever', prompt:'Part 2 — the fixed point about which the rod moves.', answers:['fulcrum']},
+    {id:'l3', group:'Lever Diagram', svg:'lever', prompt:'Part 3 — the object being lifted.', answers:['load']},
+    {id:'l4', group:'Pulley Diagram', svg:'pulley', prompt:'Part 1 — the grooved wheel with a rope wound around it.', answers:['wheel']},
+    {id:'l5', group:'Pulley Diagram', svg:'pulley', prompt:'Part 2 — the central rod the wheel turns on.', answers:['axle']},
+    {id:'l6', group:'Pulley Diagram', svg:'pulley', prompt:'Part 3 — the force pulled downward to raise the load.', answers:['effort']},
+    {id:'l7', group:'Pulley Diagram', svg:'pulley', prompt:'Part 4 — the object (e.g. bucket) being lifted.', answers:['load']},
+  ],
+};
+
+const SVGS = {
+  lever: `<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+    <line x1="40" y1="80" x2="260" y2="60" stroke="#7a6a3a" stroke-width="7" stroke-linecap="round"/>
+    <polygon points="150,90 168,120 132,120" fill="#1c2338"/>
+    <circle cx="248" cy="58" r="14" fill="#d3a24d" stroke="#1c2338" stroke-width="1.5"/>
+    <line x1="46" y1="76" x2="46" y2="40" stroke="#1c2338" stroke-width="3" marker-end="url(#arrLever)"/>
+    <defs><marker id="arrLever" markerWidth="8" markerHeight="8" refX="4" refY="0" orient="auto"><path d="M0,6 L4,0 L8,6 Z" fill="#1c2338"/></marker></defs>
+    <circle cx="46" cy="66" r="15" fill="none" stroke="#b1503f" stroke-width="2"/>
+    <text x="46" y="70" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">1</text>
+    <circle cx="150" cy="112" r="15" fill="none" stroke="#b1503f" stroke-width="2"/>
+    <text x="150" y="116" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">2</text>
+    <circle cx="248" cy="90" r="15" fill="none" stroke="#b1503f" stroke-width="2"/>
+    <text x="248" y="94" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">3</text>
+  </svg>`,
+  pulley: `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+    <line x1="90" y1="15" x2="220" y2="15" stroke="#7a6a3a" stroke-width="8"/>
+    <line x1="150" y1="15" x2="150" y2="45" stroke="#7a6a3a" stroke-width="8"/>
+    <circle cx="150" cy="70" r="26" fill="none" stroke="#1c2338" stroke-width="7"/>
+    <circle cx="150" cy="70" r="5" fill="#1c2338"/>
+    <line x1="128" y1="88" x2="128" y2="150" stroke="#4a3f27" stroke-width="4"/>
+    <line x1="172" y1="88" x2="172" y2="150" stroke="#4a3f27" stroke-width="4"/>
+    <rect x="112" y="150" width="32" height="24" fill="#d3a24d" stroke="#1c2338" stroke-width="1.5"/>
+    <line x1="172" y1="150" x2="172" y2="182" stroke="#1c2338" stroke-width="3" marker-end="url(#arrPul)"/>
+    <defs><marker id="arrPul" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto"><path d="M0,0 L4,6 L8,0 Z" fill="#1c2338"/></marker></defs>
+    <circle cx="150" cy="70" r="15" fill="none" stroke="#b1503f" stroke-width="2"/>
+    <text x="150" y="52" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">1</text>
+    <circle cx="150" cy="70" r="9" fill="none" stroke="#b1503f" stroke-width="2"/>
+    <text x="164" y="74" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">2</text>
+    <text x="182" y="120" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">3</text>
+    <text x="128" y="145" font-size="13" text-anchor="middle" fill="#b1503f" font-family="Georgia,serif" font-weight="bold">4</text>
+  </svg>`
+};
+
+/* ---------------------------------------------------------
+   STATE + STORAGE
+--------------------------------------------------------- */
+let activeCat = 'fib';
+const state = {}; // state[catKey] = { responses: { id: {value, correct} } }
+CATEGORIES.forEach(c => state[c.key] = {responses:{}});
+
+// Voice Round: only these three sections get the List View / Voice Round toggle.
+const VOICE_CATS = ['fib', 'oneword', 'tf'];
+const LISTEN_TIMEOUT_MS = 5000;   // fixed 5s answer window, timed from listening start
+const ADVANCE_DELAY_MS = 1800;    // pause on feedback before auto-advancing
+const voiceMode = {};             // voiceMode[catKey] = 'list' | 'voice'
+VOICE_CATS.forEach(k => voiceMode[k] = 'list');
+let vr = null; // the single active voice-round controller, or null when no round is running
+
+// Everything is persisted in one localStorage entry, namespaced to this
+// chapter's quiz so it never collides with another chapter's quiz hosted
+// on the same site/origin.
+const STORAGE_KEY = 'quiz-progress-machines-ch11';
+
+function loadState(){
+  let raw = null;
+  try{
+    raw = localStorage.getItem(STORAGE_KEY);
+  }catch(e){
+    console.error('localStorage is unavailable — starting without saved progress.', e);
+    return;
+  }
+  if(!raw) return;
+  let parsed = null;
+  try{
+    parsed = JSON.parse(raw);
+  }catch(e){
+    console.error('Saved progress was corrupted — starting fresh.', e);
+    return;
+  }
+  if(!parsed || typeof parsed !== 'object') return;
+  CATEGORIES.forEach(c=>{
+    const saved = parsed[c.key];
+    if(saved && saved.responses && typeof saved.responses === 'object'){
+      state[c.key] = saved;
+    }
+  });
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){
+    console.error('Could not save progress to localStorage.', e);
+  }
+}
+
+function resetCat(catKey){
+  if(vr && vr.catKey === catKey) cleanupVoiceRound();
+  state[catKey] = {responses:{}};
+  saveState();
+  render();
+}
+
+function resetAll(){
+  if(vr) cleanupVoiceRound();
+  CATEGORIES.forEach(c => state[c.key] = {responses:{}});
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){ /* nothing to clear */ }
+  render();
+}
+
+loadState(); // restore any saved progress before the very first render
+
+/* ---------------------------------------------------------
+   GRADING
+--------------------------------------------------------- */
+function norm(s){
+  return (s||'').toString().trim().toLowerCase().replace(/[^\w\s]/g,'').replace(/\s+/g,' ');
+}
+function textMatches(userVal, answers){
+  const u = norm(userVal);
+  if(!u) return false;
+  return answers.some(a=>{
+    const an = norm(a);
+    return u === an || u.includes(an) || an.includes(u);
+  });
+}
+
+/* ---------------------------------------------------------
+   SCORING
+--------------------------------------------------------- */
+function catScore(catKey){
+  const items = DATA[catKey];
+  const responses = state[catKey].responses;
+  let correct = 0, answered = 0;
+  items.forEach(it=>{
+    const r = responses[it.id];
+    if(r && r.correct !== null && r.correct !== undefined){
+      answered++;
+      if(r.correct) correct++;
+    }
+  });
+  return {correct, answered, total: items.length};
+}
+function overallScore(){
+  let correct=0, total=0;
+  CATEGORIES.forEach(c=>{ const s = catScore(c.key); correct+=s.correct; total+=s.total; });
+  return {correct, total};
+}
+
+/* ---------------------------------------------------------
+   RENDER
+--------------------------------------------------------- */
+function render(){
+  renderOverall();
+  renderTabs();
+  renderPanel();
+}
+
+function renderOverall(){
+  const o = overallScore();
+  const totalQuestions = CATEGORIES.reduce((sum, c) => sum + DATA[c.key].length, 0);
+  document.getElementById('overallBox').innerHTML =
+    `<span class="pill">TOTAL &nbsp;${o.correct} / ${o.total} correct</span>
+     <span class="pill">${totalQuestions} questions across ${CATEGORIES.length} sections</span>
+     <button class="action reset" id="resetAllBtn">Reset all answers</button>`;
+  document.getElementById('resetAllBtn').onclick = ()=>{
+    if(confirm('Reset ALL answers and progress across every section? This cannot be undone.')){
+      resetAll();
+    }
+  };
+}
+
+function renderTabs(){
+  const nav = document.getElementById('tabs');
+  nav.innerHTML = '';
+  CATEGORIES.forEach(c=>{
+    const s = catScore(c.key);
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (c.key===activeCat ? ' active' : '');
+    btn.innerHTML = `<span class="code">${c.code}</span><span class="name">${c.name}</span><span class="score">${s.correct}/${s.total}</span>`;
+    btn.onclick = ()=>{
+      cleanupVoiceRound(); // stop any speech/recognition before we tear this panel down
+      activeCat = c.key;
+      render();
+    };
+    nav.appendChild(btn);
+  });
+}
+
+function renderPanel(){
+  const main = document.getElementById('main');
+  const cat = CATEGORIES.find(c=>c.key===activeCat);
+  const items = DATA[activeCat];
+  const s = catScore(activeCat);
+  const voiceCapable = VOICE_CATS.includes(activeCat);
+
+  let html = '';
+  html += `<div class="panel-head">
+      <div><h2>${cat.name}</h2><p class="desc">${cat.desc}</p></div>
+      <div class="panel-score-block">
+        <div class="panel-score">Score: ${s.correct} / ${s.total} &nbsp;\u00b7&nbsp; ${s.answered} answered</div>
+        <button class="action reset small" id="resetSectionBtn">Reset section</button>
+      </div>
+    </div>`;
+
+  if(voiceCapable){
+    html += `<div class="mode-toggle-row">
+        <div class="mode-toggle">
+          <button class="mode-btn ${voiceMode[cat.key]==='list' ? 'active' : ''}" data-mode="list">List View</button>
+          <button class="mode-btn ${voiceMode[cat.key]==='voice' ? 'active' : ''}" data-mode="voice">Voice Round</button>
+        </div>
+      </div>`;
+  }
+
+  if(voiceCapable && voiceMode[cat.key] === 'voice'){
+    html += `<div id="voiceRoundRoot" class="voice-root"></div>`;
+    main.innerHTML = html;
+    wireModeToggle(cat.key);
+    wireSectionReset(cat.key);
+    const container = document.getElementById('voiceRoundRoot');
+    setStage(container, buildVoiceIdleStage(cat.key));
+    return; // Voice Round manages its own DOM from here — skip list rendering
+  }
+
+  html += `<div class="btn-row">
+      <button class="action" id="checkAllBtn">Check all answered</button>
+    </div>`;
+
+  let lastGroup = null;
+  items.forEach(it=>{
+    if(it.group && it.group !== lastGroup){
+      lastGroup = it.group;
+      html += `<div class="group-title">${it.group}</div>`;
+      if(it.svg){
+        html += `<div class="svg-wrap">${SVGS[it.svg]}</div>`;
+      }
+    }
+    html += renderItem(cat.key, it);
+  });
+
+  main.innerHTML = html;
+
+  if(voiceCapable) wireModeToggle(cat.key);
+  wireSectionReset(cat.key);
+
+  document.getElementById('checkAllBtn').onclick = ()=> checkAll(cat.key);
+
+  wireItemEvents(cat.key, items);
+}
+
+function wireSectionReset(catKey){
+  const btn = document.getElementById('resetSectionBtn');
+  if(!btn) return;
+  const cat = CATEGORIES.find(c=>c.key===catKey);
+  btn.onclick = ()=>{
+    if(confirm('Reset all answers and scores for "' + cat.name + '"? This cannot be undone.')){
+      resetCat(catKey);
+    }
+  };
+}
+
+function wireModeToggle(catKey){
+  document.querySelectorAll('.mode-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const mode = btn.dataset.mode;
+      if(mode === voiceMode[catKey]) return;
+      cleanupVoiceRound();
+      voiceMode[catKey] = mode;
+      render();
+    });
+  });
+}
+
+function renderItem(catKey, it){
+  const kind = kindOf(catKey);
+  const r = state[catKey].responses[it.id] || {};
+  let body = '';
+
+  if(kind === 'blank'){
+    const val = r.value !== undefined ? r.value : '';
+    body = `<input type="text" data-id="${it.id}" class="blank-input" placeholder="Type your answer…" value="${escapeHtml(val)}">
+      <div class="row-actions"><button class="check" data-check="${it.id}">Check</button></div>
+      ${feedbackHtml(r, it.answers)}`;
+  } else if(kind === 'mcq'){
+    const opts = it.options.map((opt,idx)=>{
+      let cls='opt-btn';
+      if(r.selected===idx){
+        cls += (r.correct===true) ? ' correct' : (r.correct===false ? ' incorrect' : ' selected');
+      } else if(r.checked && idx===it.correct){
+        cls += ' correct';
+      }
+      return `<button class="${cls}" data-opt="${idx}" data-id="${it.id}">${opt}</button>`;
+    }).join('');
+    body = `<div class="options">${opts}</div>
+      ${r.checked ? feedbackFor(r.correct, it.options[it.correct]) : ''}`;
+  } else if(kind === 'tf'){
+    const mkBtn = (val,label)=>{
+      let cls='tf-btn';
+      if(r.selected===val){
+        cls += (r.correct===true) ? ' correct' : (r.correct===false ? ' incorrect' : ' selected');
+      } else if(r.checked && it.answer===val){
+        cls += ' correct';
+      }
+      return `<button class="${cls}" data-tf="${val}" data-id="${it.id}">${label}</button>`;
+    };
+    body = `<div class="tf-row">${mkBtn(true,'True')}${mkBtn(false,'False')}</div>
+      ${r.checked ? feedbackFor(r.correct, it.answer ? 'True' : 'False') : ''}`;
+  } else if(kind === 'reveal'){
+    const val = r.value !== undefined ? r.value : '';
+    body = `<textarea data-id="${it.id}" class="reveal-input" placeholder="Write your answer here…">${escapeHtml(val)}</textarea>
+      <div class="row-actions">
+        <button class="check" data-reveal="${it.id}">${r.revealed ? 'Hide' : 'Show'} model answer</button>
+      </div>
+      ${r.revealed ? `<div class="model-answer"><span class="lbl">FROM THE TEXTBOOK</span>${it.model}</div>
+        <div class="row-actions">
+          <button class="check mark-correct" data-mark="${it.id}" data-val="true">I got this right</button>
+          <button class="check mark-incorrect" data-mark="${it.id}" data-val="false">I need to review</button>
+        </div>
+        ${r.correct!==undefined && r.correct!==null ? `<div class="feedback ${r.correct?'correct':'incorrect'}">${r.correct?'Marked correct.':'Marked for review — take another look above.'}</div>` : ''}
+      ` : ''}`;
+  }
+
+  return `<div class="card">
+      <span class="qnum">${it.id.toUpperCase()}</span>
+      <p class="prompt">${it.prompt}</p>
+      ${body}
+    </div>`;
+}
+
+function feedbackHtml(r, answers){
+  if(r.checked === undefined) return '';
+  return feedbackFor(r.correct, answers[0]);
+}
+function feedbackFor(correct, correctAnswerText){
+  if(correct === undefined || correct === null) return '';
+  return `<div class="feedback ${correct?'correct':'incorrect'}">
+      ${correct ? 'Correct!' : 'Not quite.'}
+      ${!correct ? `<span class="ans">Correct answer: ${correctAnswerText}</span>` : ''}
+    </div>`;
+}
+
+function kindOf(catKey){
+  if(catKey==='mcq') return 'mcq';
+  if(catKey==='tf') return 'tf';
+  if(catKey==='def' || catKey==='shortqa' || catKey==='reasoning') return 'reveal';
+  return 'blank'; // fib, oneword, distinguish, labeling
+}
+
+function escapeHtml(s){
+  return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ---------------------------------------------------------
+   EVENTS
+--------------------------------------------------------- */
+function wireItemEvents(catKey, items){
+  const byId = {};
+  items.forEach(it=>byId[it.id]=it);
+
+  document.querySelectorAll('.blank-input').forEach(inp=>{
+    inp.addEventListener('input', e=>{
+      const id = e.target.dataset.id;
+      const resp = state[catKey].responses[id] || {};
+      resp.value = e.target.value;
+      state[catKey].responses[id] = resp;
+      saveState();
+    });
+  });
+  document.querySelectorAll('[data-check]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.check;
+      checkBlank(catKey, byId[id]);
+    });
+  });
+  document.querySelectorAll('[data-opt]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.id;
+      const idx = parseInt(e.target.dataset.opt,10);
+      const it = byId[id];
+      const resp = state[catKey].responses[id] || {};
+      resp.selected = idx;
+      resp.checked = true;
+      resp.correct = (idx === it.correct);
+      state[catKey].responses[id] = resp;
+      saveState();
+      render();
+    });
+  });
+  document.querySelectorAll('[data-tf]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.id;
+      const val = e.target.dataset.tf === 'true';
+      const it = byId[id];
+      const resp = state[catKey].responses[id] || {};
+      resp.selected = val;
+      resp.checked = true;
+      resp.correct = (val === it.answer);
+      state[catKey].responses[id] = resp;
+      saveState();
+      render();
+    });
+  });
+  document.querySelectorAll('.reveal-input').forEach(inp=>{
+    inp.addEventListener('input', e=>{
+      const id = e.target.dataset.id;
+      const resp = state[catKey].responses[id] || {};
+      resp.value = e.target.value;
+      state[catKey].responses[id] = resp;
+      saveState();
+    });
+  });
+  document.querySelectorAll('[data-reveal]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.reveal;
+      const resp = state[catKey].responses[id] || {};
+      resp.revealed = !resp.revealed;
+      state[catKey].responses[id] = resp;
+      saveState();
+      render();
+    });
+  });
+  document.querySelectorAll('[data-mark]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      const id = e.target.dataset.mark;
+      const val = e.target.dataset.val === 'true';
+      const resp = state[catKey].responses[id] || {};
+      resp.correct = val;
+      state[catKey].responses[id] = resp;
+      saveState();
+      render();
+    });
+  });
+}
+
+function checkBlank(catKey, it){
+  const resp = state[catKey].responses[it.id] || {};
+  resp.checked = true;
+  resp.correct = textMatches(resp.value, it.answers);
+  state[catKey].responses[it.id] = resp;
+  saveState();
+  render();
+}
+
+function checkAll(catKey){
+  const kind = kindOf(catKey);
+  if(kind !== 'blank'){ return; } // mcq/tf/reveal are checked per-item by design
+  DATA[catKey].forEach(it=>{
+    const resp = state[catKey].responses[it.id];
+    if(resp && resp.value && resp.value.trim() && !resp.checked){
+      resp.checked = true;
+      resp.correct = textMatches(resp.value, it.answers);
+    }
+  });
+  saveState();
+  render();
+}
+
+/* ---------------------------------------------------------
+   VOICE ROUND
+   A hands-free, one-question-at-a-time flow for Fill in the
+   Blanks, One Word, and True/False. Reuses the same grading
+   helpers and the same state[catKey].responses store as List
+   View, so scores and persistence stay in sync either way.
+--------------------------------------------------------- */
+
+function setStage(container, el){
+  // Always remove whatever was there first — never stack question stages.
+  if(!container) return;
+  container.innerHTML = '';
+  container.appendChild(el);
+}
+
+function supportsVoice(){
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  return !!(Recognition && window.speechSynthesis && navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+
+function parseTF(transcript){
+  const n = norm(transcript);
+  if(!n) return null;
+  if(/\bfalse\b/.test(n)) return false;
+  if(/\btrue\b/.test(n)) return true;
+  return null;
+}
+
+function gradeVoiceAnswer(catKey, item, transcript){
+  const resp = state[catKey].responses[item.id] || {};
+  let correct, correctText;
+  if(catKey === 'tf'){
+    const parsed = parseTF(transcript);
+    resp.selected = parsed;
+    resp.checked = true;
+    correct = (parsed !== null) && (parsed === item.answer);
+    resp.correct = correct;
+    correctText = item.answer ? 'True' : 'False';
+  } else {
+    resp.value = transcript || '';
+    resp.checked = true;
+    correct = transcript ? textMatches(transcript, item.answers) : false;
+    resp.correct = correct;
+    correctText = item.answers[0];
+  }
+  state[catKey].responses[item.id] = resp;
+  saveState();
+  return {correct, correctText};
+}
+
+function cleanupCurrentQuestionAudio(){
+  if(!vr) return;
+  vr.token = (vr.token || 0) + 1; // invalidate any in-flight callbacks from the old question
+  if(vr.timerId){ clearTimeout(vr.timerId); vr.timerId = null; }
+  if(vr.recognition){
+    try{
+      vr.recognition.onstart = null;
+      vr.recognition.onresult = null;
+      vr.recognition.onerror = null;
+      vr.recognition.onend = null;
+      vr.recognition.stop();
+    }catch(e){ /* recognition may already be stopped */ }
+    vr.recognition = null;
+  }
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){ /* not supported */ }
+  }
+}
+
+function cleanupVoiceRound(){
+  if(vr){
+    cleanupCurrentQuestionAudio();
+    vr.ended = true;
+  }
+  vr = null;
+}
+
+function switchToListView(catKey){
+  cleanupVoiceRound();
+  voiceMode[catKey] = 'list';
+  render();
+}
+
+function buildVoiceIdleStage(catKey){
+  const stage = document.createElement('div');
+  stage.className = 'voice-stage voice-idle';
+  if(!supportsVoice()){
+    stage.innerHTML = `
+      <div class="voice-icon">🎙️</div>
+      <p class="voice-copy"><strong>Voice Round isn't supported in this browser.</strong> It needs speech recognition (Chrome, Edge, or Safari) on a secure, https page. List View works everywhere.</p>
+      <button class="action" data-action="back">Back to List View</button>`;
+    stage.querySelector('[data-action="back"]').addEventListener('click', ()=> switchToListView(catKey));
+    return stage;
+  }
+  stage.innerHTML = `
+    <div class="voice-icon">🎙️</div>
+    <p class="voice-copy">Voice Round reads each question aloud and listens for your spoken answer — hands-free, one question at a time. It needs microphone access to start.</p>
+    <button class="action voice-primary" data-action="start">Start Voice Round</button>`;
+  stage.querySelector('[data-action="start"]').addEventListener('click', ()=> beginVoiceRound(catKey));
+  return stage;
+}
+
+function buildPermissionErrorStage(catKey){
+  const stage = document.createElement('div');
+  stage.className = 'voice-stage voice-error';
+  stage.innerHTML = `
+    <p class="voice-copy"><strong>Couldn't access the microphone.</strong></p>
+    <p class="voice-copy">This is usually one of two things:</p>
+    <ul class="voice-list">
+      <li>This app hasn't been given microphone permission at the device/OS level yet.</li>
+      <li>This page was already blocked from using the microphone in the browser's own site settings.</li>
+    </ul>
+    <div class="row-actions">
+      <button class="action voice-primary" data-action="retry">Try again</button>
+      <button class="action" data-action="back">Back to List View</button>
+    </div>`;
+  stage.querySelector('[data-action="retry"]').addEventListener('click', ()=> beginVoiceRound(catKey));
+  stage.querySelector('[data-action="back"]').addEventListener('click', ()=> switchToListView(catKey));
+  return stage;
+}
+
+function buildQuestionStage(catKey, item, idx, total){
+  const stage = document.createElement('div');
+  stage.className = 'voice-stage voice-question';
+  stage.innerHTML = `
+    <div class="voice-progress">QUESTION ${idx+1} OF ${total}</div>
+    <p class="voice-question-text">${item.prompt}</p>
+    <p class="voice-status">Reading question…</p>
+    <p class="voice-timer"></p>
+    <div class="row-actions">
+      <button class="action" data-action="skip">Skip</button>
+      <button class="action reset" data-action="end">End round</button>
+    </div>`;
+  stage.querySelector('[data-action="skip"]').addEventListener('click', ()=> skipCurrentQuestion(catKey));
+  stage.querySelector('[data-action="end"]').addEventListener('click', ()=> endVoiceRoundEarly(catKey));
+  return stage;
+}
+
+function buildSummaryStage(catKey, correctCount, attempted, total){
+  const stage = document.createElement('div');
+  stage.className = 'voice-stage voice-summary';
+  const skipped = total - attempted;
+  stage.innerHTML = `
+    <h3 class="voice-summary-title">Round complete</h3>
+    <p class="voice-summary-score">${correctCount} / ${attempted} correct${skipped > 0 ? ` &nbsp;·&nbsp; ${skipped} skipped` : ''}</p>
+    <div class="row-actions">
+      <button class="action voice-primary" data-action="redo">Redo round</button>
+      <button class="action" data-action="list">Return to List View</button>
+    </div>`;
+  stage.querySelector('[data-action="redo"]').addEventListener('click', ()=> beginVoiceRound(catKey));
+  stage.querySelector('[data-action="list"]').addEventListener('click', ()=> switchToListView(catKey));
+  return stage;
+}
+
+async function beginVoiceRound(catKey){
+  cleanupVoiceRound();
+  const container = document.getElementById('voiceRoundRoot');
+  if(!container) return;
+
+  if(!supportsVoice()){
+    setStage(container, buildVoiceIdleStage(catKey));
+    return;
+  }
+
+  const asking = document.createElement('div');
+  asking.className = 'voice-stage voice-idle';
+  asking.innerHTML = `<div class="voice-icon">🎙️</div><p class="voice-copy">Requesting microphone access…</p>`;
+  setStage(container, asking);
+
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    stream.getTracks().forEach(t=>{ try{ t.stop(); }catch(e){} });
+  }catch(e){
+    // Container may have changed (user navigated away) while we were awaiting permission.
+    const c2 = document.getElementById('voiceRoundRoot');
+    if(c2) setStage(c2, buildPermissionErrorStage(catKey));
+    return;
+  }
+
+  const c2 = document.getElementById('voiceRoundRoot');
+  if(!c2) return; // user left this section while permission was pending
+
+  vr = {catKey, index:0, correctCount:0, attempted:0, ended:false, recognition:null, timerId:null, token:0};
+  runVoiceQuestion(catKey, 0);
+}
+
+function toSpeechText(text){
+  // Fill-in-the-blank prompts contain a run of 3+ underscores for the
+  // visual blank (different questions use different exact counts). Left
+  // as-is, TTS engines read that aloud as "underscore underscore...".
+  // Swap any such run for the spoken word "blank" instead — this only
+  // changes what gets spoken; the on-screen prompt is untouched.
+  return text.replace(/_{3,}/g, ' blank ').replace(/\s+/g, ' ').trim();
+}
+
+function runVoiceQuestion(catKey, idx){
+  if(!vr || vr.catKey !== catKey) return;
+  const container = document.getElementById('voiceRoundRoot');
+  if(!container) return;
+
+  vr.token = (vr.token || 0) + 1;
+  const myToken = vr.token;
+  vr.index = idx;
+
+  const items = DATA[catKey];
+  const item = items[idx];
+  const stage = buildQuestionStage(catKey, item, idx, items.length);
+  setStage(container, stage);
+
+  const statusEl = stage.querySelector('.voice-status');
+  let started = false;
+
+  const beginListening = ()=>{
+    if(!vr || vr.ended || vr.token !== myToken || started) return;
+    started = true;
+    if(statusEl) statusEl.textContent = 'Listening… speak now';
+    startListening(catKey, idx, stage, myToken);
+  };
+
+  if(!window.speechSynthesis){
+    // No TTS available on this device/browser — go straight to listening.
+    beginListening();
+    return;
+  }
+
+  try{ window.speechSynthesis.cancel(); }catch(e){ /* not supported */ }
+
+  const text = toSpeechText(item.prompt);
+  const trimmed = text.replace(/\s+$/, '');
+  const lastSpace = trimmed.lastIndexOf(' ');
+  const lastWordStart = lastSpace === -1 ? 0 : lastSpace + 1;
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.onboundary = (e)=>{
+    if(!vr || vr.ended || vr.token !== myToken || started) return;
+    if(typeof e.charIndex === 'number' && e.charIndex >= lastWordStart){
+      beginListening();
+    }
+  };
+  utter.onend = ()=>{
+    // Fallback for voices/platforms that never fire onboundary.
+    beginListening();
+  };
+  utter.onerror = ()=>{
+    beginListening();
+  };
+
+  if(statusEl) statusEl.textContent = 'Reading question…';
+  try{
+    window.speechSynthesis.speak(utter);
+  }catch(e){
+    beginListening();
+  }
+}
+
+function startListening(catKey, idx, stage, myToken){
+  if(!vr || vr.ended || vr.token !== myToken) return;
+  const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!Recognition){
+    finishQuestion(catKey, idx, stage, '', myToken);
+    return;
+  }
+
+  const recognition = new Recognition();
+  vr.recognition = recognition;
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  let finished = false;
+  const timerEl = stage.querySelector('.voice-timer');
+
+  const finalize = (transcript)=>{
+    if(finished || !vr || vr.ended || vr.token !== myToken) return;
+    finished = true;
+    if(vr.timerId){ clearTimeout(vr.timerId); vr.timerId = null; }
+    finishQuestion(catKey, idx, stage, transcript, myToken);
+  };
+
+  recognition.onstart = ()=>{
+    if(!vr || vr.ended || vr.token !== myToken) return;
+    // Fixed 5-second window, timed from the moment listening actually begins.
+    vr.timerId = setTimeout(()=> finalize(''), LISTEN_TIMEOUT_MS);
+    if(timerEl) timerEl.textContent = 'Listening…';
+  };
+  recognition.onresult = (e)=>{
+    const transcript = (e.results && e.results[0] && e.results[0][0]) ? e.results[0][0].transcript : '';
+    finalize(transcript);
+  };
+  recognition.onerror = ()=> finalize('');
+  recognition.onend = ()=> finalize(''); // natural end-of-speech with no result yet -> no answer
+
+  try{
+    recognition.start();
+  }catch(e){
+    finalize('');
+  }
+}
+
+function finishQuestion(catKey, idx, stage, transcript, myToken){
+  if(!vr || vr.ended || vr.token !== myToken) return;
+  const items = DATA[catKey];
+  const item = items[idx];
+  const {correct, correctText} = gradeVoiceAnswer(catKey, item, transcript);
+
+  vr.attempted++;
+  if(correct) vr.correctCount++;
+
+  // Keep the header/tab scores live without touching the voice stage itself.
+  renderTabs();
+  renderOverall();
+
+  const statusEl = stage.querySelector('.voice-status');
+  const timerEl = stage.querySelector('.voice-timer');
+  if(timerEl) timerEl.textContent = '';
+  if(statusEl){
+    statusEl.className = 'voice-status ' + (correct ? 'correct' : 'incorrect');
+    statusEl.textContent = correct
+      ? 'Correct!'
+      : (transcript ? `Not quite — correct answer: ${correctText}` : `No answer heard — correct answer: ${correctText}`);
+  }
+
+  if(window.speechSynthesis){
+    try{
+      window.speechSynthesis.cancel();
+      const fb = new SpeechSynthesisUtterance(correct ? 'Correct!' : `Correct answer: ${correctText}`);
+      window.speechSynthesis.speak(fb);
+    }catch(e){ /* not supported */ }
+  }
+
+  vr.timerId = setTimeout(()=>{
+    if(!vr || vr.ended || vr.token !== myToken) return;
+    advanceVoiceRound(catKey);
+  }, ADVANCE_DELAY_MS);
+}
+
+function advanceVoiceRound(catKey){
+  if(!vr || vr.ended || vr.catKey !== catKey) return;
+  const items = DATA[catKey];
+  const nextIdx = vr.index + 1;
+  if(nextIdx >= items.length){
+    showVoiceSummary(catKey);
+  } else {
+    runVoiceQuestion(catKey, nextIdx);
+  }
+}
+
+function skipCurrentQuestion(catKey){
+  if(!vr || vr.ended || vr.catKey !== catKey) return;
+  cleanupCurrentQuestionAudio();
+  advanceVoiceRound(catKey);
+}
+
+function endVoiceRoundEarly(catKey){
+  if(!vr || vr.ended || vr.catKey !== catKey) return;
+  cleanupCurrentQuestionAudio();
+  showVoiceSummary(catKey);
+}
+
+function showVoiceSummary(catKey){
+  if(!vr) return;
+  const correctCount = vr.correctCount;
+  const attempted = vr.attempted;
+  const total = DATA[catKey].length;
+  vr.ended = true;
+  vr = null;
+
+  const container = document.getElementById('voiceRoundRoot');
+  if(!container) return; // user already navigated away
+  setStage(container, buildSummaryStage(catKey, correctCount, attempted, total));
+  renderTabs();
+  renderOverall();
+}
+
+/* ---------------------------------------------------------
+   INIT
+--------------------------------------------------------- */
+render(); // state was already restored from localStorage by loadState() above
+
+// Don't leave the mic listening in the background if the app is hidden or closed.
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden) cleanupVoiceRound();
+});
+window.addEventListener('pagehide', cleanupVoiceRound);
+window.addEventListener('beforeunload', cleanupVoiceRound);
+</script>
+</body>
+</html>

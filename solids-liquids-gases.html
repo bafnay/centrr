@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solids, Liquids & Gases — Chapter Quiz</title>
+<style>
+  :root{
+    --bg:#f4f7fb; --card:#ffffff; --ink:#1f2937; --muted:#6b7280;
+    --brand:#2563eb; --brand-dark:#1d4ed8; --good:#16a34a; --bad:#dc2626;
+    --warn:#f59e0b; --chip:#eef2ff; --border:#e5e7eb;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       background:var(--bg); color:var(--ink);}
+  header.top{
+    position:sticky; top:0; z-index:20; background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff; padding:14px 16px 10px;
+  }
+  header.top h1{margin:0; font-size:1.15rem; line-height:1.3;}
+  header.top p{margin:4px 0 10px; font-size:.8rem; opacity:.9;}
+  .overall{display:flex; gap:8px; align-items:center; font-size:.78rem; flex-wrap:wrap;}
+  .overall .pill{background:rgba(255,255,255,.18); padding:3px 9px; border-radius:999px;}
+  .reset-all-btn{margin-top:9px; background:rgba(255,255,255,.14); color:#fff;
+     border:1px solid rgba(255,255,255,.45); padding:6px 13px; border-radius:999px;
+     font-size:.75rem; font-weight:700; cursor:pointer;}
+  .reset-all-btn:active{background:rgba(255,255,255,.32);}
+  nav.tabs{display:flex; gap:6px; overflow-x:auto; padding:8px 10px 10px; background:#fff;
+     position:sticky; top:64px; z-index:19; border-bottom:1px solid var(--border);
+     -webkit-overflow-scrolling:touch;}
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab-btn{flex:0 0 auto; border:1px solid var(--border); background:#fff; color:var(--ink);
+     padding:7px 12px; border-radius:999px; font-size:.78rem; font-weight:600; cursor:pointer;
+     white-space:nowrap;}
+  .tab-btn.active{background:var(--brand); border-color:var(--brand); color:#fff;}
+  main{max-width:760px; margin:0 auto; padding:14px 12px 60px;}
+  section.panel{display:none;}
+  section.panel.active{display:block;}
+  .panel-head{display:flex; justify-content:space-between; align-items:center; gap:8px; margin:6px 2px 12px; flex-wrap:wrap;}
+  .panel-head h2{font-size:1.05rem; margin:0;}
+  .score-badge{font-size:.78rem; font-weight:700; padding:4px 10px; border-radius:999px; background:var(--chip); color:var(--brand-dark);}
+  .btnbar{display:flex; gap:8px; flex-wrap:wrap;}
+  button.action{border:none; padding:9px 14px; border-radius:10px; font-size:.82rem; font-weight:700;
+     cursor:pointer;}
+  button.check{background:var(--brand); color:#fff;}
+  button.reset{background:#fee2e2; color:var(--bad);}
+  button.reset:active, button.check:active{transform:scale(.97);}
+  .card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin-bottom:10px;}
+  .qtext{font-size:.92rem; font-weight:600; margin-bottom:8px; line-height:1.4;}
+  .qnum{color:var(--brand); margin-right:4px;}
+  input[type=text]{width:100%; padding:9px 10px; border-radius:8px; border:1.5px solid var(--border);
+     font-size:.9rem; background:#fafbff;}
+  input[type=text]:focus{outline:2px solid var(--brand); border-color:var(--brand);}
+  .card.correct{border-color:var(--good); background:#f0fdf4;}
+  .card.incorrect{border-color:var(--bad); background:#fef2f2;}
+  .feedback{font-size:.8rem; margin-top:6px; font-weight:600;}
+  .feedback.correct{color:var(--good);}
+  .feedback.incorrect{color:var(--bad);}
+  .correct-ans{font-size:.8rem; color:var(--muted); margin-top:3px;}
+  .options{display:flex; flex-direction:column; gap:7px;}
+  .opt{display:flex; align-items:center; gap:8px; padding:8px 10px; border:1.5px solid var(--border);
+     border-radius:9px; cursor:pointer; font-size:.87rem; background:#fafbff;}
+  .opt.selected{border-color:var(--brand); background:#eef2ff;}
+  .opt.opt-correct{border-color:var(--good); background:#f0fdf4;}
+  .opt.opt-wrong{border-color:var(--bad); background:#fef2f2;}
+  .tf-row{display:flex; gap:8px;}
+  .tf-btn{flex:1; padding:9px; border-radius:9px; border:1.5px solid var(--border); background:#fafbff;
+     font-weight:700; font-size:.85rem; cursor:pointer; text-align:center;}
+  .tf-btn.selected{border-color:var(--brand); background:#eef2ff;}
+  .tf-btn.tf-correct{border-color:var(--good); background:#f0fdf4; color:var(--good);}
+  .tf-btn.tf-wrong{border-color:var(--bad); background:#fef2f2; color:var(--bad);}
+  .reveal-toggle{background:none; border:1.5px dashed var(--brand); color:var(--brand-dark);
+     padding:6px 10px; border-radius:8px; font-size:.78rem; font-weight:700; cursor:pointer; margin-top:4px;}
+  .reveal-box{margin-top:8px; background:#f8fafc; border-left:3px solid var(--brand); padding:8px 10px;
+     border-radius:6px; font-size:.85rem; display:none; line-height:1.45;}
+  .reveal-box.show{display:block;}
+  .self-grade{display:flex; gap:8px; margin-top:8px;}
+  .self-grade button{flex:1; font-size:.78rem; padding:7px; border-radius:8px; border:1.5px solid var(--border);
+     background:#fff; font-weight:700; cursor:pointer;}
+  .self-grade button.got.active{background:#f0fdf4; border-color:var(--good); color:var(--good);}
+  .self-grade button.miss.active{background:#fef2f2; border-color:var(--bad); color:var(--bad);}
+  .dist-cols{display:flex; gap:10px; margin-top:8px;}
+  .dist-col{flex:1; background:#f8fafc; border-radius:8px; padding:8px 10px; font-size:.8rem;}
+  .dist-col h4{margin:0 0 6px; font-size:.82rem; color:var(--brand-dark);}
+  .dist-col ul{margin:0; padding-left:16px; line-height:1.5;}
+  svg{width:100%; height:auto; display:block; background:#fafbff; border-radius:10px; border:1px solid var(--border);}
+  .label-row{display:flex; align-items:center; gap:8px; margin:6px 0; font-size:.84rem;}
+  .label-row select{flex:1; padding:7px; border-radius:8px; border:1.5px solid var(--border); font-size:.84rem;}
+  .badge-num{width:22px; height:22px; border-radius:50%; background:var(--brand); color:#fff; font-size:.72rem;
+     display:flex; align-items:center; justify-content:center; font-weight:700; flex:0 0 auto;}
+  .intro{font-size:.82rem; color:var(--muted); margin-bottom:10px; line-height:1.4;}
+  .footer-note{text-align:center; font-size:.72rem; color:var(--muted); margin-top:24px;}
+  .toast{position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:#111827; color:#fff;
+     padding:9px 16px; border-radius:999px; font-size:.8rem; z-index:50; opacity:0; pointer-events:none;
+     transition:opacity .25s;}
+  .toast.show{opacity:1;}
+
+  .hidden{display:none !important;}
+  .mode-toggle-row{margin:0 2px 12px;}
+  .mode-toggle{display:flex; border:1.5px solid var(--border); border-radius:10px; overflow:hidden;}
+  .mode-btn{flex:1; border:none; background:#fff; color:var(--ink); padding:10px 8px;
+     font-size:.82rem; font-weight:700; cursor:pointer;}
+  .mode-btn + .mode-btn{border-left:1.5px solid var(--border);}
+  .mode-btn.active{background:var(--brand); color:#fff;}
+  .voice-controls-bar{display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+  .voice-progress{flex:1; font-size:.78rem; color:var(--muted); font-weight:700;}
+  .voice-skip-btn{background:#fef3c7; color:#92400e;}
+  .voice-end-btn{background:#fee2e2; color:var(--bad);}
+  .voice-stage{min-height:140px;}
+  .voice-card{background:var(--card); border:1.5px solid var(--border); border-radius:14px;
+     padding:18px 16px; text-align:center;}
+  .voice-qtext{font-size:1rem; font-weight:700; margin-bottom:14px; line-height:1.4;}
+  .voice-status{font-size:.85rem; color:var(--muted); margin-bottom:10px; min-height:20px;}
+  .voice-status.listening{color:var(--brand-dark); font-weight:700; animation:voicepulse 1s infinite;}
+  @keyframes voicepulse{0%,100%{opacity:1;} 50%{opacity:.35;}}
+  .voice-feedback{font-size:.92rem; font-weight:700; min-height:24px;}
+  .voice-error, .voice-summary{text-align:left;}
+  .voice-summary{text-align:center;}
+  .voice-error-title, .voice-summary-title{font-size:1.02rem; font-weight:800; margin-bottom:8px;}
+  .voice-error-body{font-size:.85rem; color:var(--muted); line-height:1.55; margin-bottom:14px;}
+  .voice-summary-score{font-size:1.5rem; font-weight:800; color:var(--brand-dark); margin-bottom:16px;}
+  .voice-card button{margin:4px 6px 0;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>🧪 Solids, Liquids &amp; Gases — Chapter Quiz</h1>
+  <p>9 question types · every fact from the chapter · your progress is saved automatically</p>
+  <div class="overall" id="overallBar"></div>
+  <button id="resetAllBtn" class="reset-all-btn" type="button">🗑️ Reset All Progress</button>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main id="main"></main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+
+const CATEGORIES = [
+  {id:"fillblank", label:"📝 Fill Blanks"},
+  {id:"mcq", label:"🔘 MCQ"},
+  {id:"oneword", label:"1️⃣ One Word"},
+  {id:"definitions", label:"📖 Definitions"},
+  {id:"shortanswer", label:"💬 Short Answer"},
+  {id:"reasoning", label:"🧠 Reasoning"},
+  {id:"truefalse", label:"✅ True/False"},
+  {id:"distinguish", label:"⚖️ Distinguish"},
+  {id:"labeling", label:"🖼️ Labeling"},
+];
+
+// ---- FILL IN THE BLANKS ----
+const fillBlanks = [
+{q:"Anything that occupies space and has weight is called ______.", a:"matter"},
+{q:"Matter can range from something as small as a ______ to something as big as an aeroplane.", a:"needle"},
+{q:"We can't see air, but since it has weight and occupies space, it is also called ______.", a:"matter"},
+{q:"In Activity 1, when you blow into a balloon, air ______ space and hence the balloon's size increases.", a:"occupies"},
+{q:"In Activity 2, when a balanced balloon is punctured, the scale bends, showing that air has ______ and hence can be called matter.", a:["mass","weight"]},
+{q:"Air is filled into tyres of cycles, scooters and cars because air makes them ______.", a:"stiff"},
+{q:"Air-filled tyres reduce the area of contact with the road, thereby decreasing ______.", a:"friction"},
+{q:"Matter occupies space, has mass or weight, and can be perceived by the ______.", a:"senses"},
+{q:"Matter exists in three different states: ______, ______ and ______.", a:["solid","liquid","gas"]},
+{q:"On cooling, water becomes ______, i.e. solid.", a:"ice"},
+{q:"On heating, water becomes gas, i.e. ______.", a:"steam"},
+{q:"In solids, the molecules are closely packed and there are no ______ spaces between them.", a:"intermolecular"},
+{q:"Solids have fixed shape and don't ______.", a:"flow"},
+{q:"Solids have fixed ______.", a:"geometry"},
+{q:"Solids occupy a definite volume and cannot be ______.", a:"compressed"},
+{q:"In solids, the molecules are strongly attracted towards each other and hence they are ______.", a:"dense"},
+{q:"In liquids, the molecules are loosely packed and there are ______ intermolecular spaces between them.", a:"small"},
+{q:"Liquids do not have a fixed ______.", a:"shape"},
+{q:"Liquids have an indefinite shape but a ______ volume.", a:"definite"},
+{q:"In liquids, molecules are not attracted towards each other with so strong forces as in solids, hence they are less ______.", a:"dense"},
+{q:"Liquids generally flow from ______ level to ______ level.", a:["high","low"]},
+{q:"Liquids take the shape of the ______ they are put in.", a:"container"},
+{q:"In Activity 3, a saturated solution of copper sulphate is kept in an ______ to obtain crystals.", a:"ice bath"},
+{q:"In gases, the molecules are very loosely packed and there are huge ______ spaces between them.", a:"intermolecular"},
+{q:"Gases do not have a definite volume and can be ______ easily.", a:"compressed"},
+{q:"In gases, molecules are very weakly attracted towards each other, hence they are very less ______.", a:"dense"},
+{q:"Aerated drinks have the gas ______ in compressed form.", a:["carbon dioxide","co2"]},
+{q:"A gas leakage in the kitchen reaches the bedroom because gaseous molecules can easily ______ into the air.", a:"diffuse"},
+{q:"The foul smelling compound present in cooking gas is known as ______.", a:["ethyl mercaptan","mercaptan"]},
+{q:"Vapour is generally a mixture of two phases: ______ and ______.", a:["liquid","gas"]},
+{q:"Vapours are formed of substances which are either solid or liquid but change into gaseous form under special ______.", a:"conditions"},
+{q:"Elements are substances that are made up of only one kind of ______.", a:"atoms"},
+{q:"Compounds are substances made up of more than one kind of atoms ______ together.", a:"combined"},
+{q:"Mixtures are substances made up of more than one kind of atoms but are ______ combined together.", a:"not"},
+{q:"Conversion of solid into a liquid is called ______.", a:"melting"},
+{q:"Conversion of a liquid into a solid is called ______.", a:"freezing"},
+{q:"Conversion of liquid into vapour is called ______.", a:"evaporation"},
+{q:"Conversion of gas into liquid is called ______.", a:"condensation"},
+{q:"The process in which a solid gets converted directly to gaseous form is called ______.", a:"sublimation"},
+{q:"Camphor and ______ are examples of substances that undergo sublimation.", a:"naphthalene"},
+{q:"Incense sticks, on heating, directly convert to ______ state.", a:"gaseous"},
+{q:"Sprinkling salt on ice lowers the ______ point of ice.", a:"melting"},
+{q:"The earth is surrounded by an envelope of air called the ______.", a:"atmosphere"},
+{q:"The atmosphere extends up to about ______ km into space.", a:"200"},
+{q:"Air is a mixture of ______.", a:"gases"},
+{q:"Nitrogen makes up approximately ______% of air.", a:"78.09"},
+{q:"Oxygen makes up approximately ______% of air.", a:"20.95"},
+{q:"Blowing or moving air is called ______.", a:"wind"},
+{q:"The speed of wind may vary from 5-10 km/h (gentle breeze) to 700-800 km/h (______).", a:"tornado"},
+{q:"The phenomenon in which warm air rises and cold air sinks is known as ______ currents.", a:"convection"},
+{q:"In room ventilation, warm exhaled air rises and leaves the room through ______.", a:"ventilators"},
+{q:"Most washrooms and kitchens have ______ near the ceiling to remove warm air.", a:"exhaust fans"},
+{q:"Land and sea breeze are actually ______ currents.", a:"convection"},
+{q:"During the day, the land warms up more quickly than the ______.", a:"sea"},
+{q:"During the day, the cool air which moves from sea towards land is known as ______ breeze.", a:"sea"},
+{q:"During the night, the land loses heat and gets cooled ______ than the sea.", a:"faster"},
+{q:"During the night, the cool air which moves from land towards sea is known as ______ breeze.", a:"land"},
+{q:"The substances which dissolve rapidly in water are called ______ substances.", a:"soluble"},
+{q:"The substances which dissolve very little or do not seem to dissolve in water are known as ______ substances.", a:"insoluble"},
+];
+
+// ---- MCQ ----
+const mcq = [
+{q:"What is matter?", opts:["Anything with color","Anything that occupies space and has weight","Only solids","Only liquids"], a:1},
+{q:"Which activity shows that air occupies space?", opts:["Blowing air into a balloon","Ice melting","Sublimation of naphthalene","Condensation on a glass"], a:0},
+{q:"Air-filled tyres decrease:", opts:["Speed","Friction","Weight","Volume"], a:1},
+{q:"Which of these is NOT a property of matter?", opts:["Occupies space","Has mass","Can be perceived by senses","Is always visible"], a:3},
+{q:"Which state of matter has a fixed shape?", opts:["Liquid","Gas","Solid","Vapour"], a:2},
+{q:"In which state are molecules most loosely packed?", opts:["Solid","Liquid","Gas","None"], a:2},
+{q:"Which state of matter can be compressed easily?", opts:["Solid","Liquid","Gas","None of these"], a:2},
+{q:"Water in its liquid form is called:", opts:["Ice","Water","Steam","Vapour only"], a:1},
+{q:"Ice, on heating, first becomes:", opts:["Steam directly","Water","Vapour directly","Gas directly"], a:1},
+{q:"Which of these is an example of an element?", opts:["Water","Hydrogen gas","Salt water","Air"], a:1},
+{q:"Which of these is an example of a compound?", opts:["Hydrogen","Water","Mixture of salt and water","Air"], a:1},
+{q:"Which of these is an example of a mixture?", opts:["Hydrogen gas","Water","Mixture of salt and water","Oxygen gas"], a:2},
+{q:"Conversion of solid to liquid is called:", opts:["Freezing","Melting","Evaporation","Condensation"], a:1},
+{q:"Conversion of liquid to solid is called:", opts:["Freezing","Melting","Sublimation","Evaporation"], a:0},
+{q:"Conversion of liquid to gas is called:", opts:["Melting","Freezing","Evaporation","Sublimation"], a:2},
+{q:"Conversion of gas to liquid is called:", opts:["Evaporation","Condensation","Sublimation","Melting"], a:1},
+{q:"Camphor and naphthalene undergo:", opts:["Melting","Evaporation","Sublimation","Freezing"], a:2},
+{q:"Sprinkling salt on ice:", opts:["Raises its melting point","Lowers its melting point","Has no effect","Freezes it faster"], a:1},
+{q:"The approximate percentage of nitrogen in air is:", opts:["20.95%","78.09%","1.00%","0.04%"], a:1},
+{q:"The approximate percentage of oxygen in air is:", opts:["78.09%","20.95%","1.00%","0.04%"], a:1},
+{q:"The speed of wind in a tornado is about:", opts:["5-10 km/h","50-100 km/h","700-800 km/h","10-20 km/h"], a:2},
+{q:"Sea breeze occurs:", opts:["During the day","During the night","Only in winter","Never"], a:0},
+{q:"Land breeze occurs:", opts:["During the day","During the night","Only in summer","Never"], a:1},
+{q:"Exhaust fans in kitchens are usually placed:", opts:["Near the floor","Near the ceiling","Outside the house","Inside the fridge"], a:1},
+{q:"The foul smell that helps detect a cooking gas leak is due to:", opts:["Methane","Ethyl mercaptan","Carbon dioxide","Nitrogen"], a:1},
+];
+
+// ---- ONE WORD ANSWERS ----
+const oneWord = [
+{q:"The blowing or moving of air is called what?", a:"wind"},
+{q:"What is the process of a solid changing directly into a gas called?", a:"sublimation"},
+{q:"What is the name of the envelope of air surrounding the earth?", a:"atmosphere"},
+{q:"What is the process by which a liquid changes to a solid called?", a:"freezing"},
+{q:"What is the process by which a solid changes to a liquid called?", a:"melting"},
+{q:"What is the process by which a liquid changes to a gas called?", a:"evaporation"},
+{q:"What is the process by which a gas changes to a liquid called?", a:"condensation"},
+{q:"What do we call a substance made of only one kind of atom?", a:"element"},
+{q:"What do we call a substance made of two or more kinds of atoms combined together?", a:"compound"},
+{q:"What do we call a substance made of two or more kinds of atoms not combined together?", a:"mixture"},
+{q:"What is the cool air moving from sea to land during the day called?", a:["sea breeze"]},
+{q:"What is the cool air moving from land to sea during the night called?", a:["land breeze"]},
+{q:"Which gas is present in compressed form in aerated drinks?", a:["carbon dioxide","co2"]},
+{q:"What is the foul-smelling compound added to cooking gas called?", a:["ethyl mercaptan","mercaptan"]},
+{q:"What do we call a mixture of liquid and gas phases suspended in air?", a:"vapour"},
+];
+
+// ---- DEFINITIONS ----
+const definitions = [
+{term:"Matter", def:"Anything that occupies space, has weight (mass), and can be perceived by the senses."},
+{term:"Solid", def:"A state of matter in which molecules are closely packed with no intermolecular spaces, giving it a fixed shape, fixed geometry, and a definite volume that cannot be compressed."},
+{term:"Liquid", def:"A state of matter in which molecules are loosely packed with small intermolecular spaces, giving it no fixed shape but a definite volume; it flows and takes the shape of its container."},
+{term:"Gas", def:"A state of matter in which molecules are very loosely packed with huge intermolecular spaces, giving it no fixed shape or volume; it can be compressed easily and flows freely."},
+{term:"Melting", def:"The conversion of a solid into a liquid, usually on heating."},
+{term:"Freezing", def:"The conversion of a liquid into a solid, usually on cooling."},
+{term:"Evaporation", def:"The conversion of a liquid into vapour."},
+{term:"Condensation", def:"The conversion of a gas into a liquid."},
+{term:"Sublimation", def:"The process in which a solid gets converted directly into gaseous form, without becoming liquid first (e.g. camphor, naphthalene)."},
+{term:"Element", def:"A substance made up of only one kind of atoms, e.g. hydrogen."},
+{term:"Compound", def:"A substance made up of more than one kind of atoms combined together, e.g. water (hydrogen + oxygen)."},
+{term:"Mixture", def:"A substance made up of more than one kind of atoms that are not combined together, e.g. a mixture of salt and water."},
+{term:"Convection currents", def:"The movement of air (or fluid) caused because warm air rises and cold air sinks."},
+{term:"Vapour", def:"A mixture of two phases — liquid and gas; a gas or moisture suspended in air, formed when a solid or liquid changes into gaseous form under special conditions."},
+];
+
+// ---- SHORT ANSWER ----
+const shortAnswer = [
+{q:"Why can't we see air, yet we still call it matter?", a:"Air cannot be seen, but it has weight and occupies space (as shown by the balloon activities), and anything that occupies space and has weight is called matter."},
+{q:"Why are the tyres of vehicles filled with air?", a:"Air-filled tyres become stiff, which reduces the area of contact with the road, thereby decreasing friction and helping the smooth movement of vehicles."},
+{q:"Why does a balloon increase in size when you blow air into it?", a:"Because air occupies space — as more air is blown in, it fills and expands the balloon, so the size increases."},
+{q:"Why are solids not compressible?", a:"In solids, molecules are closely packed with no intermolecular spaces and are strongly attracted to each other, so they cannot be pushed any closer together."},
+{q:"Why do liquids take the shape of the container they are poured into?", a:"Liquid molecules are loosely packed and not held in fixed positions, so they can move and flow, taking on the shape of whatever container holds them."},
+{q:"Why can gases be compressed easily?", a:"Gas molecules are very loosely packed with huge intermolecular spaces between them, so these spaces can be reduced, allowing gases to be compressed."},
+{q:"How does a gas leak in the kitchen reach the bedroom?", a:"Gaseous molecules can easily diffuse into the air and spread in all directions, allowing the smell to travel from the kitchen to the bedroom."},
+{q:"How does sprinkling salt help ice-sellers keep ice from melting quickly?", a:"Salt lowers the melting point of ice, meaning the temperature at which ice melts becomes lower than normal, so under normal conditions the ice melts more slowly (melting is prevented/delayed)."},
+{q:"Explain how ventilation and convection currents keep a room fresh and cool.", a:"The warm air we exhale rises and leaves the room through ventilators; to replace this lost air, fresh air enters through the door. This sets up convection currents that keep the air in the room fresh and cool."},
+{q:"Why does a sea breeze blow during the day?", a:"During the day, land warms up faster than the sea. The hot air over the land rises (low pressure), and to take its place, cooler air from the sea moves towards the land — this is the sea breeze."},
+{q:"Why does a land breeze blow during the night?", a:"At night, land loses heat and cools faster than the sea. The warmer air over the sea rises, and cooler air from the land moves towards the sea to take its place — this is the land breeze."},
+{q:"What happens to naphthalene balls left in the open for a few days, and why?", a:"They reduce in size / disappear because they undergo sublimation — they convert directly from the solid state into vapour (gas) when exposed to air."},
+];
+
+// ---- REASONING (connects facts across multiple parts of the chapter) ----
+const reasoning = [
+{q:"The two balloon activities in the chapter each prove a different property of air. Using both together, explain fully why air is classified as matter.",
+ a:"Matter is defined as anything that occupies space and has weight. Activity 1 shows that blowing air into a balloon increases its size, proving air occupies space. Activity 2 shows that puncturing one of two balanced balloons makes the scale bend, proving air has mass/weight. Since air satisfies both defining properties of matter, it is classified as matter even though it cannot be seen."},
+{q:"Tyres are filled with air rather than left empty. Using what the chapter says about why tyres are air-filled, explain how this reduces friction.",
+ a:"Air filled into tyres makes them stiff. A stiff tyre reduces the area of contact between the tyre and the road. Since friction depends on the area of contact, a smaller contact area means less friction, which helps vehicles move smoothly."},
+{q:"The chapter states that solids have no intermolecular spaces and are strongly attracted to each other. Combine these two facts to explain why solids cannot be compressed.",
+ a:"Compression means pushing molecules closer together. Since solid molecules are already closely packed with no intermolecular spaces, and are held tightly by strong attractive forces, there is no room left to push them closer — so solids occupy a definite, incompressible volume."},
+{q:"Gases have huge intermolecular spaces and very weak attraction between molecules. Explain how these two facts together account for both why gases can be compressed easily and why they are the least dense state of matter.",
+ a:"The huge intermolecular spaces mean there is a lot of empty room between gas molecules that can be reduced, so gases compress easily. The very weak attraction between molecules means they are not held close together, which is also why gases are the least dense of the three states."},
+{q:"Using the packing and attraction described for solids, liquids and gases, explain why solids are the densest and gases are the least dense.",
+ a:"Density here follows from how tightly molecules are packed and how strongly they attract each other. Solids have molecules closely packed with strong attraction, making them densest. Liquids have loosely packed molecules with weaker attraction, so they are less dense than solids. Gases have very loosely packed molecules with very weak attraction, making them the least dense of the three."},
+{q:"Water is used as the chapter's example for showing all three states of matter. Explain, using the freezing/melting/evaporation/condensation definitions, how the same water sample can visit all three states in a cycle.",
+ a:"Water in liquid form can be cooled to become ice (freezing = liquid to solid) or heated to become steam (evaporation = liquid to gas). Ice can be heated back into water (melting = solid to liquid), and steam can be cooled back into water (condensation = gas to liquid). Because each of these processes can reverse into the other, the same water can cycle repeatedly through solid, liquid and gas."},
+{q:"Camphor and naphthalene are both given as examples of sublimation. Using the definition of sublimation and the fact that solids normally have no intermolecular spaces, explain what makes these substances unusual.",
+ a:"Sublimation is a solid converting directly into gas without passing through the liquid state. Normally a solid would need to melt first before it could evaporate into gas. Camphor and naphthalene skip the liquid stage entirely, converting straight from the tightly packed solid state to the widely spaced gas state."},
+{q:"Ice-sellers sprinkle salt on ice, and the chapter explains this lowers the melting point of ice. Explain why lowering the melting point helps prevent the ice from melting as quickly at normal outdoor temperatures.",
+ a:"Melting happens once ice reaches its melting point. Salt lowers this melting point, meaning the ice needs to reach an even lower temperature before it can melt. Since the surrounding temperature doesn't change, reaching that lower melting point takes longer, so under everyday conditions the melting is slowed down / prevented."},
+{q:"A gas leak in the kitchen can be smelled in the bedroom. Combine the fact about gas molecule diffusion with the fact about the added foul-smelling compound to explain how this detection works.",
+ a:"Cooking gas has ethyl mercaptan added to it, which produces a strong smell. Because gas molecules are loosely packed and can easily diffuse (spread out) into the air in all directions, the smelly gas molecules travel from the kitchen through the air until they reach the bedroom, allowing the leak to be smelled far from its source."},
+{q:"The chapter defines elements, compounds and mixtures by whether atoms are combined. Using water and a salt-water mixture as the chapter's own examples, explain the key difference between a compound and a mixture.",
+ a:"A compound is made of more than one kind of atom that are chemically combined together — water is the example, made of hydrogen and oxygen atoms combined. A mixture is also made of more than one kind of atom, but they are NOT combined together — a mixture of salt and water is the example, where the atoms simply mix without forming a new combined substance."},
+{q:"Using the convection-current explanation given for ventilators and exhaust fans, explain why fresh air keeps entering a room even though nothing is pushing it in from outside.",
+ a:"The air we exhale (or the warm air in a kitchen/washroom) is warm, and warm air rises. As this warm air rises and escapes through ventilators or exhaust fans, it leaves behind less air in the room. Fresh air from the door then moves in to take its place — this movement, driven purely by warm air rising and being replaced, is what the chapter calls a convection current."},
+{q:"Both sea breeze and land breeze are described as convection currents, but they occur at opposite times of day and in opposite directions. Explain why, using the differences in how fast land and sea heat up and cool down.",
+ a:"Land heats up faster than the sea during the day, so the air over the hot land rises and cooler air from the sea moves in to replace it — this is the sea breeze. At night, the land also cools down faster than the sea, so the air over the now-warmer sea rises, and cooler air from the land moves out to replace it — this is the land breeze. Because land's temperature changes faster than the sea's in both directions, the direction of airflow reverses between day and night."},
+{q:"Nitrogen and oxygen together make up most of the air, according to the percentages given in the chapter. Using those percentages, explain roughly what fraction of air is made up of gases other than nitrogen and oxygen.",
+ a:"Nitrogen makes up about 78.09% of air and oxygen makes up about 20.95%. Added together, these two gases make up about 99.04% of air, leaving only a small remainder (roughly under 1%) for carbon dioxide, water vapour, rare gases and impurities combined."},
+{q:"The chapter says wind speed can range from 5–10 km/h for a gentle breeze up to 700–800 km/h for a tornado. Using the definition of wind as moving air, explain what this range tells us about how differently air can move.",
+ a:"Wind is simply air that is blowing or moving. The huge range from a gentle breeze (5–10 km/h) to a tornado (700–800 km/h) shows that the same basic phenomenon — moving air — can occur at vastly different intensities, from barely noticeable to extremely destructive, depending on how fast the air is moving."},
+{q:"A vapour is described as a mixture of liquid and gas phases, formed when a solid or liquid changes into gaseous form under special conditions. Using the sublimation and evaporation definitions, explain how water vapour and naphthalene fumes are both examples of 'vapour' even though they come from different states of matter.",
+ a:"Water vapour forms when liquid water evaporates into gas, while naphthalene fumes form when solid naphthalene sublimes directly into gas. Even though one starts as a liquid and the other as a solid, both end up as a gas/moisture phase mixed into the air, which is exactly what the chapter defines as a vapour — so both fit the definition despite starting from different states."},
+{q:"Liquids are described as flowing from high level to low level and taking the shape of their container. Using both of these facts, explain why liquids can be poured from one container into a differently-shaped container and still settle into a stable, flat-topped shape.",
+ a:"Because liquid molecules are loosely packed and not fixed in position, the liquid can flow and take on the shape of whatever container it is poured into. At the same time, liquids naturally flow from a higher level to a lower level, so once poured in, the liquid settles downward and spreads into a flat, stable surface inside its new container."},
+{q:"The chapter states that solids have a fixed shape and geometry, while gases take the shape of any container they are put in. Using the molecule-packing explanation, explain why solids resist changing shape but gases don't.",
+ a:"Solid molecules are closely packed with no intermolecular spaces and strongly attracted to each other, which locks them into a fixed arrangement, giving solids a fixed shape that resists change. Gas molecules, in contrast, are very loosely packed with huge intermolecular spaces and very weak attraction, so they are free to spread out and completely fill whatever shape of container they are placed in."},
+{q:"Using the definitions of soluble and insoluble substances, explain what determines whether a substance added to water will dissolve.",
+ a:"The chapter defines soluble substances as those that dissolve rapidly in water, and insoluble substances as those that dissolve very little or do not seem to dissolve at all. So whether a substance is 'soluble' or 'insoluble' is essentially defined by how much and how quickly it dissolves when mixed with water."},
+{q:"Both condensation (droplets forming on a cold glass of ice) and sublimation (naphthalene balls shrinking) involve a change of state without any liquid pouring or visible boiling. Explain what's actually happening in each case using the chapter's definitions.",
+ a:"Condensation is the conversion of gas into liquid — water vapour present in the air turns into liquid droplets when it touches the cold surface of the glass. Sublimation is a solid converting directly into gas — naphthalene balls slowly turn into vapour and escape into the air, which is why they shrink over time. Although neither involves obvious pouring or boiling, both are still genuine changes of state, just moving in different directions (gas→liquid vs solid→gas)."},
+{q:"Using the tyre example and the general property of gases being compressible, explain why filling a tyre with air (a gas) makes it both stiff and able to absorb bumps.",
+ a:"Air is a gas, and gases can be compressed easily because their molecules are very loosely packed with huge intermolecular spaces. When air is pumped into a tyre, this compressibility lets the air cushion and absorb shocks from bumps, while still filling the tyre firmly enough to make it stiff and reduce its contact area with the road."},
+{q:"The chapter explains that matter can be 'perceived by the senses' and gives air as an example that can't be seen but can still be classified as matter. Combine this with the balloon activities to explain which senses could actually detect air, even though sight cannot.",
+ a:"Although air cannot be seen, the balloon activities show it can be felt (its weight bends the scale) and its effect can be seen indirectly (the balloon inflating). So even though sight alone doesn't reveal air directly, feeling its weight/resistance and observing its effects let the senses perceive that air is present, satisfying the 'perceived by senses' part of the definition of matter."},
+{q:"Using the description of exhaust fans and ventilators, explain why both are placed near the ceiling rather than near the floor.",
+ a:"The chapter explains that warm air rises. Since exhaust fans and ventilators are meant to remove warm air from a room (like in kitchens, washrooms, or after exhaling), they need to be positioned where the warm air naturally collects — near the ceiling — so the rising warm air can escape through them efficiently."},
+{q:"Explain why the chapter describes land and sea breeze as convection currents specifically, rather than just calling them 'wind.'",
+ a:"Wind is simply any moving air, but convection currents specifically involve warm air rising and cooler air moving in to replace it. Land and sea breezes follow exactly this pattern — warm air over the warmer surface (land by day, sea by night) rises, and cooler air from the other side moves in to take its place — so they are convection currents, a specific cause-and-effect type of wind, not just random air movement."},
+{q:"Using the examples given for elements (hydrogen), compounds (water) and mixtures (salt and water), explain why water counts as a compound but salt water does not.",
+ a:"Water is made of hydrogen and oxygen atoms that are chemically combined together into a new single substance, which is what makes something a compound. Salt water is just salt and water mixed together without the atoms combining into a new substance — the salt and water each keep their own separate identity, which is what makes it a mixture instead of a compound."},
+];
+
+// ---- TRUE / FALSE ----
+const trueFalse = [
+{s:"Matter occupies space and has weight.", a:true},
+{s:"Air is not matter because it cannot be seen.", a:false},
+{s:"Solids can be compressed easily.", a:false},
+{s:"Liquids have a fixed shape.", a:false},
+{s:"Gases have a definite volume.", a:false},
+{s:"In solids, molecules are closely packed with no intermolecular spaces.", a:true},
+{s:"In gases, molecules are held together very weakly.", a:true},
+{s:"Melting is the conversion of a liquid into a solid.", a:false},
+{s:"Freezing is the conversion of a liquid into a solid.", a:true},
+{s:"Evaporation is the conversion of a liquid into vapour.", a:true},
+{s:"Condensation is the conversion of a gas into a liquid.", a:true},
+{s:"Sublimation is the conversion of a liquid directly into a gas.", a:false},
+{s:"Water is an example of an element.", a:false},
+{s:"Hydrogen gas is an example of an element.", a:true},
+{s:"A mixture of salt and water is an example of a compound.", a:false},
+{s:"Nitrogen is the most abundant gas in air.", a:true},
+{s:"Sea breeze occurs at night.", a:false},
+{s:"Land breeze occurs at night.", a:true},
+{s:"Convection currents occur because warm air sinks and cold air rises.", a:false},
+{s:"Sprinkling salt on ice raises its melting point.", a:false},
+];
+
+// ---- DISTINGUISH BETWEEN ----
+const distinguish = [
+{title:"Solid vs Liquid",
+ left:{h:"Solid", pts:["Molecules closely packed, no intermolecular spaces","Fixed shape and fixed geometry","Definite volume; cannot be compressed","Does not flow","Molecules strongly attracted — dense"]},
+ right:{h:"Liquid", pts:["Molecules loosely packed, small intermolecular spaces","No fixed shape; takes shape of container","Definite volume; can be compressed slightly","Flows easily, from high level to low level","Molecules less strongly attracted — less dense"]}},
+{title:"Liquid vs Gas",
+ left:{h:"Liquid", pts:["Molecules loosely packed, small intermolecular spaces","Indefinite shape but definite volume","Can be compressed only slightly","Denser than gases"]},
+ right:{h:"Gas", pts:["Molecules very loosely packed, huge intermolecular spaces","No definite shape or volume","Can be compressed easily","Very less dense — weak molecular attraction"]}},
+{title:"Solid vs Gas",
+ left:{h:"Solid", pts:["No intermolecular spaces","Fixed shape and definite volume","Cannot be compressed","Strong molecular attraction — dense"]},
+ right:{h:"Gas", pts:["Huge intermolecular spaces","No fixed shape or definite volume","Can be compressed easily","Very weak molecular attraction — least dense"]}},
+{title:"Element vs Compound",
+ left:{h:"Element", pts:["Made up of only one kind of atoms","Cannot be broken into simpler substances","Example: Hydrogen gas"]},
+ right:{h:"Compound", pts:["Made up of more than one kind of atoms combined together","Atoms are chemically combined","Example: Water (hydrogen + oxygen)"]}},
+{title:"Compound vs Mixture",
+ left:{h:"Compound", pts:["More than one kind of atoms combined together","Fixed composition","Example: Water"]},
+ right:{h:"Mixture", pts:["More than one kind of atoms, NOT combined together","Components keep their own properties","Example: Mixture of salt and water"]}},
+{title:"Sea Breeze vs Land Breeze",
+ left:{h:"Sea Breeze", pts:["Occurs during the day","Land is hotter (low pressure) than sea (high pressure)","Cool air moves from sea towards land"]},
+ right:{h:"Land Breeze", pts:["Occurs during the night","Sea is warmer (low pressure) than land (high pressure)","Cool air moves from land towards sea"]}},
+];
+
+/* ============ STORAGE (plain localStorage, single key per chapter) ============
+   This file is hosted as a normal webpage (e.g. GitHub Pages over https), not a
+   Claude.ai artifact, so plain localStorage is the right tool here. Everything for
+   this chapter's quiz lives under ONE key so it never collides with other chapter
+   quizzes hosted alongside it, and a single JSON blob makes save/restore simple. */
+const CHAPTER_SLUG = "solids-liquids-gases";
+const STORAGE_KEY = "quiz-progress-" + CHAPTER_SLUG;
+
+let progressStore = {};
+(function loadProgressStoreFromDisk(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) progressStore = JSON.parse(raw);
+  }catch(e){
+    // corrupted entry — start fresh rather than breaking the page
+    progressStore = {};
+  }
+})();
+
+function persistProgressStore(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(progressStore)); }
+  catch(e){ console.error("save failed", e); }
+}
+
+async function loadState(catId, fallback){
+  if(progressStore[catId] !== undefined && progressStore[catId] !== null) return progressStore[catId];
+  return fallback;
+}
+async function saveState(catId, stateObj){
+  progressStore[catId] = stateObj;
+  persistProgressStore();
+}
+async function clearState(catId){
+  delete progressStore[catId];
+  persistProgressStore();
+}
+
+// Kept for compatibility with code that flushes state before the page is hidden/closed —
+// with plain localStorage every save is already synchronous, so this just re-persists once.
+function flushAllSaves(){
+  persistProgressStore();
+}
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState==="hidden"){ flushAllSaves(); stopAllVoiceRounds(); }
+});
+window.addEventListener("pagehide", ()=>{ flushAllSaves(); stopAllVoiceRounds(); });
+window.addEventListener("blur", flushAllSaves);
+
+function normalize(str){
+  return (str||"").toLowerCase().replace(/[^a-z0-9. ]/g," ").replace(/\s+/g," ").trim();
+}
+function answerMatches(user, correct){
+  const u = normalize(user);
+  if(!u) return false;
+  if(Array.isArray(correct)){
+    // all listed tokens must appear somewhere in user's text (any order) OR user matches any single accepted phrase
+    const anyWhole = correct.some(c => normalize(c) === u);
+    if(anyWhole) return true;
+    return correct.every(c => u.includes(normalize(c)));
+  }
+  const c = normalize(correct);
+  return u === c || u.includes(c) || c.includes(u);
+}
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 1600);
+}
+function formatCorrectAnswer(a){
+  return Array.isArray(a) ? a.join(" / ") : a;
+}
+
+/* ============ VOICE ROUND (shared engine for Fill Blank / One Word / True-False) ============
+   Only these three sections get a "Voice Round" mode; MCQ, Definitions, Short Answer,
+   Distinguish and Labeling are untouched. Existing question data/coverage is never modified —
+   this just adds a hands-free way to answer the same questions. */
+
+const voiceRounds = {}; // catId -> round-state object
+
+function speechSupported(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  return !!(SR && window.speechSynthesis);
+}
+
+// Ask for mic permission up-front (spec requirement) and immediately release the stream.
+async function checkMicAccess(){
+  try{
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      throw new Error("getUserMedia unavailable");
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    stream.getTracks().forEach(t=>{ try{ t.stop(); }catch(e){} });
+    return {ok:true};
+  }catch(e){
+    return {ok:false, error:e};
+  }
+}
+
+// Tear down whatever is in-flight for one round (recognition + timers + any speech)
+// without touching anything else. Safe to call multiple times.
+function teardownVoiceQuestion(vr){
+  if(vr.timeoutId){ clearTimeout(vr.timeoutId); vr.timeoutId = null; }
+  if(vr.recognition){
+    const r = vr.recognition;
+    vr.recognition = null;
+    try{ r.onresult = null; r.onerror = null; r.onend = null; r.stop(); }catch(e){}
+  }
+  if(window.speechSynthesis){
+    try{ window.speechSynthesis.cancel(); }catch(e){}
+  }
+}
+
+function stopAllVoiceRounds(){
+  Object.keys(voiceRounds).forEach(catId=>{
+    const vr = voiceRounds[catId];
+    if(vr){ teardownVoiceQuestion(vr); vr.active = false; }
+  });
+}
+
+// Builds the "List View / Voice Round" toggle row. Listeners are attached directly to the
+// button elements this function creates and returns — never looked up later via getElementById.
+function buildModeToggleRow(onSwitchToVoice, onSwitchToList){
+  const row = document.createElement("div");
+  row.className = "mode-toggle-row";
+  const wrap = document.createElement("div");
+  wrap.className = "mode-toggle";
+  const listBtn = document.createElement("button");
+  listBtn.type = "button"; listBtn.className = "mode-btn active"; listBtn.textContent = "📋 List View";
+  const voiceBtn = document.createElement("button");
+  voiceBtn.type = "button"; voiceBtn.className = "mode-btn"; voiceBtn.textContent = "🎙️ Voice Round";
+  wrap.appendChild(listBtn); wrap.appendChild(voiceBtn);
+  row.appendChild(wrap);
+
+  listBtn.addEventListener("click", ()=>{
+    if(listBtn.classList.contains("active")) return;
+    listBtn.classList.add("active"); voiceBtn.classList.remove("active");
+    onSwitchToList();
+  });
+  voiceBtn.addEventListener("click", ()=>{
+    if(voiceBtn.classList.contains("active")) return;
+    voiceBtn.classList.add("active"); listBtn.classList.remove("active");
+    onSwitchToVoice();
+  });
+  return {row, listBtn, voiceBtn};
+}
+
+// Attaches the toggle row + Voice Round wrapper to an already-built panel.
+// sectionEl: the <section class="panel"> element (already appended to the DOM)
+// listWrapEl: the wrapper div holding the existing list-view UI for this category
+function setupVoiceRound(catId, items, config, sectionEl, listWrapEl){
+  const voiceWrap = document.createElement("div");
+  voiceWrap.id = "voicewrap-" + catId;
+  voiceWrap.className = "voice-wrap hidden";
+
+  const controlsBar = document.createElement("div");
+  controlsBar.className = "voice-controls-bar";
+  const progressSpan = document.createElement("span");
+  progressSpan.className = "voice-progress";
+  progressSpan.textContent = "Ready when you are";
+  const skipBtn = document.createElement("button");
+  skipBtn.type = "button"; skipBtn.className = "action voice-skip-btn"; skipBtn.textContent = "⏭ Skip";
+  const endBtn = document.createElement("button");
+  endBtn.type = "button"; endBtn.className = "action voice-end-btn"; endBtn.textContent = "⏹ End Round";
+  controlsBar.appendChild(progressSpan);
+  controlsBar.appendChild(skipBtn);
+  controlsBar.appendChild(endBtn);
+
+  const stageEl = document.createElement("div");
+  stageEl.className = "voice-stage";
+
+  voiceWrap.appendChild(controlsBar);
+  voiceWrap.appendChild(stageEl);
+  sectionEl.appendChild(voiceWrap);
+
+  const vr = {
+    catId, items, config,
+    index: 0, score: 0, active: false, listeningStarted: false, answered: false,
+    stageEl, progressSpan, skipBtn, endBtn,
+    listWrapEl, voiceWrapEl: voiceWrap,
+    recognition: null, timeoutId: null,
+    listToggleBtn: null, voiceToggleBtn: null,
+  };
+  voiceRounds[catId] = vr;
+
+  const toggle = buildModeToggleRow(
+    ()=> switchToVoiceView(vr),
+    ()=> switchToListView(vr)
+  );
+  vr.listToggleBtn = toggle.listBtn;
+  vr.voiceToggleBtn = toggle.voiceBtn;
+  sectionEl.insertBefore(toggle.row, listWrapEl);
+
+  skipBtn.addEventListener("click", ()=>{
+    if(!vr.active) return;
+    teardownVoiceQuestion(vr);
+    vr.index++;
+    askQuestion(vr);
+  });
+  endBtn.addEventListener("click", ()=>{
+    endVoiceRound(vr);
+  });
+}
+
+function switchToVoiceView(vr){
+  vr.listWrapEl.classList.add("hidden");
+  vr.voiceWrapEl.classList.remove("hidden");
+  if(!speechSupported()){
+    renderVoiceUnsupported(vr);
+    return;
+  }
+  startVoiceRoundFlow(vr);
+}
+
+function switchToListView(vr){
+  teardownVoiceQuestion(vr);
+  vr.active = false;
+  vr.voiceWrapEl.classList.add("hidden");
+  vr.listWrapEl.classList.remove("hidden");
+  if(vr.listToggleBtn && vr.voiceToggleBtn){
+    vr.listToggleBtn.classList.add("active");
+    vr.voiceToggleBtn.classList.remove("active");
+  }
+}
+
+function renderVoiceUnsupported(vr){
+  vr.stageEl.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "voice-card voice-error";
+  card.innerHTML = `<div class="voice-error-title">🎙️ Voice Round isn't supported here</div>
+    <div class="voice-error-body">This browser doesn't support the speech recognition and
+    speech synthesis features Voice Round needs. Try Chrome or Edge on desktop, or Chrome on Android.</div>`;
+  const backBtn = document.createElement("button");
+  backBtn.type = "button"; backBtn.className = "action reset"; backBtn.textContent = "📋 Return to List View";
+  card.appendChild(backBtn);
+  vr.stageEl.appendChild(card);
+  vr.progressSpan.textContent = "Not available in this browser";
+  backBtn.addEventListener("click", ()=> switchToListView(vr));
+}
+
+async function startVoiceRoundFlow(vr){
+  vr.index = 0; vr.score = 0; vr.active = true;
+  vr.stageEl.innerHTML = "";
+  const waitCard = document.createElement("div");
+  waitCard.className = "voice-card";
+  waitCard.innerHTML = `<div class="voice-status">🎤 Requesting microphone access…</div>`;
+  vr.stageEl.appendChild(waitCard);
+  vr.progressSpan.textContent = "Getting ready…";
+
+  const micResult = await checkMicAccess();
+  if(!vr.active) return; // round was ended/left while waiting on permission
+  if(!micResult.ok){
+    renderMicError(vr);
+    return;
+  }
+  askQuestion(vr);
+}
+
+function renderMicError(vr){
+  vr.stageEl.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "voice-card voice-error";
+  card.innerHTML = `<div class="voice-error-title">🎤 Couldn't access the microphone</div>
+    <div class="voice-error-body">This is usually one of two things:<br><br>
+    1. The browser (or the app it's running inside) doesn't have microphone permission
+    turned on at the device/OS level.<br><br>
+    2. This page was already blocked from using the microphone in the browser's own
+    site settings.<br><br>
+    Please check permissions, then try again.</div>`;
+  const retryBtn = document.createElement("button");
+  retryBtn.type = "button"; retryBtn.className = "action check"; retryBtn.textContent = "Try Again";
+  card.appendChild(retryBtn);
+  vr.stageEl.appendChild(card);
+  vr.progressSpan.textContent = "Microphone access needed";
+  retryBtn.addEventListener("click", ()=> startVoiceRoundFlow(vr));
+}
+
+function askQuestion(vr){
+  teardownVoiceQuestion(vr); // never let a previous question's listener/timer/speech linger
+  if(!vr.active) return;
+  if(vr.index >= vr.items.length){
+    showVoiceSummary(vr);
+    return;
+  }
+  vr.answered = false;
+  vr.listeningStarted = false;
+  const item = vr.items[vr.index];
+  const questionText = vr.config.getQuestionText(item);
+
+  vr.progressSpan.textContent = `Question ${vr.index+1} of ${vr.items.length} · Score ${vr.score}`;
+
+  vr.stageEl.innerHTML = ""; // exactly one question-stage element in the DOM at a time
+  const card = document.createElement("div");
+  card.className = "voice-card";
+  card.innerHTML = `<div class="voice-qtext">${questionText}</div>
+    <div class="voice-status">🔊 Reading question…</div>
+    <div class="voice-feedback"></div>`;
+  vr.stageEl.appendChild(card);
+  const statusEl = card.querySelector(".voice-status");
+  const feedbackEl = card.querySelector(".voice-feedback");
+
+  speakQuestionThenListen(vr, questionText, statusEl, feedbackEl, item);
+}
+
+function speakQuestionThenListen(vr, text, statusEl, feedbackEl, item){
+  if(!window.speechSynthesis){
+    beginListening(vr, statusEl, feedbackEl, item);
+    return;
+  }
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+
+  const utter = new SpeechSynthesisUtterance(text);
+  const trimmed = text.trim();
+  const lastSpaceIdx = trimmed.lastIndexOf(" ");
+  const lastWordStart = lastSpaceIdx === -1 ? 0 : lastSpaceIdx + 1;
+
+  const tryStart = ()=>{
+    if(vr.listeningStarted || !vr.active) return;
+    vr.listeningStarted = true;
+    beginListening(vr, statusEl, feedbackEl, item);
+  };
+
+  // Start listening a fraction of a second early — right as the LAST word begins —
+  // on browsers that report word boundaries. Never start any earlier than that,
+  // to avoid the mic picking up the device's own speaker output.
+  utter.onboundary = (e)=>{
+    if(typeof e.charIndex === "number" && e.charIndex >= lastWordStart){
+      tryStart();
+    }
+  };
+  // Reliable fallback for platforms where onboundary never fires (most mobile TTS voices).
+  utter.onend = ()=> tryStart();
+  utter.onerror = ()=> tryStart();
+
+  window.speechSynthesis.speak(utter);
+}
+
+function beginListening(vr, statusEl, feedbackEl, item){
+  if(!vr.active) return;
+  statusEl.textContent = "🎙️ Listening… (5 seconds)";
+  statusEl.classList.add("listening");
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){
+    handleVoiceAnswer(vr, null, statusEl, feedbackEl, item);
+    return;
+  }
+
+  const recognition = new SR();
+  recognition.lang = "en-US";
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  vr.recognition = recognition;
+
+  const finish = (transcript)=>{
+    if(vr.answered) return;
+    vr.answered = true;
+    if(vr.timeoutId){ clearTimeout(vr.timeoutId); vr.timeoutId = null; }
+    if(vr.recognition){
+      const r = vr.recognition; vr.recognition = null;
+      try{ r.onresult = null; r.onerror = null; r.onend = null; r.stop(); }catch(e){}
+    }
+    handleVoiceAnswer(vr, transcript, statusEl, feedbackEl, item);
+  };
+
+  recognition.onresult = (event)=>{
+    const transcript = (event.results && event.results[0] && event.results[0][0])
+      ? event.results[0][0].transcript : "";
+    finish(transcript);
+  };
+  recognition.onerror = ()=> finish(null);
+  recognition.onend = ()=> finish(null); // idempotent thanks to vr.answered guard
+
+  // Fixed 5-second window timed from the moment listening actually begins.
+  vr.timeoutId = setTimeout(()=> finish(null), 5000);
+
+  try{
+    recognition.start();
+  }catch(e){
+    finish(null);
+  }
+}
+
+function handleVoiceAnswer(vr, transcript, statusEl, feedbackEl, item){
+  if(!vr.active) return;
+  statusEl.classList.remove("listening");
+  const heardSomething = !!(transcript && transcript.trim());
+  const isCorrect = heardSomething ? vr.config.checkAnswer(transcript, item) : false;
+  const correctText = vr.config.getCorrectAnswerText(item);
+
+  statusEl.textContent = heardSomething ? `You said: "${transcript}"` : "🤔 No answer heard.";
+
+  // Keep List View's persisted state (and, if it's already on screen, its inputs/buttons)
+  // in sync with what was answered by voice — but only when something was actually heard,
+  // so a timeout/no-answer never overwrites a previously typed answer.
+  if(heardSomething && vr.config.syncAnswer){
+    try{ vr.config.syncAnswer(vr.catId, vr.index, transcript, item); }catch(e){}
+  }
+
+  if(isCorrect){
+    vr.score++;
+    feedbackEl.innerHTML = `<span class="feedback correct">✔ Correct!</span>`;
+    speakFeedbackThenNext(vr, "Correct!");
+  } else {
+    feedbackEl.innerHTML = `<span class="feedback incorrect">✘ Correct answer: ${correctText}</span>`;
+    speakFeedbackThenNext(vr, `The correct answer is ${correctText}`);
+  }
+  vr.progressSpan.textContent = `Question ${vr.index+1} of ${vr.items.length} · Score ${vr.score}`;
+}
+
+function speakFeedbackThenNext(vr, text){
+  const goNext = ()=>{
+    if(!vr.active) return;
+    vr.index++;
+    setTimeout(()=> askQuestion(vr), 350);
+  };
+  if(!window.speechSynthesis){
+    setTimeout(goNext, 900);
+    return;
+  }
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.onend = goNext;
+  utter.onerror = goNext;
+  window.speechSynthesis.speak(utter);
+}
+
+function endVoiceRound(vr){
+  teardownVoiceQuestion(vr);
+  showVoiceSummary(vr);
+}
+
+function showVoiceSummary(vr){
+  vr.active = false;
+  teardownVoiceQuestion(vr);
+  vr.stageEl.innerHTML = "";
+  const card = document.createElement("div");
+  card.className = "voice-card voice-summary";
+  card.innerHTML = `<div class="voice-summary-title">🏁 Round Complete</div>
+    <div class="voice-summary-score">Score: ${vr.score} / ${vr.items.length}</div>`;
+  const redoBtn = document.createElement("button");
+  redoBtn.type = "button"; redoBtn.className = "action check"; redoBtn.textContent = "🔁 Redo Round";
+  const listBtn = document.createElement("button");
+  listBtn.type = "button"; listBtn.className = "action reset"; listBtn.textContent = "📋 Return to List View";
+  card.appendChild(redoBtn); card.appendChild(listBtn);
+  vr.stageEl.appendChild(card);
+  vr.progressSpan.textContent = `Finished · Score ${vr.score}/${vr.items.length}`;
+
+  redoBtn.addEventListener("click", ()=> startVoiceRoundFlow(vr));
+  listBtn.addEventListener("click", ()=> switchToListView(vr));
+}
+
+/* ============ STATE ============ */
+const state = {}; // per category runtime state
+CATEGORIES.forEach(c=>state[c.id]={});
+const categoryResetFns = {}; // catId -> reset function, used by per-section AND global reset
+
+/* ============ RENDERERS ============ */
+
+function catScoreLabel(catId){
+  const s = state[catId] || {};
+  if(!s.checked) return "Not checked yet";
+  return `Score: ${s.score}/${s.total}`;
+}
+
+function renderTabs(){
+  const nav = document.getElementById("tabs");
+  nav.innerHTML = "";
+  CATEGORIES.forEach((c,i)=>{
+    const b = document.createElement("button");
+    b.className = "tab-btn" + (i===0?" active":"");
+    b.textContent = c.label;
+    b.dataset.cat = c.id;
+    b.onclick = ()=> switchTab(c.id);
+    nav.appendChild(b);
+  });
+}
+
+function switchTab(catId){
+  flushAllSaves(); // make sure the section you're leaving is fully saved first
+  stopAllVoiceRounds(); // don't let speech/mic keep running in a tab you've left
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.cat===catId));
+  document.querySelectorAll("section.panel").forEach(p=>p.classList.toggle("active", p.id==="panel-"+catId));
+  updateOverallBar();
+}
+
+function updateOverallBar(){
+  const bar = document.getElementById("overallBar");
+  bar.innerHTML = CATEGORIES.map(c=>{
+    const s = state[c.id] || {};
+    const label = s.checked ? `${s.score}/${s.total}` : "–";
+    return `<span class="pill">${c.label.split(" ")[0]} ${label}</span>`;
+  }).join("");
+}
+
+/* ---- Fill Blank & One Word (same engine) ---- */
+function buildSimpleTextPanel(catId, items, questionKey, voiceConfig){
+  const s = document.createElement("section");
+  s.className = "panel"; s.id = "panel-"+catId;
+
+  const head = document.createElement("div");
+  head.className = "panel-head";
+  head.innerHTML = `<h2>${CATEGORIES.find(c=>c.id===catId).label}</h2><span class="score-badge" id="badge-${catId}">${catScoreLabel(catId)}</span>`;
+  s.appendChild(head);
+
+  // "List View" vs "Voice Round" — its own full-width row, not squeezed next to the title.
+  const listWrap = document.createElement("div");
+  listWrap.id = "listwrap-" + catId;
+
+  const intro = document.createElement("div");
+  intro.className = "intro";
+  intro.textContent = catId==="fillblank"
+    ? "Fill in each blank, then tap Check Answers. Answers are saved automatically."
+    : "Answer in one word or short phrase, then tap Check Answers.";
+  listWrap.appendChild(intro);
+
+  const bar = document.createElement("div");
+  bar.className = "btnbar";
+  bar.style.marginBottom = "10px";
+  bar.innerHTML = `<button class="action check" id="check-${catId}">Check Answers</button>
+                    <button class="action reset" id="reset-${catId}">Reset This Category</button>`;
+  listWrap.appendChild(bar);
+
+  const list = document.createElement("div");
+  list.id = "list-"+catId;
+  listWrap.appendChild(list);
+
+  items.forEach((item,idx)=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    card.id = `${catId}-card-${idx}`;
+    card.innerHTML = `<div class="qtext"><span class="qnum">${idx+1}.</span>${item[questionKey]}</div>
+      <input type="text" id="${catId}-input-${idx}" placeholder="Type your answer..." autocomplete="off">
+      <div class="feedback" id="${catId}-fb-${idx}"></div>`;
+    list.appendChild(card);
+  });
+
+  s.appendChild(listWrap);
+
+  document.getElementById("main").appendChild(s);
+
+  if(voiceConfig){
+    setupVoiceRound(catId, items, voiceConfig, s, listWrap);
+  }
+
+  // wire events after DOM insert
+  loadState(catId, {answers:{}, checked:false, score:0, total:items.length}).then(saved=>{
+    state[catId] = saved;
+    items.forEach((item,idx)=>{
+      const inp = document.getElementById(`${catId}-input-${idx}`);
+      if(saved.answers && saved.answers[idx] !== undefined) inp.value = saved.answers[idx];
+      inp.addEventListener("input", ()=>{
+        state[catId].answers = state[catId].answers || {};
+        state[catId].answers[idx] = inp.value;
+        saveState(catId, state[catId]);
+      });
+    });
+    if(saved.checked) applyCheckedStylesSimple(catId, items, questionKey, false);
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+  });
+
+  document.getElementById("check-"+catId).addEventListener("click", ()=> {
+    let score = 0;
+    items.forEach((item,idx)=>{
+      const inp = document.getElementById(`${catId}-input-${idx}`);
+      const correct = answerMatches(inp.value, item.a);
+      if(correct) score++;
+    });
+    state[catId].checked = true;
+    state[catId].score = score;
+    state[catId].total = items.length;
+    saveState(catId, state[catId]);
+    applyCheckedStylesSimple(catId, items, questionKey, true);
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast(`Scored ${score}/${items.length}`);
+  });
+
+  document.getElementById("reset-"+catId).addEventListener("click", async ()=>{
+    await doReset();
+  });
+  async function doReset(){
+    await clearState(catId);
+    state[catId] = {answers:{}, checked:false, score:0, total:items.length};
+    items.forEach((item,idx)=>{
+      const inp = document.getElementById(`${catId}-input-${idx}`);
+      inp.value = "";
+      const card = document.getElementById(`${catId}-card-${idx}`);
+      card.classList.remove("correct","incorrect");
+      document.getElementById(`${catId}-fb-${idx}`).innerHTML = "";
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast("Category reset");
+  }
+  categoryResetFns[catId] = doReset;
+}
+
+function applyCheckedStylesSimple(catId, items, questionKey, animate){
+  items.forEach((item,idx)=>{
+    const inp = document.getElementById(`${catId}-input-${idx}`);
+    const card = document.getElementById(`${catId}-card-${idx}`);
+    const fb = document.getElementById(`${catId}-fb-${idx}`);
+    const correct = answerMatches(inp.value, item.a);
+    card.classList.remove("correct","incorrect");
+    card.classList.add(correct ? "correct" : "incorrect");
+    const correctText = Array.isArray(item.a) ? item.a.join(" / ") : item.a;
+    fb.innerHTML = correct
+      ? `<span class="feedback correct">✔ Correct</span>`
+      : `<span class="feedback incorrect">✘ Correct answer: ${correctText}</span>`;
+  });
+}
+
+/* ---- MCQ ---- */
+function buildMcqPanel(){
+  const catId = "mcq";
+  const items = mcq;
+  const s = document.createElement("section");
+  s.className = "panel"; s.id = "panel-"+catId;
+
+  s.innerHTML = `<div class="panel-head"><h2>${CATEGORIES.find(c=>c.id===catId).label}</h2>
+    <span class="score-badge" id="badge-${catId}">${catScoreLabel(catId)}</span></div>
+    <div class="intro">Choose the best option for each question, then tap Check Answers.</div>
+    <div class="btnbar" style="margin-bottom:10px;">
+      <button class="action check" id="check-${catId}">Check Answers</button>
+      <button class="action reset" id="reset-${catId}">Reset This Category</button>
+    </div>
+    <div id="list-${catId}"></div>`;
+  document.getElementById("main").appendChild(s);
+
+  const list = document.getElementById("list-"+catId);
+  items.forEach((item,idx)=>{
+    const card = document.createElement("div");
+    card.className = "card"; card.id = `${catId}-card-${idx}`;
+    card.innerHTML = `<div class="qtext"><span class="qnum">${idx+1}.</span>${item.q}</div>
+      <div class="options" id="${catId}-opts-${idx}">
+        ${item.opts.map((o,oi)=>`<div class="opt" data-idx="${oi}">${String.fromCharCode(65+oi)}. ${o}</div>`).join("")}
+      </div>`;
+    list.appendChild(card);
+  });
+
+  loadState(catId, {answers:{}, checked:false, score:0, total:items.length}).then(saved=>{
+    state[catId] = saved;
+    items.forEach((item,idx)=>{
+      const optsWrap = document.getElementById(`${catId}-opts-${idx}`);
+      const sel = saved.answers ? saved.answers[idx] : undefined;
+      [...optsWrap.children].forEach(opt=>{
+        if(sel !== undefined && parseInt(opt.dataset.idx)===sel) opt.classList.add("selected");
+        opt.addEventListener("click", ()=>{
+          [...optsWrap.children].forEach(o=>o.classList.remove("selected"));
+          opt.classList.add("selected");
+          state[catId].answers = state[catId].answers || {};
+          state[catId].answers[idx] = parseInt(opt.dataset.idx);
+          saveState(catId, state[catId]);
+        });
+      });
+    });
+    if(saved.checked) applyMcqChecked(items);
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+  });
+
+  document.getElementById("check-"+catId).addEventListener("click", ()=>{
+    let score = 0;
+    items.forEach((item,idx)=>{
+      const sel = state[catId].answers ? state[catId].answers[idx] : undefined;
+      if(sel === item.a) score++;
+    });
+    state[catId].checked = true; state[catId].score = score; state[catId].total = items.length;
+    saveState(catId, state[catId]);
+    applyMcqChecked(items);
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast(`Scored ${score}/${items.length}`);
+  });
+
+  document.getElementById("reset-"+catId).addEventListener("click", async ()=>{
+    await doReset();
+  });
+  async function doReset(){
+    await clearState(catId);
+    state[catId] = {answers:{}, checked:false, score:0, total:items.length};
+    items.forEach((item,idx)=>{
+      const optsWrap = document.getElementById(`${catId}-opts-${idx}`);
+      [...optsWrap.children].forEach(o=>o.classList.remove("selected","opt-correct","opt-wrong"));
+      document.getElementById(`${catId}-card-${idx}`).classList.remove("correct","incorrect");
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast("Category reset");
+  }
+  categoryResetFns[catId] = doReset;
+}
+
+function applyMcqChecked(items){
+  items.forEach((item,idx)=>{
+    const optsWrap = document.getElementById(`mcq-opts-${idx}`);
+    const card = document.getElementById(`mcq-card-${idx}`);
+    const sel = state.mcq.answers ? state.mcq.answers[idx] : undefined;
+    const correct = sel === item.a;
+    card.classList.remove("correct","incorrect");
+    card.classList.add(correct?"correct":"incorrect");
+    [...optsWrap.children].forEach(opt=>{
+      const oi = parseInt(opt.dataset.idx);
+      opt.classList.remove("opt-correct","opt-wrong");
+      if(oi === item.a) opt.classList.add("opt-correct");
+      else if(oi === sel) opt.classList.add("opt-wrong");
+    });
+  });
+}
+
+/* ---- True / False ---- */
+function buildTruefalsePanel(voiceConfig){
+  const catId="truefalse"; const items=trueFalse;
+  const s = document.createElement("section");
+  s.className="panel"; s.id="panel-"+catId;
+  s.innerHTML = `<div class="panel-head"><h2>${CATEGORIES.find(c=>c.id===catId).label}</h2>
+    <span class="score-badge" id="badge-${catId}">${catScoreLabel(catId)}</span></div>`;
+
+  const listWrap = document.createElement("div");
+  listWrap.id = "listwrap-" + catId;
+  listWrap.innerHTML = `<div class="intro">Mark each statement True or False, then tap Check Answers.</div>
+    <div class="btnbar" style="margin-bottom:10px;">
+      <button class="action check" id="check-${catId}">Check Answers</button>
+      <button class="action reset" id="reset-${catId}">Reset This Category</button>
+    </div>
+    <div id="list-${catId}"></div>`;
+  s.appendChild(listWrap);
+
+  document.getElementById("main").appendChild(s);
+
+  if(voiceConfig){
+    setupVoiceRound(catId, items, voiceConfig, s, listWrap);
+  }
+
+  const list = document.getElementById("list-"+catId);
+  items.forEach((item,idx)=>{
+    const card = document.createElement("div");
+    card.className="card"; card.id=`${catId}-card-${idx}`;
+    card.innerHTML = `<div class="qtext"><span class="qnum">${idx+1}.</span>${item.s}</div>
+      <div class="tf-row" id="${catId}-opts-${idx}">
+        <div class="tf-btn" data-val="true">TRUE</div>
+        <div class="tf-btn" data-val="false">FALSE</div>
+      </div>`;
+    list.appendChild(card);
+  });
+
+  loadState(catId,{answers:{}, checked:false, score:0, total:items.length}).then(saved=>{
+    state[catId]=saved;
+    items.forEach((item,idx)=>{
+      const wrap = document.getElementById(`${catId}-opts-${idx}`);
+      const sel = saved.answers ? saved.answers[idx] : undefined;
+      [...wrap.children].forEach(btn=>{
+        const val = btn.dataset.val==="true";
+        if(sel!==undefined && val===sel) btn.classList.add("selected");
+        btn.addEventListener("click", ()=>{
+          [...wrap.children].forEach(b=>b.classList.remove("selected"));
+          btn.classList.add("selected");
+          state[catId].answers = state[catId].answers||{};
+          state[catId].answers[idx]= val;
+          saveState(catId, state[catId]);
+        });
+      });
+    });
+    if(saved.checked) applyTfChecked(items);
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+  });
+
+  document.getElementById("check-"+catId).addEventListener("click", ()=>{
+    let score=0;
+    items.forEach((item,idx)=>{
+      const sel = state[catId].answers ? state[catId].answers[idx] : undefined;
+      if(sel===item.a) score++;
+    });
+    state[catId].checked=true; state[catId].score=score; state[catId].total=items.length;
+    saveState(catId, state[catId]);
+    applyTfChecked(items);
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast(`Scored ${score}/${items.length}`);
+  });
+
+  document.getElementById("reset-"+catId).addEventListener("click", async ()=>{
+    await doReset();
+  });
+  async function doReset(){
+    await clearState(catId);
+    state[catId]={answers:{}, checked:false, score:0, total:items.length};
+    items.forEach((item,idx)=>{
+      const wrap = document.getElementById(`${catId}-opts-${idx}`);
+      [...wrap.children].forEach(b=>b.classList.remove("selected","tf-correct","tf-wrong"));
+      document.getElementById(`${catId}-card-${idx}`).classList.remove("correct","incorrect");
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast("Category reset");
+  }
+  categoryResetFns[catId] = doReset;
+}
+
+function applyTfChecked(items){
+  items.forEach((item,idx)=>{
+    const wrap = document.getElementById(`truefalse-opts-${idx}`);
+    const card = document.getElementById(`truefalse-card-${idx}`);
+    const sel = state.truefalse.answers ? state.truefalse.answers[idx] : undefined;
+    const correct = sel===item.a;
+    card.classList.remove("correct","incorrect");
+    card.classList.add(correct?"correct":"incorrect");
+    [...wrap.children].forEach(btn=>{
+      const val = btn.dataset.val==="true";
+      btn.classList.remove("tf-correct","tf-wrong");
+      if(val===item.a) btn.classList.add("tf-correct");
+      else if(val===sel) btn.classList.add("tf-wrong");
+    });
+  });
+}
+
+/* ---- Definitions & Short Answer (reveal + self-grade) ---- */
+function buildRevealPanel(catId, items, renderQuestion){
+  const s = document.createElement("section");
+  s.className="panel"; s.id="panel-"+catId;
+  s.innerHTML = `<div class="panel-head"><h2>${CATEGORIES.find(c=>c.id===catId).label}</h2>
+    <span class="score-badge" id="badge-${catId}">${catScoreLabel(catId)}</span></div>
+    <div class="intro">Think of / write your answer, tap "Show Model Answer" to check, then mark yourself honestly.</div>
+    <div class="btnbar" style="margin-bottom:10px;">
+      <button class="action reset" id="reset-${catId}">Reset This Category</button>
+    </div>
+    <div id="list-${catId}"></div>`;
+  document.getElementById("main").appendChild(s);
+
+  const list = document.getElementById("list-"+catId);
+  items.forEach((item,idx)=>{
+    const card = document.createElement("div");
+    card.className="card"; card.id=`${catId}-card-${idx}`;
+    card.innerHTML = `<div class="qtext"><span class="qnum">${idx+1}.</span>${renderQuestion(item)}</div>
+      <input type="text" id="${catId}-input-${idx}" placeholder="Jot down your answer (optional)..." autocomplete="off">
+      <button class="reveal-toggle" id="${catId}-toggle-${idx}">Show Model Answer</button>
+      <div class="reveal-box" id="${catId}-reveal-${idx}">${item.def || item.a}</div>
+      <div class="self-grade">
+        <button class="got" data-val="got" id="${catId}-got-${idx}">👍 I got this right</button>
+        <button class="miss" data-val="miss" id="${catId}-miss-${idx}">🔁 Need to review</button>
+      </div>`;
+    list.appendChild(card);
+  });
+
+  loadState(catId,{answers:{}, grades:{}, revealed:{}, checked:false, score:0, total:items.length}).then(saved=>{
+    state[catId]=saved;
+    items.forEach((item,idx)=>{
+      const inp = document.getElementById(`${catId}-input-${idx}`);
+      if(saved.answers && saved.answers[idx]!==undefined) inp.value = saved.answers[idx];
+      inp.addEventListener("input", ()=>{
+        state[catId].answers = state[catId].answers || {};
+        state[catId].answers[idx]=inp.value;
+        saveState(catId, state[catId]);
+      });
+      const toggle = document.getElementById(`${catId}-toggle-${idx}`);
+      const revealBox = document.getElementById(`${catId}-reveal-${idx}`);
+      if(saved.revealed && saved.revealed[idx]){
+        revealBox.classList.add("show");
+        toggle.textContent = "Hide Model Answer";
+      }
+      toggle.addEventListener("click", ()=>{
+        revealBox.classList.toggle("show");
+        const isShown = revealBox.classList.contains("show");
+        toggle.textContent = isShown ? "Hide Model Answer" : "Show Model Answer";
+        state[catId].revealed = state[catId].revealed || {};
+        state[catId].revealed[idx] = isShown;
+        saveState(catId, state[catId]);
+      });
+      const gotBtn = document.getElementById(`${catId}-got-${idx}`);
+      const missBtn = document.getElementById(`${catId}-miss-${idx}`);
+      const applyGradeUi = (val)=>{
+        gotBtn.classList.toggle("active", val==="got");
+        missBtn.classList.toggle("active", val==="miss");
+      };
+      if(saved.grades && saved.grades[idx]) applyGradeUi(saved.grades[idx]);
+      gotBtn.addEventListener("click", ()=>{
+        state[catId].grades = state[catId].grades||{};
+        state[catId].grades[idx]="got";
+        applyGradeUi("got");
+        recomputeRevealScore(catId, items.length);
+      });
+      missBtn.addEventListener("click", ()=>{
+        state[catId].grades = state[catId].grades||{};
+        state[catId].grades[idx]="miss";
+        applyGradeUi("miss");
+        recomputeRevealScore(catId, items.length);
+      });
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+  });
+
+  document.getElementById("reset-"+catId).addEventListener("click", async ()=>{
+    await doReset();
+  });
+  async function doReset(){
+    await clearState(catId);
+    state[catId]={answers:{}, grades:{}, revealed:{}, checked:false, score:0, total:items.length};
+    items.forEach((item,idx)=>{
+      document.getElementById(`${catId}-input-${idx}`).value="";
+      document.getElementById(`${catId}-reveal-${idx}`).classList.remove("show");
+      document.getElementById(`${catId}-toggle-${idx}`).textContent="Show Model Answer";
+      document.getElementById(`${catId}-got-${idx}`).classList.remove("active");
+      document.getElementById(`${catId}-miss-${idx}`).classList.remove("active");
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast("Category reset");
+  }
+  categoryResetFns[catId] = doReset;
+}
+
+function recomputeRevealScore(catId, total){
+  const grades = state[catId].grades || {};
+  const score = Object.values(grades).filter(v=>v==="got").length;
+  const gradedCount = Object.keys(grades).length;
+  state[catId].checked = gradedCount>0;
+  state[catId].score = score;
+  state[catId].total = total;
+  saveState(catId, state[catId]);
+  document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+  updateOverallBar();
+}
+
+/* ---- Distinguish Between ---- */
+function buildDistinguishPanel(){
+  const catId="distinguish"; const items=distinguish;
+  const s = document.createElement("section");
+  s.className="panel"; s.id="panel-"+catId;
+  s.innerHTML = `<div class="panel-head"><h2>${CATEGORIES.find(c=>c.id===catId).label}</h2>
+    <span class="score-badge" id="badge-${catId}">${catScoreLabel(catId)}</span></div>
+    <div class="intro">Try to list the differences yourself, then reveal and self-mark.</div>
+    <div class="btnbar" style="margin-bottom:10px;">
+      <button class="action reset" id="reset-${catId}">Reset This Category</button>
+    </div>
+    <div id="list-${catId}"></div>`;
+  document.getElementById("main").appendChild(s);
+
+  const list = document.getElementById("list-"+catId);
+  items.forEach((item,idx)=>{
+    const card = document.createElement("div");
+    card.className="card"; card.id=`${catId}-card-${idx}`;
+    card.innerHTML = `<div class="qtext"><span class="qnum">${idx+1}.</span>Distinguish between ${item.title}.</div>
+      <button class="reveal-toggle" id="${catId}-toggle-${idx}">Show Comparison</button>
+      <div class="reveal-box" id="${catId}-reveal-${idx}">
+        <div class="dist-cols">
+          <div class="dist-col"><h4>${item.left.h}</h4><ul>${item.left.pts.map(p=>`<li>${p}</li>`).join("")}</ul></div>
+          <div class="dist-col"><h4>${item.right.h}</h4><ul>${item.right.pts.map(p=>`<li>${p}</li>`).join("")}</ul></div>
+        </div>
+      </div>
+      <div class="self-grade">
+        <button class="got" data-val="got" id="${catId}-got-${idx}">👍 I got this right</button>
+        <button class="miss" data-val="miss" id="${catId}-miss-${idx}">🔁 Need to review</button>
+      </div>`;
+    list.appendChild(card);
+  });
+
+  loadState(catId,{grades:{}, revealed:{}, checked:false, score:0, total:items.length}).then(saved=>{
+    state[catId]=saved;
+    items.forEach((item,idx)=>{
+      const toggle = document.getElementById(`${catId}-toggle-${idx}`);
+      const revealBox = document.getElementById(`${catId}-reveal-${idx}`);
+      if(saved.revealed && saved.revealed[idx]){
+        revealBox.classList.add("show");
+        toggle.textContent = "Hide Comparison";
+      }
+      toggle.addEventListener("click", ()=>{
+        revealBox.classList.toggle("show");
+        const isShown = revealBox.classList.contains("show");
+        toggle.textContent = isShown ? "Hide Comparison" : "Show Comparison";
+        state[catId].revealed = state[catId].revealed || {};
+        state[catId].revealed[idx] = isShown;
+        saveState(catId, state[catId]);
+      });
+      const gotBtn = document.getElementById(`${catId}-got-${idx}`);
+      const missBtn = document.getElementById(`${catId}-miss-${idx}`);
+      const applyGradeUi=(val)=>{
+        gotBtn.classList.toggle("active", val==="got");
+        missBtn.classList.toggle("active", val==="miss");
+      };
+      if(saved.grades && saved.grades[idx]) applyGradeUi(saved.grades[idx]);
+      gotBtn.addEventListener("click", ()=>{
+        state[catId].grades = state[catId].grades||{};
+        state[catId].grades[idx]="got";
+        applyGradeUi("got");
+        recomputeRevealScore(catId, items.length);
+      });
+      missBtn.addEventListener("click", ()=>{
+        state[catId].grades = state[catId].grades||{};
+        state[catId].grades[idx]="miss";
+        applyGradeUi("miss");
+        recomputeRevealScore(catId, items.length);
+      });
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+  });
+
+  document.getElementById("reset-"+catId).addEventListener("click", async ()=>{
+    await doReset();
+  });
+  async function doReset(){
+    await clearState(catId);
+    state[catId]={grades:{}, revealed:{}, checked:false, score:0, total:items.length};
+    items.forEach((item,idx)=>{
+      document.getElementById(`${catId}-reveal-${idx}`).classList.remove("show");
+      document.getElementById(`${catId}-toggle-${idx}`).textContent="Show Comparison";
+      document.getElementById(`${catId}-got-${idx}`).classList.remove("active");
+      document.getElementById(`${catId}-miss-${idx}`).classList.remove("active");
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast("Category reset");
+  }
+  categoryResetFns[catId] = doReset;
+}
+
+/* ---- Labeling (diagrams) ---- */
+const labelingDiagrams = [
+  {
+    title:"Label the molecule packing arrangement",
+    svg: `<svg viewBox="0 0 360 140" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="100" height="100" rx="8" fill="#fde68a" stroke="#f59e0b"/>
+      ${[0,1,2,3].map(r=>[0,1,2,3].map(c=>`<circle cx="${28+c*22}" cy="${28+r*22}" r="8" fill="#b45309"/>`).join("")).join("")}
+      <rect x="130" y="10" width="100" height="100" rx="8" fill="#bfdbfe" stroke="#2563eb"/>
+      <circle cx="150" cy="28" r="7" fill="#1d4ed8"/><circle cx="185" cy="35" r="7" fill="#1d4ed8"/>
+      <circle cx="210" cy="55" r="7" fill="#1d4ed8"/><circle cx="145" cy="65" r="7" fill="#1d4ed8"/>
+      <circle cx="175" cy="80" r="7" fill="#1d4ed8"/><circle cx="205" cy="95" r="7" fill="#1d4ed8"/>
+      <circle cx="155" cy="100" r="7" fill="#1d4ed8"/>
+      <rect x="250" y="10" width="100" height="100" rx="8" fill="#bbf7d0" stroke="#16a34a"/>
+      <circle cx="270" cy="25" r="6" fill="#15803d"/><circle cx="330" cy="40" r="6" fill="#15803d"/>
+      <circle cx="290" cy="90" r="6" fill="#15803d"/><circle cx="255" cy="90" r="6" fill="#15803d"/>
+      <text x="60" y="128" font-size="11" text-anchor="middle" fill="#78350f">Box A</text>
+      <text x="180" y="128" font-size="11" text-anchor="middle" fill="#1e3a8a">Box B</text>
+      <text x="300" y="128" font-size="11" text-anchor="middle" fill="#14532d">Box C</text>
+    </svg>`,
+    blanks:[
+      {label:"Box A (tightly packed, grid-like) is:", options:["Solid","Liquid","Gas"], a:"Solid"},
+      {label:"Box B (loosely packed, close together) is:", options:["Solid","Liquid","Gas"], a:"Liquid"},
+      {label:"Box C (very few, spread far apart) is:", options:["Solid","Liquid","Gas"], a:"Gas"},
+    ]
+  },
+  {
+    title:"Label the change of state diagram",
+    svg: `<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="15" width="90" height="45" rx="8" fill="#fde68a" stroke="#f59e0b"/>
+      <text x="65" y="42" font-size="13" text-anchor="middle" fill="#78350f">SOLID</text>
+      <rect x="115" y="150" width="90" height="45" rx="8" fill="#bfdbfe" stroke="#2563eb"/>
+      <text x="160" y="177" font-size="13" text-anchor="middle" fill="#1e3a8a">LIQUID</text>
+      <rect x="210" y="15" width="90" height="45" rx="8" fill="#bbf7d0" stroke="#16a34a"/>
+      <text x="255" y="42" font-size="13" text-anchor="middle" fill="#14532d">GAS</text>
+      <line x1="70" y1="60" x2="130" y2="150" stroke="#111827" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="150" y1="150" x2="90" y2="60" stroke="#111827" stroke-width="2" marker-end="url(#arrow)" transform="translate(6,6)"/>
+      <line x1="195" y1="150" x2="245" y2="60" stroke="#111827" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="255" y1="60" x2="205" y2="150" stroke="#111827" stroke-width="2" marker-end="url(#arrow)" transform="translate(6,-6)"/>
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#111827"/></marker></defs>
+      <text x="82" y="105" font-size="10" fill="#111827">①</text>
+      <text x="120" y="95" font-size="10" fill="#111827">②</text>
+      <text x="222" y="105" font-size="10" fill="#111827">③</text>
+      <text x="248" y="95" font-size="10" fill="#111827">④</text>
+    </svg>`,
+    blanks:[
+      {label:"① Solid → Liquid (on heating):", options:["Melting","Freezing","Evaporation","Condensation"], a:"Melting"},
+      {label:"② Liquid → Solid (on cooling):", options:["Melting","Freezing","Evaporation","Condensation"], a:"Freezing"},
+      {label:"③ Liquid → Gas:", options:["Melting","Freezing","Evaporation","Condensation"], a:"Evaporation"},
+      {label:"④ Gas → Liquid:", options:["Melting","Freezing","Evaporation","Condensation"], a:"Condensation"},
+    ]
+  },
+  {
+    title:"Label the Sea Breeze diagram (daytime)",
+    svg: `<svg viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="90" width="150" height="70" fill="#d6b98c"/>
+      <rect x="150" y="100" width="170" height="60" fill="#93c5fd"/>
+      <circle cx="60" cy="30" r="16" fill="#fbbf24"/>
+      <text x="60" y="115" font-size="11" text-anchor="middle" fill="#78350f">LAND (A)</text>
+      <text x="230" y="120" font-size="11" text-anchor="middle" fill="#1e3a8a">SEA (B)</text>
+      <path d="M60 90 L60 55" stroke="#111827" stroke-width="2" marker-end="url(#arrow2)"/>
+      <path d="M230 100 L230 55" stroke="#111827" stroke-width="2" marker-end="url(#arrow2)"/>
+      <path d="M215 55 L90 55" stroke="#111827" stroke-width="2" marker-end="url(#arrow2)"/>
+      <path d="M110 90 L200 100" stroke="#111827" stroke-width="2" marker-end="url(#arrow2)"/>
+      <defs><marker id="arrow2" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#111827"/></marker></defs>
+      <text x="60" y="45" font-size="10" text-anchor="middle">(C)</text>
+      <text x="230" y="45" font-size="10" text-anchor="middle">(D)</text>
+    </svg>`,
+    blanks:[
+      {label:"(A) Land is relatively:", options:["Hot","Cold"], a:"Hot"},
+      {label:"(B) Sea is relatively:", options:["Hot","Cold"], a:"Cold"},
+      {label:"(C) Pressure above the land:", options:["Low pressure","High pressure"], a:"Low pressure"},
+      {label:"(D) Pressure above the sea:", options:["Low pressure","High pressure"], a:"High pressure"},
+    ]
+  },
+  {
+    title:"Label the Land Breeze diagram (night-time)",
+    svg: `<svg viewBox="0 0 320 170" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="90" width="150" height="70" fill="#a8a29e"/>
+      <rect x="150" y="100" width="170" height="60" fill="#1e3a8a"/>
+      <circle cx="260" cy="30" r="10" fill="#e5e7eb"/>
+      <text x="60" y="115" font-size="11" text-anchor="middle" fill="#fff">LAND (A)</text>
+      <text x="230" y="120" font-size="11" text-anchor="middle" fill="#e0e7ff">SEA (B)</text>
+      <path d="M60 90 L60 55" stroke="#111827" stroke-width="2" marker-end="url(#arrow3)"/>
+      <path d="M230 100 L230 55" stroke="#111827" stroke-width="2" marker-end="url(#arrow3)"/>
+      <path d="M90 55 L215 55" stroke="#111827" stroke-width="2" marker-end="url(#arrow3)"/>
+      <path d="M200 100 L110 90" stroke="#111827" stroke-width="2" marker-end="url(#arrow3)"/>
+      <defs><marker id="arrow3" markerWidth="8" markerHeight="8" refX="5" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#111827"/></marker></defs>
+      <text x="60" y="45" font-size="10" text-anchor="middle">(C)</text>
+      <text x="230" y="45" font-size="10" text-anchor="middle">(D)</text>
+    </svg>`,
+    blanks:[
+      {label:"(A) At night, land is relatively:", options:["Hot","Cold"], a:"Cold"},
+      {label:"(B) At night, sea is relatively:", options:["Hot","Cold"], a:"Hot"},
+      {label:"(C) Pressure above the land:", options:["Low pressure","High pressure"], a:"High pressure"},
+      {label:"(D) Pressure above the sea:", options:["Low pressure","High pressure"], a:"Low pressure"},
+    ]
+  },
+];
+
+function buildLabelingPanel(){
+  const catId="labeling";
+  const totalBlanks = labelingDiagrams.reduce((sum,d)=>sum+d.blanks.length,0);
+  const s = document.createElement("section");
+  s.className="panel"; s.id="panel-"+catId;
+  s.innerHTML = `<div class="panel-head"><h2>${CATEGORIES.find(c=>c.id===catId).label}</h2>
+    <span class="score-badge" id="badge-${catId}">${catScoreLabel(catId)}</span></div>
+    <div class="intro">Use the dropdowns to label each part of the diagrams, then tap Check Answers.</div>
+    <div class="btnbar" style="margin-bottom:10px;">
+      <button class="action check" id="check-${catId}">Check Answers</button>
+      <button class="action reset" id="reset-${catId}">Reset This Category</button>
+    </div>
+    <div id="list-${catId}"></div>`;
+  document.getElementById("main").appendChild(s);
+
+  const list = document.getElementById("list-"+catId);
+  labelingDiagrams.forEach((diag,di)=>{
+    const card = document.createElement("div");
+    card.className="card"; card.id=`${catId}-card-${di}`;
+    let blanksHtml = diag.blanks.map((b,bi)=>`
+      <div class="label-row">
+        <span class="badge-num">${bi+1}</span>
+        <span style="flex:1.4">${b.label}</span>
+        <select id="${catId}-sel-${di}-${bi}">
+          <option value="">Choose…</option>
+          ${b.options.map(o=>`<option value="${o}">${o}</option>`).join("")}
+        </select>
+      </div>`).join("");
+    card.innerHTML = `<div class="qtext">${diag.title}</div>${diag.svg}${blanksHtml}`;
+    list.appendChild(card);
+  });
+
+  loadState(catId,{answers:{}, checked:false, score:0, total:totalBlanks}).then(saved=>{
+    state[catId]=saved;
+    labelingDiagrams.forEach((diag,di)=>{
+      diag.blanks.forEach((b,bi)=>{
+        const key = `${di}-${bi}`;
+        const sel = document.getElementById(`${catId}-sel-${di}-${bi}`);
+        if(saved.answers && saved.answers[key]) sel.value = saved.answers[key];
+        sel.addEventListener("change", ()=>{
+          state[catId].answers = state[catId].answers||{};
+          state[catId].answers[key] = sel.value;
+          saveState(catId, state[catId]);
+        });
+      });
+    });
+    if(saved.checked) applyLabelingChecked();
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+  });
+
+  document.getElementById("check-"+catId).addEventListener("click", ()=>{
+    let score=0;
+    labelingDiagrams.forEach((diag,di)=>{
+      diag.blanks.forEach((b,bi)=>{
+        const key=`${di}-${bi}`;
+        const val = state[catId].answers ? state[catId].answers[key] : "";
+        if(val === b.a) score++;
+      });
+    });
+    state[catId].checked=true; state[catId].score=score; state[catId].total=totalBlanks;
+    saveState(catId, state[catId]);
+    applyLabelingChecked();
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast(`Scored ${score}/${totalBlanks}`);
+  });
+
+  document.getElementById("reset-"+catId).addEventListener("click", async ()=>{
+    await doReset();
+  });
+  async function doReset(){
+    await clearState(catId);
+    state[catId]={answers:{}, checked:false, score:0, total:totalBlanks};
+    labelingDiagrams.forEach((diag,di)=>{
+      diag.blanks.forEach((b,bi)=>{
+        const sel = document.getElementById(`${catId}-sel-${di}-${bi}`);
+        sel.value=""; sel.style.borderColor="";
+      });
+      document.getElementById(`${catId}-card-${di}`).classList.remove("correct","incorrect");
+    });
+    document.getElementById("badge-"+catId).textContent = catScoreLabel(catId);
+    updateOverallBar();
+    toast("Category reset");
+  }
+  categoryResetFns[catId] = doReset;
+}
+
+function applyLabelingChecked(){
+  let allGood = true;
+  labelingDiagrams.forEach((diag,di)=>{
+    let cardGood = true;
+    diag.blanks.forEach((b,bi)=>{
+      const key=`${di}-${bi}`;
+      const sel = document.getElementById(`labeling-sel-${di}-${bi}`);
+      const val = state.labeling.answers ? state.labeling.answers[key] : "";
+      const correct = val === b.a;
+      sel.style.borderColor = correct ? "#16a34a" : "#dc2626";
+      if(!correct) cardGood = false;
+    });
+    document.getElementById(`labeling-card-${di}`).classList.remove("correct","incorrect");
+    document.getElementById(`labeling-card-${di}`).classList.add(cardGood?"correct":"incorrect");
+    if(!cardGood) allGood=false;
+  });
+}
+
+/* ---- Voice Round configs (Fill Blanks / One Word / True-False only) ----
+   Each config can optionally provide syncAnswer(catId, idx, transcript, item) so that
+   whatever gets answered by voice is written back into the same persisted state (and,
+   if already on screen, the same DOM inputs/buttons) List View uses — keeping the two
+   modes in sync per requirement 8. */
+
+function syncTextAnswer(catId, idx, transcript){
+  state[catId] = state[catId] || {};
+  state[catId].answers = state[catId].answers || {};
+  state[catId].answers[idx] = transcript;
+  saveState(catId, state[catId]);
+  const inp = document.getElementById(`${catId}-input-${idx}`);
+  if(inp) inp.value = transcript;
+}
+
+function parseTrueFalseFromTranscript(transcript){
+  const t = transcript.toLowerCase();
+  const hasTrue = /\btrue\b/.test(t);
+  const hasFalse = /\bfalse\b/.test(t);
+  if(hasFalse && !hasTrue) return false;
+  if(hasTrue && !hasFalse) return true;
+  return null; // ambiguous or neither keyword heard
+}
+
+function syncTFAnswer(catId, idx, boolVal){
+  state[catId] = state[catId] || {};
+  state[catId].answers = state[catId].answers || {};
+  state[catId].answers[idx] = boolVal;
+  saveState(catId, state[catId]);
+  const wrap = document.getElementById(`${catId}-opts-${idx}`);
+  if(wrap){
+    [...wrap.children].forEach(btn=>{
+      const val = btn.dataset.val === "true";
+      btn.classList.toggle("selected", val===boolVal);
+    });
+  }
+}
+
+const fillBlankVoiceConfig = {
+  // Don't read literal underscores aloud — normalize any run of 3+ underscores
+  // (questions use varying counts) into a spoken "blank". Regex, not exact match,
+  // so it catches every blank regardless of how many underscores it uses.
+  getQuestionText: (item)=> item.q.replace(/_{3,}/g, "blank"),
+  checkAnswer: (transcript, item)=> answerMatches(transcript, item.a),
+  getCorrectAnswerText: (item)=> formatCorrectAnswer(item.a),
+  syncAnswer: (catId, idx, transcript)=> syncTextAnswer(catId, idx, transcript),
+};
+const oneWordVoiceConfig = {
+  getQuestionText: (item)=> item.q,
+  checkAnswer: (transcript, item)=> answerMatches(transcript, item.a),
+  getCorrectAnswerText: (item)=> formatCorrectAnswer(item.a),
+  syncAnswer: (catId, idx, transcript)=> syncTextAnswer(catId, idx, transcript),
+};
+const trueFalseVoiceConfig = {
+  getQuestionText: (item)=> item.s, // statement only — no "true, or false?" appended
+  checkAnswer: (transcript, item)=>{
+    const said = parseTrueFalseFromTranscript(transcript);
+    if(said === null) return false;
+    return said === item.a;
+  },
+  getCorrectAnswerText: (item)=> item.a ? "True" : "False",
+  syncAnswer: (catId, idx, transcript)=>{
+    const said = parseTrueFalseFromTranscript(transcript);
+    if(said === null) return; // don't overwrite an existing answer with an ambiguous one
+    syncTFAnswer(catId, idx, said);
+  },
+};
+
+/* ============ INIT ============ */
+function init(){
+  renderTabs();
+  buildSimpleTextPanel("fillblank", fillBlanks, "q", fillBlankVoiceConfig);
+  buildMcqPanel();
+  buildSimpleTextPanel("oneword", oneWord, "q", oneWordVoiceConfig);
+  buildRevealPanel("definitions", definitions, (item)=>`What is <b>${item.term}</b>?`);
+  buildRevealPanel("shortanswer", shortAnswer, (item)=>item.q);
+  buildRevealPanel("reasoning", reasoning, (item)=>item.q);
+  buildTruefalsePanel(trueFalseVoiceConfig);
+  buildDistinguishPanel();
+  buildLabelingPanel();
+
+  document.getElementById("panel-fillblank").classList.add("active");
+
+  document.getElementById("resetAllBtn").addEventListener("click", ()=>{
+    const proceed = (typeof window.confirm === "function")
+      ? window.confirm("Reset ALL progress across every section? This can't be undone.")
+      : true;
+    if(!proceed) return;
+    Object.values(categoryResetFns).forEach(fn=>{ try{ fn(); }catch(e){} });
+    toast("All progress reset");
+  });
+
+  setTimeout(updateOverallBar, 400);
+}
+init();
+</script>
+</body>
+</html>
