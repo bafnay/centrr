@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1F2E28;
+    --bg2:#24352E;
+    --line:#3E5147;
+    --chalk:#F2EFE3;
+    --chalk-dim:#9FB0A5;
+    --a1:#E8B34A;
+    --a2:#7FB0C9;
+    --a3:#D98B94;
+    --a4:#9BC49A;
+    --a5:#C9A6D9;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--chalk);
+    font-family:'Work Sans',system-ui,sans-serif;
+    line-height:1.55;
+    position:relative;
+    min-height:100vh;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:48px 22px 80px;position:relative;z-index:1;}
+
+  header{margin-bottom:8px;}
+  h1{
+    font-family:'Kalam',cursive;
+    font-weight:700;
+    font-size:clamp(34px,7vw,48px);
+    margin:0 0 6px;
+    color:var(--chalk);
+  }
+  .subtitle{color:var(--chalk-dim);font-size:15px;max-width:480px;margin:0 0 26px;}
+
+  .toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px;flex-wrap:wrap;}
+  .repo-link{font-size:13px;color:var(--chalk-dim);text-decoration:none;border-bottom:1px dotted var(--chalk-dim);}
+  .repo-link:hover{color:var(--chalk);border-color:var(--chalk);}
+  button.refresh{
+    background:transparent;border:1px solid var(--line);color:var(--chalk-dim);
+    padding:8px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'Work Sans',sans-serif;
+  }
+  button.refresh:hover{color:var(--chalk);border-color:var(--chalk-dim);}
+
+  .state{color:var(--chalk-dim);font-size:15px;padding:20px 0;}
+  .state.error{color:var(--a3);}
+  .state a{color:inherit;text-decoration:underline;}
+
+  .subject{margin-bottom:38px;}
+  .subject-tab{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:6px 4px 8px;margin-bottom:14px;
+    border-bottom:3px solid var(--tab-color, var(--a1));
+  }
+  .subject-tab h2{
+    font-family:'Kalam',cursive;font-weight:700;font-size:26px;margin:0;color:var(--chalk);
+  }
+  .subject-count{color:var(--chalk-dim);font-size:13px;}
+
+  ul.chapters{list-style:none;margin:0;padding:0;}
+  ul.chapters li{
+    border-bottom:1px solid var(--line);
+  }
+  ul.chapters li:last-child{border-bottom:none;}
+  ul.chapters a{
+    display:flex;align-items:baseline;gap:10px;
+    color:var(--chalk);text-decoration:none;
+    padding:11px 4px;font-size:16px;
+  }
+  ul.chapters a::before{
+    content:'—';color:var(--tab-color, var(--a1));font-weight:700;flex:0 0 auto;
+  }
+  ul.chapters a:hover{color:var(--tab-color, var(--a1));}
+  ul.chapters .path-hint{color:var(--chalk-dim);font-size:12.5px;margin-left:auto;padding-left:12px;white-space:nowrap;}
+
+  footer{margin-top:50px;color:var(--chalk-dim);font-size:12.5px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Study Hub</h1>
+    <p class="subtitle">Every chapter quiz in one place, pulled straight from the repo — add a new file and it shows up here automatically.</p>
+  </header>
+
+  <div class="toprow">
+    <a class="repo-link" id="repoLink" href="#" target="_blank" rel="noopener">View the repo on GitHub</a>
+    <button class="refresh" id="refreshBtn">Refresh list</button>
+  </div>
+
+  <div id="content">
+    <div class="state" id="stateMsg">Loading your chapters…</div>
+  </div>
+
+  <footer>Built from <span id="repoName">this repo</span>'s file list via the GitHub API.</footer>
+</div>
+
+<script>
+const OWNER = 'bafnay';
+const REPO = 'centrr';
+const ACCENTS = ['var(--a1)','var(--a2)','var(--a3)','var(--a4)','var(--a5)'];
+
+document.getElementById('repoLink').href = `https://github.com/${OWNER}/${REPO}`;
+document.getElementById('repoName').textContent = `${OWNER}/${REPO}`;
+
+function titleFromFilename(path){
+  const base = path.split('/').pop().replace(/\.html?$/i, '');
+  const small = new Set(['of','the','and','in','on','a','an','to','for']);
+  return base
+    .replace(/[_-]+/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .map((w,i)=>{
+      const lw = w.toLowerCase();
+      if(i>0 && small.has(lw)) return lw;
+      return lw.charAt(0).toUpperCase() + lw.slice(1);
+    })
+    .join(' ');
+}
+
+function titleFromFolder(name){
+  if(/^[a-zA-Z]{2,5}$/.test(name)) return name.toUpperCase();
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+async function loadChapters(){
+  const contentEl = document.getElementById('content');
+  contentEl.innerHTML = '<div class="state" id="stateMsg">Loading your chapters…</div>';
+
+  try{
+    const repoRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}`);
+    if(!repoRes.ok) throw new Error('repo:'+repoRes.status);
+    const repoInfo = await repoRes.json();
+    const branch = repoInfo.default_branch || 'main';
+
+    const treeRes = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${branch}?recursive=1`);
+    if(!treeRes.ok) throw new Error('tree:'+treeRes.status);
+    const treeData = await treeRes.json();
+
+    const files = (treeData.tree || []).filter(item =>
+      item.type === 'blob' &&
+      /\.html?$/i.test(item.path) &&
+      item.path.toLowerCase() !== 'index.html'
+    );
+
+    if(files.length === 0){
+      contentEl.innerHTML = '<div class="state">No chapter files found yet. Upload a quiz file to the repo and refresh this page.</div>';
+      return;
+    }
+
+    const groups = {};
+    files.forEach(f=>{
+      const parts = f.path.split('/');
+      const folder = parts.length > 1 ? parts[0] : '';
+      if(!groups[folder]) groups[folder] = [];
+      groups[folder].push(f.path);
+    });
+
+    const folderNames = Object.keys(groups).sort((a,b)=>{
+      if(a === '') return 1;
+      if(b === '') return -1;
+      return a.localeCompare(b);
+    });
+
+    contentEl.innerHTML = '';
+    folderNames.forEach((folder, i)=>{
+      const accent = ACCENTS[i % ACCENTS.length];
+      const section = document.createElement('div');
+      section.className = 'subject';
+      section.style.setProperty('--tab-color', accent);
+
+      const label = folder === '' ? 'General' : titleFromFolder(folder);
+      const paths = groups[folder].sort((a,b)=> a.localeCompare(b));
+
+      const tab = document.createElement('div');
+      tab.className = 'subject-tab';
+      tab.innerHTML = `<h2>${label}</h2><span class="subject-count">${paths.length} ${paths.length===1?'chapter':'chapters'}</span>`;
+      section.appendChild(tab);
+
+      const list = document.createElement('ul');
+      list.className = 'chapters';
+      paths.forEach(p=>{
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = p;
+        a.innerHTML = `<span>${titleFromFilename(p)}</span>`;
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      section.appendChild(list);
+      contentEl.appendChild(section);
+    });
+
+  }catch(err){
+    const msg = String(err && err.message || err);
+    let text = "Couldn't load the chapter list.";
+    if(msg.includes('403')){
+      text = "GitHub's API is rate-limited for a bit (it allows a limited number of checks per hour without signing in). Wait a few minutes and refresh, or open the repo directly.";
+    } else if(msg.includes('404')){
+      text = `Couldn't find the repo ${OWNER}/${REPO}, or it doesn't have a default branch yet.`;
+    }
+    contentEl.innerHTML = `<div class="state error">${text} <a href="https://github.com/${OWNER}/${REPO}" target="_blank" rel="noopener">Open the repo on GitHub</a> instead.</div>`;
+  }
+}
+
+document.getElementById('refreshBtn').onclick = loadChapters;
+loadChapters();
+</script>
+</body>
+</html>
